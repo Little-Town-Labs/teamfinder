@@ -2,6 +2,7 @@
   "name": "next-enterprise",
   "version": "0.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "cross-env FORCE_COLOR=1 next dev --turbo",
     "build": "next build",
@@ -114,6 +115,7 @@
     "typed-query-selector": "^2.12.0",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.32.0",
+    "vite": "^6.0.0",
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^3.2.4",
     "webpack": "5.94.0"
