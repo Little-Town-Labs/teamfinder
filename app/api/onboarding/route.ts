@@ -1,9 +1,25 @@
 import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
+import { z } from "zod";
 
 import { playerProfiles, users } from "@/drizzle/schema";
 import { db } from "@/lib/db";
+
+const onboardingSchema = z.object({
+  usbcMemberId: z.string().min(1),
+  gender: z.enum(["male", "female", "other"]),
+  bowlingHand: z.enum(["right", "left"]),
+  currentAverage: z.string().optional(),
+  highGame: z.string().optional(),
+  highSeries: z.string().optional(),
+  yearsExperience: z.string().optional(),
+  preferredTeamTypes: z.array(z.string()).optional(),
+  preferredCompetitionLevel: z.string().optional(),
+  lookingForTeam: z.boolean().optional(),
+  openToSubstitute: z.boolean().optional(),
+  bio: z.string().optional(),
+});
 
 export async function POST(request: Request) {
   try {
@@ -13,7 +29,8 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const body = await request.json();
+    const rawBody = await request.json();
+    const body = onboardingSchema.parse(rawBody);
 
     // Find the user in our database
     const user = await db.query.users.findFirst({
@@ -60,6 +77,15 @@ export async function POST(request: Request) {
     return NextResponse.json({ success: true, profile }, { status: 201 });
   } catch (error) {
     console.error("Onboarding error:", error);
+
+    // Handle Zod validation errors
+    if (error instanceof z.ZodError) {
+      return NextResponse.json(
+        { error: "Invalid form data", details: error.errors },
+        { status: 400 },
+      );
+    }
+
     return NextResponse.json(
       { error: "Failed to create profile. Please try again." },
       { status: 500 },
