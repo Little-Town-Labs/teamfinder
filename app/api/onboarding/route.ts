@@ -3,7 +3,7 @@ import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
-import { playerProfiles, users } from "@/drizzle/schema";
+import { type NewPlayerProfile, playerProfiles, users } from "@/drizzle/schema";
 import { db } from "@/lib/db";
 
 const onboardingSchema = z.object({
@@ -14,8 +14,8 @@ const onboardingSchema = z.object({
   highGame: z.string().optional(),
   highSeries: z.string().optional(),
   yearsExperience: z.string().optional(),
-  preferredTeamTypes: z.array(z.string()).optional(),
-  preferredCompetitionLevel: z.string().optional(),
+  preferredTeamTypes: z.array(z.enum(["singles", "doubles", "team"])).optional(),
+  preferredCompetitionLevel: z.enum(["recreational", "league", "competitive", "professional"]).optional(),
   lookingForTeam: z.boolean().optional(),
   openToSubstitute: z.boolean().optional(),
   bio: z.string().optional(),
@@ -54,24 +54,26 @@ export async function POST(request: Request) {
     }
 
     // Create player profile
+    const profileData: NewPlayerProfile = {
+      userId: user.id,
+      usbcMemberId: body.usbcMemberId,
+      gender: body.gender,
+      bowlingHand: body.bowlingHand,
+      currentAverage: body.currentAverage ? parseInt(body.currentAverage) : null,
+      highGame: body.highGame ? parseInt(body.highGame) : null,
+      highSeries: body.highSeries ? parseInt(body.highSeries) : null,
+      yearsExperience: body.yearsExperience ? parseInt(body.yearsExperience) : null,
+      preferredTeamTypes: body.preferredTeamTypes || [],
+      preferredCompetitionLevel: body.preferredCompetitionLevel || null,
+      lookingForTeam: body.lookingForTeam || false,
+      openToSubstitute: body.openToSubstitute || false,
+      bio: body.bio || null,
+      profileComplete: true,
+    };
+
     const [profile] = await db
       .insert(playerProfiles)
-      .values({
-        userId: user.id,
-        usbcMemberId: body.usbcMemberId,
-        gender: body.gender,
-        bowlingHand: body.bowlingHand,
-        currentAverage: body.currentAverage ? parseInt(body.currentAverage) : null,
-        highGame: body.highGame ? parseInt(body.highGame) : null,
-        highSeries: body.highSeries ? parseInt(body.highSeries) : null,
-        yearsExperience: body.yearsExperience ? parseInt(body.yearsExperience) : null,
-        preferredTeamTypes: body.preferredTeamTypes || [],
-        preferredCompetitionLevel: body.preferredCompetitionLevel || null,
-        lookingForTeam: body.lookingForTeam || false,
-        openToSubstitute: body.openToSubstitute || false,
-        bio: body.bio || null,
-        profileComplete: true,
-      })
+      .values(profileData)
       .returning();
 
     return NextResponse.json({ success: true, profile }, { status: 201 });
