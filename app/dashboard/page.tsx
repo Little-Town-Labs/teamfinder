@@ -3,7 +3,7 @@ import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
 
-import { users } from "@/drizzle/schema";
+import { type PlayerProfile, playerProfiles, users } from "@/drizzle/schema";
 import { db } from "@/lib/db";
 
 export default async function DashboardPage() {
@@ -13,24 +13,24 @@ export default async function DashboardPage() {
     redirect("/sign-in");
   }
 
-  // Get user with profile
+  // Get user
   const user = await db.query.users.findFirst({
     where: eq(users.clerkUserId, userId),
-    with: {
-      playerProfile: true,
-    },
   });
 
   if (!user) {
     redirect("/sign-in");
   }
 
+  // Get player profile
+  const profile = await db.query.playerProfiles.findFirst({
+    where: eq(playerProfiles.userId, user.id),
+  }) as PlayerProfile | undefined;
+
   // If profile not complete, redirect to onboarding
-  if (!user.playerProfile || !user.playerProfile.profileComplete) {
+  if (!profile || !profile.profileComplete) {
     redirect("/onboarding");
   }
-
-  const profile = user.playerProfile;
 
   return (
     <div className="min-h-screen bg-gray-50">
