@@ -1,13 +1,13 @@
 "use client";
 
-import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 interface OnboardingFormProps {
   userId: string;
 }
 
-export default function OnboardingForm({ userId }: OnboardingFormProps) {
+export default function OnboardingForm(_props: OnboardingFormProps) {
   const router = useRouter();
   const [step, setStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);

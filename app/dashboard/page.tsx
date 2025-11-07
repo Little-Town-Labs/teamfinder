@@ -1,9 +1,10 @@
-import { redirect } from "next/navigation";
-import { auth } from "@clerk/nextjs/server";
 import { UserButton } from "@clerk/nextjs";
-import { db } from "@/lib/db";
-import { users } from "@/drizzle/schema";
+import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
+import { redirect } from "next/navigation";
+
+import { users } from "@/drizzle/schema";
+import { db } from "@/lib/db";
 
 export default async function DashboardPage() {
   const { userId } = await auth();

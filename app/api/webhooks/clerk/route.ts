@@ -1,9 +1,10 @@
-import { Webhook } from "svix";
-import { headers } from "next/headers";
 import { WebhookEvent } from "@clerk/nextjs/server";
-import { db } from "@/lib/db";
-import { users } from "@/drizzle/schema";
 import { eq } from "drizzle-orm";
+import { headers } from "next/headers";
+import { Webhook } from "svix";
+
+import { users } from "@/drizzle/schema";
+import { db } from "@/lib/db";
 
 export async function POST(req: Request) {
   const WEBHOOK_SECRET = process.env.CLERK_WEBHOOK_SECRET;

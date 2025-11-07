@@ -1,8 +1,9 @@
-import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
-import { db } from "@/lib/db";
-import { users, playerProfiles } from "@/drizzle/schema";
 import { eq } from "drizzle-orm";
+import { NextResponse } from "next/server";
+
+import { playerProfiles, users } from "@/drizzle/schema";
+import { db } from "@/lib/db";
 
 export async function POST(request: Request) {
   try {
