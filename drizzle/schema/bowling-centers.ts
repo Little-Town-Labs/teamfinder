@@ -1,4 +1,4 @@
-import { pgTable, text, timestamp, uuid, decimal } from "drizzle-orm/pg-core";
+import { decimal, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 
 /**
  * Bowling Centers table

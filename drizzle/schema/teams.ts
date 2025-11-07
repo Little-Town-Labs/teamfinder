@@ -1,7 +1,7 @@
-import { pgTable, text, timestamp, uuid, boolean, integer, jsonb } from "drizzle-orm/pg-core";
-import { users } from "./users";
+import { boolean, integer, jsonb, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 import { bowlingCenters } from "./bowling-centers";
-import { teamTypeEnum, competitionLevelEnum, genderEnum } from "./player-profiles";
+import { competitionLevelEnum, genderEnum, teamTypeEnum } from "./player-profiles";
+import { users } from "./users";
 
 /**
  * Teams table

@@ -2,7 +2,9 @@
   "permissions": {
     "allow": [
       "Bash(pnpm add:*)",
-      "Bash(node scripts/push-db.js:*)"
+      "Bash(node scripts/push-db.js:*)",
+      "Bash(pnpm exec tsc:*)",
+      "Bash(pnpm exec eslint:*)"
     ],
     "deny": [],
     "ask": []

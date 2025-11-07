@@ -1,6 +1,6 @@
-import { pgTable, text, timestamp, uuid, boolean, integer, pgEnum, jsonb } from "drizzle-orm/pg-core";
-import { users } from "./users";
+import { boolean, integer, jsonb, pgEnum, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 import { bowlingCenters } from "./bowling-centers";
+import { users } from "./users";
 
 // Enums
 export const genderEnum = pgEnum("gender", ["male", "female", "other", "prefer_not_to_say"]);

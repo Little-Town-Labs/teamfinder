@@ -1,7 +1,7 @@
 import { pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
+import { invitationStatusEnum } from "./team-invitations";
 import { teams } from "./teams";
 import { users } from "./users";
-import { invitationStatusEnum } from "./team-invitations";
 
 /**
  * Player Applications table

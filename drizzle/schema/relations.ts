@@ -1,8 +1,8 @@
 import { relations } from "drizzle-orm";
-import { users } from "./users";
 import { playerProfiles } from "./player-profiles";
-import { teams } from "./teams";
 import { teamMembers } from "./team-members";
+import { teams } from "./teams";
+import { users } from "./users";
 
 export const usersRelations = relations(users, ({ one, many }) => ({
   playerProfile: one(playerProfiles, {

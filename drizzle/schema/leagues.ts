@@ -1,4 +1,4 @@
-import { pgTable, text, timestamp, uuid, date, boolean } from "drizzle-orm/pg-core";
+import { boolean, date, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 import { bowlingCenters } from "./bowling-centers";
 import { competitionLevelEnum } from "./player-profiles";
 
