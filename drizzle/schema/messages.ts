@@ -21,7 +21,7 @@ export const messages = pgTable("messages", {
   readAt: timestamp("read_at"),
 
   // For threading/replies
-  parentMessageId: uuid("parent_message_id").references(() => messages.id),
+  parentMessageId: uuid("parent_message_id").references((): any => messages.id),
 
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });

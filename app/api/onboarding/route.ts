@@ -8,7 +8,7 @@ import { db } from "@/lib/db";
 
 const onboardingSchema = z.object({
   usbcMemberId: z.string().min(1),
-  gender: z.enum(["male", "female", "other"]),
+  gender: z.enum(["male", "female", "other", "prefer_not_to_say"]),
   bowlingHand: z.enum(["right", "left"]),
   currentAverage: z.string().optional(),
   highGame: z.string().optional(),

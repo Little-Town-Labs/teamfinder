@@ -23,7 +23,7 @@ export default async function OnboardingPage() {
   });
 
   // If profile is complete, redirect to dashboard
-  if (user?.playerProfile?.profileComplete) {
+  if (user?.playerProfile && !Array.isArray(user.playerProfile) && user.playerProfile.profileComplete) {
     redirect("/dashboard");
   }
 
