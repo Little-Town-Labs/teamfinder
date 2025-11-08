@@ -30,6 +30,7 @@ export async function POST(request: Request) {
     }
 
     const rawBody = await request.json();
+    console.log("Received onboarding data:", JSON.stringify(rawBody, null, 2));
     const body = onboardingSchema.parse(rawBody);
 
     // Find the user in our database, or create if doesn't exist (handles dev environment)
@@ -98,6 +99,7 @@ export async function POST(request: Request) {
 
     // Handle Zod validation errors
     if (error instanceof z.ZodError) {
+      console.error("Zod validation errors:", error.errors);
       return NextResponse.json(
         { error: "Invalid form data", details: error.errors },
         { status: 400 },
