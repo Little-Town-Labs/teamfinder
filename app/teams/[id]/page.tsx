@@ -1,5 +1,6 @@
 import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 
@@ -137,10 +138,12 @@ export default async function TeamDetailsPage({ params }: { params: Promise<{ id
               <div key={member.id} className="flex items-center justify-between p-3 bg-gray-50 rounded">
                 <div className="flex items-center space-x-3">
                   {member.user.imageUrl && (
-                    <img
+                    <Image
                       src={member.user.imageUrl}
                       alt={member.user.firstName || "User"}
-                      className="w-10 h-10 rounded-full"
+                      width={40}
+                      height={40}
+                      className="rounded-full"
                     />
                   )}
                   <div>

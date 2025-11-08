@@ -1,6 +1,7 @@
 import { UserButton } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { type PlayerProfile, playerProfiles, users } from "@/drizzle/schema";
@@ -84,12 +85,12 @@ export default async function DashboardPage() {
               </div>
             </dl>
             <div className="mt-4">
-              <a
+              <Link
                 href="/profile"
                 className="text-sm text-blue-600 hover:text-blue-800 font-medium"
               >
                 Edit Profile →
-              </a>
+              </Link>
             </div>
           </div>
 
@@ -114,24 +115,24 @@ export default async function DashboardPage() {
           <div className="bg-white shadow rounded-lg p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
             <div className="space-y-2">
-              <a
+              <Link
                 href="/teams/browse"
                 className="block w-full px-4 py-2 bg-blue-600 text-white text-center rounded-md hover:bg-blue-700 transition-colors"
               >
                 Browse Teams
-              </a>
-              <a
+              </Link>
+              <Link
                 href="/teams/create"
                 className="block w-full px-4 py-2 bg-white border border-gray-300 text-gray-700 text-center rounded-md hover:bg-gray-50 transition-colors"
               >
                 Create Team
-              </a>
-              <a
+              </Link>
+              <Link
                 href="/players/browse"
                 className="block w-full px-4 py-2 bg-white border border-gray-300 text-gray-700 text-center rounded-md hover:bg-gray-50 transition-colors"
               >
                 Find Players
-              </a>
+              </Link>
             </div>
           </div>
         </div>

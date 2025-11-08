@@ -1,6 +1,7 @@
 import { UserButton } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
+import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
@@ -127,10 +128,12 @@ export default async function BrowsePlayersPage() {
               >
                 <div className="flex items-center gap-3 mb-4">
                   {player.user.imageUrl && (
-                    <img
+                    <Image
                       src={player.user.imageUrl}
                       alt={player.user.firstName || "Player"}
-                      className="w-12 h-12 rounded-full"
+                      width={48}
+                      height={48}
+                      className="rounded-full"
                     />
                   )}
                   <div>
