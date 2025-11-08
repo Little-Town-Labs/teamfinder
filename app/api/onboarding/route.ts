@@ -1,4 +1,4 @@
-import { auth } from "@clerk/nextjs/server";
+import { auth, clerkClient } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import { z } from "zod";
@@ -32,13 +32,29 @@ export async function POST(request: Request) {
     const rawBody = await request.json();
     const body = onboardingSchema.parse(rawBody);
 
-    // Find the user in our database
-    const user = await db.query.users.findFirst({
+    // Find the user in our database, or create if doesn't exist (handles dev environment)
+    let user = await db.query.users.findFirst({
       where: eq(users.clerkUserId, userId),
     });
 
     if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      // User doesn't exist in our DB yet (can happen in dev when webhook doesn't fire)
+      // Get user info from Clerk and create the record
+      const client = await clerkClient();
+      const clerkUser = await client.users.getUser(userId);
+
+      const [newUser] = await db
+        .insert(users)
+        .values({
+          clerkUserId: userId,
+          email: clerkUser.emailAddresses[0]?.emailAddress || "",
+          firstName: clerkUser.firstName || null,
+          lastName: clerkUser.lastName || null,
+          imageUrl: clerkUser.imageUrl || null,
+        })
+        .returning();
+
+      user = newUser;
     }
 
     // Check if USBC Member ID is already in use
@@ -55,7 +71,7 @@ export async function POST(request: Request) {
 
     // Create player profile
     const profileData: NewPlayerProfile = {
-      userId: user.id,
+      userId: user!.id,
       usbcMemberId: body.usbcMemberId,
       gender: body.gender,
       bowlingHand: body.bowlingHand,
