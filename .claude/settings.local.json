@@ -6,7 +6,8 @@
       "Bash(pnpm exec tsc:*)",
       "Bash(pnpm exec eslint:*)",
       "Bash(pnpm tsc:*)",
-      "Bash(./node_modules/.bin/tsc:*)"
+      "Bash(./node_modules/.bin/tsc:*)",
+      "Bash(cat:*)"
     ],
     "deny": [],
     "ask": []
