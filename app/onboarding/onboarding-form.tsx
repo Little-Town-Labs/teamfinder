@@ -27,6 +27,7 @@ export default function OnboardingForm(_props: OnboardingFormProps) {
 
     // Step 3: Preferences
     preferredTeamTypes: [] as string[],
+    preferredTeamGenderTypes: [] as string[],
     preferredCompetitionLevel: "",
     lookingForTeam: false,
     openToSubstitute: false,
@@ -52,6 +53,15 @@ export default function OnboardingForm(_props: OnboardingFormProps) {
       preferredTeamTypes: prev.preferredTeamTypes.includes(teamType)
         ? prev.preferredTeamTypes.filter((t) => t !== teamType)
         : [...prev.preferredTeamTypes, teamType],
+    }));
+  };
+
+  const handleTeamGenderTypeToggle = (genderType: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      preferredTeamGenderTypes: prev.preferredTeamGenderTypes.includes(genderType)
+        ? prev.preferredTeamGenderTypes.filter((t) => t !== genderType)
+        : [...prev.preferredTeamGenderTypes, genderType],
     }));
   };
 
@@ -298,6 +308,27 @@ export default function OnboardingForm(_props: OnboardingFormProps) {
                     className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                   />
                   <span className="ml-2 text-sm text-gray-700 capitalize">{type}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Preferred Team Gender Types
+            </label>
+            <div className="space-y-2">
+              {["male", "female", "mixed"].map((type) => (
+                <label key={type} className="flex items-center">
+                  <input
+                    type="checkbox"
+                    checked={formData.preferredTeamGenderTypes.includes(type)}
+                    onChange={() => handleTeamGenderTypeToggle(type)}
+                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  />
+                  <span className="ml-2 text-sm text-gray-700 capitalize">
+                    {type === "male" ? "Men's Team" : type === "female" ? "Women's Team" : "Mixed Team"}
+                  </span>
                 </label>
               ))}
             </div>

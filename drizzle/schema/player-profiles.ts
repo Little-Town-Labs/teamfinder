@@ -6,6 +6,7 @@ import { users } from "./users";
 export const genderEnum = pgEnum("gender", ["male", "female", "other", "prefer_not_to_say"]);
 export const bowlingHandEnum = pgEnum("bowling_hand", ["left", "right"]);
 export const teamTypeEnum = pgEnum("team_type", ["singles", "doubles", "team"]);
+export const teamGenderTypeEnum = pgEnum("team_gender_type", ["male", "female", "mixed"]);
 export const competitionLevelEnum = pgEnum("competition_level", [
   "recreational",
   "league",
@@ -56,6 +57,7 @@ export const playerProfiles = pgTable("player_profiles", {
     sunday?: string[];
   }>(),
   preferredTeamTypes: teamTypeEnum("preferred_team_types").array(),
+  preferredTeamGenderTypes: teamGenderTypeEnum("preferred_team_gender_types").array(),
   preferredCompetitionLevel: competitionLevelEnum("preferred_competition_level"),
 
   // Matchmaking Status

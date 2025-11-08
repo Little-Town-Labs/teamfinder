@@ -15,6 +15,13 @@
       "when": 1762574667169,
       "tag": "0001_tearful_stranger",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1762575159020,
+      "tag": "0002_lucky_the_fury",
+      "breakpoints": true
     }
   ]
 }

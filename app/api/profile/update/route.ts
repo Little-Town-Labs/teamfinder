@@ -15,6 +15,7 @@ const updateProfileSchema = z.object({
   highSeries: z.string().optional(),
   yearsExperience: z.string().optional(),
   preferredTeamTypes: z.array(z.enum(["singles", "doubles", "team"])).optional(),
+  preferredTeamGenderTypes: z.array(z.enum(["male", "female", "mixed"])).optional(),
   preferredCompetitionLevel: z
     .enum(["recreational", "league", "competitive", "professional"])
     .optional(),
@@ -78,6 +79,7 @@ export async function PUT(request: Request) {
         highSeries: body.highSeries ? parseInt(body.highSeries) : null,
         yearsExperience: body.yearsExperience ? parseInt(body.yearsExperience) : null,
         preferredTeamTypes: body.preferredTeamTypes || [],
+        preferredTeamGenderTypes: body.preferredTeamGenderTypes || [],
         preferredCompetitionLevel: body.preferredCompetitionLevel || null,
         lookingForTeam: body.lookingForTeam || false,
         openToSubstitute: body.openToSubstitute || false,
