@@ -5,6 +5,8 @@ import { useState } from "react";
 
 import type { PlayerProfile } from "@/drizzle/schema";
 
+import AffiliationsManager from "./affiliations-manager";
+
 interface EditProfileFormProps {
   profile: PlayerProfile;
   userId: string;
@@ -318,6 +320,11 @@ export default function EditProfileForm({ profile }: EditProfileFormProps) {
             placeholder="Tell us about your bowling experience, goals, and what you're looking for in a team..."
           />
         </div>
+      </div>
+
+      {/* Affiliations */}
+      <div className="space-y-6 pt-6 border-t">
+        <AffiliationsManager />
       </div>
 
       {/* Submit Button */}
