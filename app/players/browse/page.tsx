@@ -6,6 +6,8 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { playerProfiles, users } from "@/drizzle/schema";
+import type { PlayerProfile, User } from "@/drizzle/schema";
+
 import { db } from "@/lib/db";
 
 export default async function BrowsePlayersPage() {
@@ -35,13 +37,13 @@ export default async function BrowsePlayersPage() {
   }
 
   // Get all players looking for teams or open to substitute
-  const availablePlayers = await db.query.playerProfiles.findMany({
+  const availablePlayers = (await db.query.playerProfiles.findMany({
     where: eq(playerProfiles.lookingForTeam, true),
     with: {
       user: true,
     },
     orderBy: (playerProfiles, { desc }) => [desc(playerProfiles.updatedAt)],
-  });
+  })) as Array<PlayerProfile & { user: User }>;
 
   return (
     <div className="min-h-screen bg-gray-50">

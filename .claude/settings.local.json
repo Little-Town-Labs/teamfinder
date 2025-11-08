@@ -4,7 +4,9 @@
       "Bash(pnpm add:*)",
       "Bash(node scripts/push-db.js:*)",
       "Bash(pnpm exec tsc:*)",
-      "Bash(pnpm exec eslint:*)"
+      "Bash(pnpm exec eslint:*)",
+      "Bash(pnpm tsc:*)",
+      "Bash(./node_modules/.bin/tsc:*)"
     ],
     "deny": [],
     "ask": []

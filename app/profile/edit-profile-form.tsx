@@ -44,7 +44,7 @@ export default function EditProfileForm({ profile }: EditProfileFormProps) {
     }
   };
 
-  const handleTeamTypeToggle = (teamType: string) => {
+  const handleTeamTypeToggle = (teamType: "singles" | "doubles" | "team") => {
     setFormData((prev) => ({
       ...prev,
       preferredTeamTypes: prev.preferredTeamTypes.includes(teamType)
@@ -242,7 +242,7 @@ export default function EditProfileForm({ profile }: EditProfileFormProps) {
             Preferred Team Types
           </label>
           <div className="space-y-2">
-            {["singles", "doubles", "team"].map((type) => (
+            {(["singles", "doubles", "team"] as const).map((type) => (
               <label key={type} className="flex items-center">
                 <input
                   type="checkbox"

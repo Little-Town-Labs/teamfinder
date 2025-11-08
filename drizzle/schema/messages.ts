@@ -20,8 +20,8 @@ export const messages = pgTable("messages", {
   isRead: boolean("is_read").notNull().default(false),
   readAt: timestamp("read_at"),
 
-  // For threading/replies
-  parentMessageId: uuid("parent_message_id").references((): any => messages.id),
+  // For threading/replies - self reference needs explicit typing
+  parentMessageId: uuid("parent_message_id"),
 
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });

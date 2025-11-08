@@ -5,6 +5,8 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { playerProfiles, teams, users } from "@/drizzle/schema";
+import type { Team, User } from "@/drizzle/schema";
+
 import { db } from "@/lib/db";
 
 export default async function BrowseTeamsPage() {
@@ -34,13 +36,13 @@ export default async function BrowseTeamsPage() {
   }
 
   // Get all active teams looking for players
-  const availableTeams = await db.query.teams.findMany({
+  const availableTeams = (await db.query.teams.findMany({
     where: eq(teams.lookingForPlayers, true),
     with: {
       captain: true,
     },
     orderBy: (teams, { desc }) => [desc(teams.createdAt)],
-  });
+  })) as Array<Team & { captain: User }>;
 
   return (
     <div className="min-h-screen bg-gray-50">

@@ -5,6 +5,8 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 
 import { teamMembers, teams, users } from "@/drizzle/schema";
+import type { TeamMember, User } from "@/drizzle/schema";
+
 import { db } from "@/lib/db";
 
 export default async function TeamDetailsPage({ params }: { params: Promise<{ id: string }> }) {
@@ -28,12 +30,12 @@ export default async function TeamDetailsPage({ params }: { params: Promise<{ id
   }
 
   // Get team members
-  const members = await db.query.teamMembers.findMany({
+  const members = (await db.query.teamMembers.findMany({
     where: eq(teamMembers.teamId, id),
     with: {
       user: true,
     },
-  });
+  })) as Array<TeamMember & { user: User }>;
 
   // Check if current user is team captain
   const currentUser = await db.query.users.findFirst({
