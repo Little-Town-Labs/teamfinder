@@ -67,6 +67,10 @@ export async function POST(request: Request) {
 
     const [team] = await db.insert(teams).values(teamData).returning();
 
+    if (!team) {
+      return NextResponse.json({ error: "Failed to create team" }, { status: 500 });
+    }
+
     // Add captain as first team member
     await db.insert(teamMembers).values({
       teamId: team.id,
