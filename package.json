@@ -28,7 +28,7 @@
     "db:migrate": "dotenv -e .env.local -- drizzle-kit migrate",
     "db:push": "dotenv -e .env.local -- drizzle-kit push",
     "db:studio": "dotenv -e .env.local -- drizzle-kit studio",
-    "migrate": "dotenv -e .env.local -- tsx scripts/migrate.ts"
+    "migrate": "dotenv -e .env.local -- node --loader tsx scripts/migrate.ts"
   },
   "dependencies": {
     "@clerk/nextjs": "^6.34.5",
