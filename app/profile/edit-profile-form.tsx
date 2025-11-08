@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 
 import type { PlayerProfile } from "@/drizzle/schema";
 
@@ -83,13 +84,12 @@ export default function EditProfileForm({ profile }: EditProfileFormProps) {
         throw new Error(data.error || "Failed to update profile");
       }
 
-      setSuccessMessage("Profile updated successfully!");
+      toast.success("Profile updated successfully!");
       router.refresh();
-
-      // Clear success message after 3 seconds
-      setTimeout(() => setSuccessMessage(null), 3000);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred");
+      const errorMessage = err instanceof Error ? err.message : "An error occurred";
+      setError(errorMessage);
+      toast.error(errorMessage);
     } finally {
       setIsSubmitting(false);
     }

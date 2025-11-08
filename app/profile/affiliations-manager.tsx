@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 import type { Affiliation } from "@/drizzle/schema";
 
@@ -39,6 +40,7 @@ export default function AffiliationsManager() {
   const handleAdd = async () => {
     if (!newAffiliation.name.trim()) {
       setError("Name is required");
+      toast.error("Name is required");
       return;
     }
 
@@ -63,12 +65,16 @@ export default function AffiliationsManager() {
           endYear: "",
         });
         setIsAdding(false);
+        toast.success("Affiliation added successfully!");
       } else {
         const data = (await response.json()) as { error: string };
         setError(data.error);
+        toast.error(data.error);
       }
     } catch {
-      setError("Failed to add affiliation");
+      const errorMsg = "Failed to add affiliation";
+      setError(errorMsg);
+      toast.error(errorMsg);
     } finally {
       setIsLoading(false);
     }
@@ -86,9 +92,12 @@ export default function AffiliationsManager() {
 
       if (response.ok) {
         setAffiliations(affiliations.filter((a) => a.id !== id));
+        toast.success("Affiliation deleted successfully!");
+      } else {
+        toast.error("Failed to delete affiliation");
       }
     } catch {
-      // Silently fail
+      toast.error("Failed to delete affiliation");
     }
   };
 
