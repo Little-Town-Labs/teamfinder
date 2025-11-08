@@ -1,0 +1,343 @@
+"use client";
+
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+
+import type { PlayerProfile } from "@/drizzle/schema";
+
+interface EditProfileFormProps {
+  profile: PlayerProfile;
+  userId: string;
+}
+
+export default function EditProfileForm({ profile }: EditProfileFormProps) {
+  const router = useRouter();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+
+  const [formData, setFormData] = useState({
+    usbcMemberId: profile.usbcMemberId,
+    gender: profile.gender,
+    bowlingHand: profile.bowlingHand,
+    currentAverage: profile.currentAverage?.toString() || "",
+    highGame: profile.highGame?.toString() || "",
+    highSeries: profile.highSeries?.toString() || "",
+    yearsExperience: profile.yearsExperience?.toString() || "",
+    preferredTeamTypes: profile.preferredTeamTypes || [],
+    preferredCompetitionLevel: profile.preferredCompetitionLevel || "",
+    lookingForTeam: profile.lookingForTeam,
+    openToSubstitute: profile.openToSubstitute,
+    bio: profile.bio || "",
+  });
+
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
+  ) => {
+    const { name, value, type } = e.target;
+
+    if (type === "checkbox") {
+      const checked = (e.target as HTMLInputElement).checked;
+      setFormData((prev) => ({ ...prev, [name]: checked }));
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: value }));
+    }
+  };
+
+  const handleTeamTypeToggle = (teamType: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      preferredTeamTypes: prev.preferredTeamTypes.includes(teamType)
+        ? prev.preferredTeamTypes.filter((t) => t !== teamType)
+        : [...prev.preferredTeamTypes, teamType],
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setError(null);
+    setSuccessMessage(null);
+
+    try {
+      const response = await fetch("/api/profile/update", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        const data = (await response.json()) as { error: string };
+        throw new Error(data.error || "Failed to update profile");
+      }
+
+      setSuccessMessage("Profile updated successfully!");
+      router.refresh();
+
+      // Clear success message after 3 seconds
+      setTimeout(() => setSuccessMessage(null), 3000);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "An error occurred");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-6">
+      {error && (
+        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+          {error}
+        </div>
+      )}
+
+      {successMessage && (
+        <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded">
+          {successMessage}
+        </div>
+      )}
+
+      {/* Essential Information */}
+      <div className="space-y-6">
+        <h2 className="text-xl font-semibold text-gray-900">Essential Information</h2>
+
+        <div>
+          <label htmlFor="usbcMemberId" className="block text-sm font-medium text-gray-700">
+            USBC Member ID <span className="text-red-500">*</span>
+          </label>
+          <p className="text-xs text-gray-500 mb-2">
+            Your USBC Member ID is required for verification and credibility
+          </p>
+          <input
+            type="text"
+            id="usbcMemberId"
+            name="usbcMemberId"
+            required
+            value={formData.usbcMemberId}
+            onChange={handleInputChange}
+            className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-blue-500"
+            placeholder="e.g., 1234-56789"
+          />
+        </div>
+
+        <div>
+          <label htmlFor="gender" className="block text-sm font-medium text-gray-700">
+            Gender <span className="text-red-500">*</span>
+          </label>
+          <select
+            id="gender"
+            name="gender"
+            required
+            value={formData.gender}
+            onChange={handleInputChange}
+            className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-blue-500"
+          >
+            <option value="">Select gender</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="other">Other</option>
+            <option value="prefer_not_to_say">Prefer not to say</option>
+          </select>
+        </div>
+
+        <div>
+          <label htmlFor="bowlingHand" className="block text-sm font-medium text-gray-700">
+            Bowling Hand <span className="text-red-500">*</span>
+          </label>
+          <select
+            id="bowlingHand"
+            name="bowlingHand"
+            required
+            value={formData.bowlingHand}
+            onChange={handleInputChange}
+            className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-blue-500"
+          >
+            <option value="">Select hand</option>
+            <option value="right">Right</option>
+            <option value="left">Left</option>
+          </select>
+        </div>
+      </div>
+
+      {/* Bowling Statistics */}
+      <div className="space-y-6 pt-6 border-t">
+        <h2 className="text-xl font-semibold text-gray-900">Bowling Statistics</h2>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label htmlFor="currentAverage" className="block text-sm font-medium text-gray-700">
+              Current Average
+            </label>
+            <input
+              type="number"
+              id="currentAverage"
+              name="currentAverage"
+              min="0"
+              max="300"
+              value={formData.currentAverage}
+              onChange={handleInputChange}
+              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-blue-500"
+              placeholder="e.g., 180"
+            />
+          </div>
+
+          <div>
+            <label htmlFor="highGame" className="block text-sm font-medium text-gray-700">
+              High Game
+            </label>
+            <input
+              type="number"
+              id="highGame"
+              name="highGame"
+              min="0"
+              max="300"
+              value={formData.highGame}
+              onChange={handleInputChange}
+              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-blue-500"
+              placeholder="e.g., 279"
+            />
+          </div>
+
+          <div>
+            <label htmlFor="highSeries" className="block text-sm font-medium text-gray-700">
+              High Series (3 games)
+            </label>
+            <input
+              type="number"
+              id="highSeries"
+              name="highSeries"
+              min="0"
+              max="900"
+              value={formData.highSeries}
+              onChange={handleInputChange}
+              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-blue-500"
+              placeholder="e.g., 720"
+            />
+          </div>
+
+          <div>
+            <label htmlFor="yearsExperience" className="block text-sm font-medium text-gray-700">
+              Years of Experience
+            </label>
+            <input
+              type="number"
+              id="yearsExperience"
+              name="yearsExperience"
+              min="0"
+              value={formData.yearsExperience}
+              onChange={handleInputChange}
+              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-blue-500"
+              placeholder="e.g., 5"
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Preferences */}
+      <div className="space-y-6 pt-6 border-t">
+        <h2 className="text-xl font-semibold text-gray-900">Team Preferences</h2>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Preferred Team Types
+          </label>
+          <div className="space-y-2">
+            {["singles", "doubles", "team"].map((type) => (
+              <label key={type} className="flex items-center">
+                <input
+                  type="checkbox"
+                  checked={formData.preferredTeamTypes.includes(type)}
+                  onChange={() => handleTeamTypeToggle(type)}
+                  className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                />
+                <span className="ml-2 text-sm text-gray-700 capitalize">{type}</span>
+              </label>
+            ))}
+          </div>
+        </div>
+
+        <div>
+          <label
+            htmlFor="preferredCompetitionLevel"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Competition Level
+          </label>
+          <select
+            id="preferredCompetitionLevel"
+            name="preferredCompetitionLevel"
+            value={formData.preferredCompetitionLevel}
+            onChange={handleInputChange}
+            className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-blue-500"
+          >
+            <option value="">Select level</option>
+            <option value="recreational">Recreational</option>
+            <option value="league">League</option>
+            <option value="competitive">Competitive</option>
+            <option value="professional">Professional</option>
+          </select>
+        </div>
+
+        <div className="space-y-2">
+          <label className="flex items-center">
+            <input
+              type="checkbox"
+              name="lookingForTeam"
+              checked={formData.lookingForTeam}
+              onChange={handleInputChange}
+              className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+            />
+            <span className="ml-2 text-sm text-gray-700">I'm currently looking for a team</span>
+          </label>
+
+          <label className="flex items-center">
+            <input
+              type="checkbox"
+              name="openToSubstitute"
+              checked={formData.openToSubstitute}
+              onChange={handleInputChange}
+              className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+            />
+            <span className="ml-2 text-sm text-gray-700">
+              I'm open to being a substitute bowler
+            </span>
+          </label>
+        </div>
+
+        <div>
+          <label htmlFor="bio" className="block text-sm font-medium text-gray-700">
+            Bio (Optional)
+          </label>
+          <textarea
+            id="bio"
+            name="bio"
+            rows={4}
+            value={formData.bio}
+            onChange={handleInputChange}
+            className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-blue-500"
+            placeholder="Tell us about your bowling experience, goals, and what you're looking for in a team..."
+          />
+        </div>
+      </div>
+
+      {/* Submit Button */}
+      <div className="flex justify-between pt-6 border-t">
+        <button
+          type="button"
+          onClick={() => router.back()}
+          className="px-6 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+        >
+          Cancel
+        </button>
+
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
+        >
+          {isSubmitting ? "Saving..." : "Save Changes"}
+        </button>
+      </div>
+    </form>
+  );
+}
