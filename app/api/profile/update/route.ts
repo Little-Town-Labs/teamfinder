@@ -5,6 +5,7 @@ import { z } from "zod";
 
 import { playerProfiles, users } from "@/drizzle/schema";
 import { db } from "@/lib/db";
+import { logProfileUpdated } from "@/lib/activity-logger";
 
 const updateProfileSchema = z.object({
   usbcMemberId: z.string().min(1),
@@ -88,6 +89,11 @@ export async function PUT(request: Request) {
       })
       .where(eq(playerProfiles.userId, user.id))
       .returning();
+
+    // Log activity
+    await logProfileUpdated({
+      userId: user.id,
+    });
 
     return NextResponse.json({ success: true, profile: updatedProfile }, { status: 200 });
   } catch (error) {

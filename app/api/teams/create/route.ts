@@ -5,6 +5,7 @@ import { z } from "zod";
 
 import { type NewTeam, teamMembers, teams, users } from "@/drizzle/schema";
 import { db } from "@/lib/db";
+import { logTeamCreated } from "@/lib/activity-logger";
 
 const createTeamSchema = z.object({
   userId: z.string().uuid(),
@@ -76,6 +77,13 @@ export async function POST(request: Request) {
       teamId: team.id,
       userId: user.id,
       role: "captain",
+    });
+
+    // Log activity
+    await logTeamCreated({
+      userId: user.id,
+      teamId: team.id,
+      teamName: team.name,
     });
 
     return NextResponse.json({ success: true, teamId: team.id }, { status: 201 });

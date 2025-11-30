@@ -1,11 +1,12 @@
 import { UserButton } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
-import { eq } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
-import { type PlayerProfile, playerProfiles, users } from "@/drizzle/schema";
+import { activityLogs, type PlayerProfile, playerProfiles, users } from "@/drizzle/schema";
 import { db } from "@/lib/db";
+import { ActivityFeed } from "@/components/ActivityFeed/ActivityFeed";
 
 export default async function DashboardPage() {
   const { userId } = await auth();
@@ -32,6 +33,13 @@ export default async function DashboardPage() {
   if (!profile || !profile.profileComplete) {
     redirect("/onboarding");
   }
+
+  // Get recent activity logs
+  const recentActivities = await db.query.activityLogs.findMany({
+    where: eq(activityLogs.userId, user.id),
+    orderBy: [desc(activityLogs.createdAt)],
+    limit: 10,
+  });
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -137,10 +145,10 @@ export default async function DashboardPage() {
           </div>
         </div>
 
-        {/* Activity Feed Placeholder */}
+        {/* Activity Feed */}
         <div className="bg-white shadow rounded-lg p-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Activity</h3>
-          <p className="text-gray-500 text-center py-8">No recent activity yet</p>
+          <ActivityFeed activities={recentActivities} />
         </div>
       </main>
     </div>

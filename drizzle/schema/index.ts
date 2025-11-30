@@ -9,4 +9,5 @@ export * from "./player-applications";
 export * from "./messages";
 export * from "./leagues";
 export * from "./affiliations";
+export * from "./activity-logs";
 export * from "./relations";
