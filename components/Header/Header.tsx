@@ -1,0 +1,32 @@
+import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import { Button } from "components/Button/Button";
+
+export function Header() {
+  return (
+    <header className="border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900">
+      <nav className="mx-auto flex max-w-(--breakpoint-xl) items-center justify-between px-4 py-4 lg:px-6">
+        <a href="/" className="flex items-center">
+          <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
+            TeamFinder
+          </span>
+        </a>
+        <div className="flex items-center gap-4">
+          <SignedOut>
+            <Button href="/sign-in" intent="secondary" size="sm">
+              Sign In
+            </Button>
+            <Button href="/sign-up" size="sm">
+              Sign Up
+            </Button>
+          </SignedOut>
+          <SignedIn>
+            <Button href="/dashboard" intent="secondary" size="sm">
+              Dashboard
+            </Button>
+            <UserButton />
+          </SignedIn>
+        </div>
+      </nav>
+    </header>
+  );
+}

@@ -1,16 +1,17 @@
 import { Metadata } from "next"
 import { Button } from "components/Button/Button"
+import { Header } from "components/Header/Header"
 
 import { LP_GRID_ITEMS } from "lp-items"
 
 export const metadata: Metadata = {
-  title: "TeamFinder - Find Your Perfect Bowling Team",
+  title: "TeamFinder - Teams Need Players. Players Need Teams.",
   description: "Connect bowlers with teams. Find teammates, recruit players, and join the bowling community.",
   twitter: {
     card: "summary_large_image",
   },
   openGraph: {
-    title: "TeamFinder - Connect Bowlers & Teams",
+    title: "TeamFinder - Teams Need Players. Players Need Teams.",
     description: "The premier platform for bowling team matchmaking. Find your perfect team or recruit talented bowlers.",
     url: "https://teamfinder.vercel.app/",
   },
@@ -19,12 +20,13 @@ export const metadata: Metadata = {
 export default function Web() {
   return (
     <>
+      <Header />
       {/* Hero Section */}
       <section className="bg-white dark:bg-gray-900">
         <div className="mx-auto grid max-w-(--breakpoint-xl) px-4 py-8 text-center lg:py-16">
           <div className="mx-auto place-self-center">
             <h1 className="mb-4 max-w-2xl text-4xl leading-none font-extrabold tracking-tight md:text-5xl xl:text-6xl dark:text-white">
-              Find Your Perfect Bowling Team
+              Teams Need Players. Players Need Teams.
             </h1>
             <p className="mb-6 max-w-2xl font-light text-gray-500 md:text-lg lg:mb-8 lg:text-xl dark:text-gray-400">
               Connect with bowlers and teams in your area. Whether you&apos;re looking to join a league team or
