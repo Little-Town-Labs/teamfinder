@@ -7,7 +7,8 @@
       "Bash(pnpm exec eslint:*)",
       "Bash(pnpm tsc:*)",
       "Bash(./node_modules/.bin/tsc:*)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(git commit:*)"
     ],
     "deny": [],
     "ask": []
