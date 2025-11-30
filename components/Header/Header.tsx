@@ -1,15 +1,16 @@
 import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import Link from "next/link";
 import { Button } from "components/Button/Button";
 
 export function Header() {
   return (
     <header className="border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900">
       <nav className="mx-auto flex max-w-(--breakpoint-xl) items-center justify-between px-4 py-4 lg:px-6">
-        <a href="/" className="flex items-center">
+        <Link href="/" className="flex items-center">
           <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
             TeamFinder
           </span>
-        </a>
+        </Link>
         <div className="flex items-center gap-4">
           <SignedOut>
             <Button href="/sign-in" intent="secondary" size="sm">
