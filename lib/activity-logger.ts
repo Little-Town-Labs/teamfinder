@@ -1,5 +1,5 @@
-import { db } from "@/lib/db";
 import { activityLogs, type NewActivityLog } from "@/drizzle/schema";
+import { db } from "@/lib/db";
 
 /**
  * Activity Logger Utility

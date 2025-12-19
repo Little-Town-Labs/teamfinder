@@ -4,8 +4,8 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 
 import { type NewTeam, teamMembers, teams, users } from "@/drizzle/schema";
-import { db } from "@/lib/db";
 import { logTeamCreated } from "@/lib/activity-logger";
+import { db } from "@/lib/db";
 
 const createTeamSchema = z.object({
   userId: z.string().uuid(),

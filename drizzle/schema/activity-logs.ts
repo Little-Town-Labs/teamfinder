@@ -1,6 +1,6 @@
-import { pgEnum, pgTable, text, timestamp, uuid, jsonb } from "drizzle-orm/pg-core";
-import { users } from "./users";
+import { jsonb, pgEnum, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 import { teams } from "./teams";
+import { users } from "./users";
 
 /**
  * Activity types enum

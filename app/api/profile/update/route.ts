@@ -4,8 +4,8 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 
 import { playerProfiles, users } from "@/drizzle/schema";
-import { db } from "@/lib/db";
 import { logProfileUpdated } from "@/lib/activity-logger";
+import { db } from "@/lib/db";
 
 const updateProfileSchema = z.object({
   usbcMemberId: z.string().min(1),
