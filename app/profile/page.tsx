@@ -1,8 +1,8 @@
 import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
-import Link from "next/link";
 import { redirect } from "next/navigation";
 
+import { Header } from "@/components/Header/Header";
 import { type PlayerProfile, playerProfiles, users } from "@/drizzle/schema";
 import { db } from "@/lib/db";
 
@@ -35,28 +35,30 @@ export default async function ProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex justify-between items-center">
-            <h1 className="text-2xl font-bold text-gray-900">Edit Profile</h1>
-            <Link
-              href="/dashboard"
-              className="text-sm text-blue-600 hover:text-blue-800 font-medium"
-            >
-              ← Back to Dashboard
-            </Link>
+    <>
+      <Header />
+      <section className="bg-white dark:bg-gray-900">
+        <div className="mx-auto max-w-(--breakpoint-xl) px-4 py-8 sm:py-16 lg:px-6">
+          <div className="mx-auto max-w-3xl text-center">
+            <h1 className="mb-4 text-4xl font-extrabold tracking-tight text-gray-900 md:text-5xl dark:text-white">
+              Edit Profile
+            </h1>
+            <p className="mb-8 font-light text-gray-500 md:text-lg lg:text-xl dark:text-gray-400">
+              Update your bowling profile and preferences
+            </p>
           </div>
         </div>
-      </header>
+      </section>
 
-      {/* Main Content */}
-      <main className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="bg-white shadow rounded-lg p-6">
-          <EditProfileForm profile={profile} userId={user.id} />
+      <section className="bg-gray-50 dark:bg-gray-800">
+        <div className="mx-auto max-w-(--breakpoint-xl) px-4 py-8 sm:py-16 lg:px-6">
+          <div className="mx-auto max-w-3xl">
+            <div className="rounded-lg bg-white p-8 shadow-md dark:bg-gray-900">
+              <EditProfileForm profile={profile} userId={user.id} />
+            </div>
+          </div>
         </div>
-      </main>
-    </div>
+      </section>
+    </>
   );
 }

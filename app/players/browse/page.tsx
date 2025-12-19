@@ -1,10 +1,9 @@
-import { UserButton } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 import Image from "next/image";
-import Link from "next/link";
 import { redirect } from "next/navigation";
 
+import { Header } from "@/components/Header/Header";
 import { playerProfiles, users } from "@/drizzle/schema";
 import type { PlayerProfile, User } from "@/drizzle/schema";
 
@@ -46,89 +45,89 @@ export default async function BrowsePlayersPage() {
   })) as Array<PlayerProfile & { user: User }>;
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-          <div>
-            <Link
-              href="/dashboard"
-              className="text-sm text-blue-600 hover:text-blue-800 font-medium mb-2 inline-block"
-            >
-              ← Back to Dashboard
-            </Link>
-            <h1 className="text-2xl font-bold text-gray-900">Find Players</h1>
+    <>
+      <Header />
+
+      {/* Hero Section */}
+      <section className="bg-white dark:bg-gray-900">
+        <div className="mx-auto max-w-(--breakpoint-xl) px-4 py-8 sm:py-16 lg:px-6">
+          <div className="mb-8 text-center lg:mb-16">
+            <h1 className="mb-4 text-4xl font-extrabold tracking-tight text-gray-900 dark:text-white">
+              Find Players
+            </h1>
+            <p className="font-light text-gray-500 sm:text-xl dark:text-gray-400">
+              Discover talented bowlers looking for teams
+            </p>
           </div>
-          <UserButton afterSignOutUrl="/" />
-        </div>
-      </header>
 
-      {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Filters Section (placeholder for future) */}
-        <div className="bg-white shadow rounded-lg p-6 mb-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Filter Players</h2>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div>
-              <label htmlFor="minAverage" className="block text-sm font-medium text-gray-700">
-                Min Average
-              </label>
-              <input
-                type="number"
-                id="minAverage"
-                placeholder="e.g., 150"
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-blue-500"
-              />
-            </div>
+          {/* Filters Section */}
+          <div className="mx-auto max-w-5xl rounded-lg bg-gray-50 p-6 dark:bg-gray-800">
+            <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">Filter Players</h2>
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
+              <div>
+                <label htmlFor="minAverage" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  Min Average
+                </label>
+                <input
+                  type="number"
+                  id="minAverage"
+                  placeholder="e.g., 150"
+                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+                />
+              </div>
 
-            <div>
-              <label htmlFor="maxAverage" className="block text-sm font-medium text-gray-700">
-                Max Average
-              </label>
-              <input
-                type="number"
-                id="maxAverage"
-                placeholder="e.g., 200"
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-blue-500"
-              />
-            </div>
+              <div>
+                <label htmlFor="maxAverage" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  Max Average
+                </label>
+                <input
+                  type="number"
+                  id="maxAverage"
+                  placeholder="e.g., 200"
+                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+                />
+              </div>
 
-            <div>
-              <label htmlFor="bowlingHand" className="block text-sm font-medium text-gray-700">
-                Bowling Hand
-              </label>
-              <select
-                id="bowlingHand"
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-blue-500"
-              >
-                <option value="">All</option>
-                <option value="right">Right</option>
-                <option value="left">Left</option>
-              </select>
-            </div>
+              <div>
+                <label htmlFor="bowlingHand" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  Bowling Hand
+                </label>
+                <select
+                  id="bowlingHand"
+                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                >
+                  <option value="">All</option>
+                  <option value="right">Right</option>
+                  <option value="left">Left</option>
+                </select>
+              </div>
 
-            <div className="flex items-end">
-              <button className="w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
-                Apply Filters
-              </button>
+              <div className="flex items-end">
+                <button className="w-full rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800">
+                  Apply Filters
+                </button>
+              </div>
             </div>
           </div>
         </div>
+      </section>
 
-        {/* Players List */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* Players Grid Section */}
+      <section className="bg-gray-50 dark:bg-gray-800">
+        <div className="mx-auto max-w-(--breakpoint-xl) px-4 py-8 sm:py-16 lg:px-6">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {availablePlayers.length === 0 ? (
-            <div className="col-span-full bg-white shadow rounded-lg p-8 text-center">
-              <p className="text-gray-500">No players are currently looking for teams.</p>
-              <p className="text-sm text-gray-400 mt-2">Check back later!</p>
+            <div className="col-span-full rounded-lg bg-white p-8 text-center shadow dark:bg-gray-900">
+              <p className="text-gray-500 dark:text-gray-400">No players are currently looking for teams.</p>
+              <p className="mt-2 text-sm text-gray-400 dark:text-gray-500">Check back later!</p>
             </div>
           ) : (
             availablePlayers.map((player) => (
               <div
                 key={player.id}
-                className="bg-white shadow rounded-lg p-6 hover:shadow-lg transition-shadow"
+                className="rounded-lg bg-white p-6 shadow transition-shadow hover:shadow-lg dark:bg-gray-900"
               >
-                <div className="flex items-center gap-3 mb-4">
+                <div className="mb-4 flex items-center gap-3">
                   {player.user.imageUrl && (
                     <Image
                       src={player.user.imageUrl}
@@ -139,17 +138,17 @@ export default async function BrowsePlayersPage() {
                     />
                   )}
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-900">
+                    <h3 className="text-lg font-bold text-gray-900 dark:text-white">
                       {player.user.firstName} {player.user.lastName}
                     </h3>
-                    <div className="flex gap-2 mt-1">
+                    <div className="mt-1 flex gap-2">
                       {player.lookingForTeam && (
-                        <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded">
+                        <span className="rounded bg-blue-100 px-2 py-1 text-xs font-medium text-blue-800 dark:bg-blue-900 dark:text-blue-300">
                           Looking for Team
                         </span>
                       )}
                       {player.openToSubstitute && (
-                        <span className="px-2 py-1 bg-purple-100 text-purple-800 text-xs font-medium rounded">
+                        <span className="rounded bg-purple-100 px-2 py-1 text-xs font-medium text-purple-800 dark:bg-purple-900 dark:text-purple-300">
                           Open to Sub
                         </span>
                       )}
@@ -157,35 +156,35 @@ export default async function BrowsePlayersPage() {
                   </div>
                 </div>
 
-                <dl className="space-y-2 mb-4">
+                <dl className="mb-4 space-y-2">
                   {player.currentAverage && (
                     <div className="flex justify-between text-sm">
-                      <dt className="text-gray-500">Average:</dt>
-                      <dd className="font-medium text-gray-900">{player.currentAverage}</dd>
+                      <dt className="text-gray-500 dark:text-gray-400">Average:</dt>
+                      <dd className="font-medium text-gray-900 dark:text-white">{player.currentAverage}</dd>
                     </div>
                   )}
                   {player.highGame && (
                     <div className="flex justify-between text-sm">
-                      <dt className="text-gray-500">High Game:</dt>
-                      <dd className="font-medium text-gray-900">{player.highGame}</dd>
+                      <dt className="text-gray-500 dark:text-gray-400">High Game:</dt>
+                      <dd className="font-medium text-gray-900 dark:text-white">{player.highGame}</dd>
                     </div>
                   )}
                   {player.yearsExperience && (
                     <div className="flex justify-between text-sm">
-                      <dt className="text-gray-500">Experience:</dt>
-                      <dd className="font-medium text-gray-900">
+                      <dt className="text-gray-500 dark:text-gray-400">Experience:</dt>
+                      <dd className="font-medium text-gray-900 dark:text-white">
                         {player.yearsExperience} {player.yearsExperience === 1 ? "year" : "years"}
                       </dd>
                     </div>
                   )}
                   <div className="flex justify-between text-sm">
-                    <dt className="text-gray-500">Hand:</dt>
-                    <dd className="font-medium text-gray-900 capitalize">{player.bowlingHand}</dd>
+                    <dt className="text-gray-500 dark:text-gray-400">Hand:</dt>
+                    <dd className="font-medium capitalize text-gray-900 dark:text-white">{player.bowlingHand}</dd>
                   </div>
                   {player.preferredCompetitionLevel && (
                     <div className="flex justify-between text-sm">
-                      <dt className="text-gray-500">Level:</dt>
-                      <dd className="font-medium text-gray-900 capitalize">
+                      <dt className="text-gray-500 dark:text-gray-400">Level:</dt>
+                      <dd className="font-medium capitalize text-gray-900 dark:text-white">
                         {player.preferredCompetitionLevel}
                       </dd>
                     </div>
@@ -194,12 +193,12 @@ export default async function BrowsePlayersPage() {
 
                 {player.preferredTeamTypes && player.preferredTeamTypes.length > 0 && (
                   <div className="mb-4">
-                    <p className="text-xs text-gray-500 mb-1">Preferred Team Types:</p>
+                    <p className="mb-1 text-xs text-gray-500 dark:text-gray-400">Preferred Team Types:</p>
                     <div className="flex flex-wrap gap-1">
                       {player.preferredTeamTypes.map((type) => (
                         <span
                           key={type}
-                          className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded capitalize"
+                          className="rounded bg-gray-100 px-2 py-1 text-xs capitalize text-gray-700 dark:bg-gray-700 dark:text-gray-300"
                         >
                           {type}
                         </span>
@@ -209,25 +208,26 @@ export default async function BrowsePlayersPage() {
                 )}
 
                 {player.bio && (
-                  <p className="text-sm text-gray-700 mb-4 line-clamp-3">{player.bio}</p>
+                  <p className="mb-4 line-clamp-3 text-sm text-gray-700 dark:text-gray-300">{player.bio}</p>
                 )}
 
-                <div className="pt-4 border-t">
-                  <button className="w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm font-medium">
+                <div className="border-t pt-4 dark:border-gray-700">
+                  <button className="w-full rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800">
                     Send Message
                   </button>
                 </div>
 
                 {player.usbcVerified && (
                   <div className="mt-2 text-center">
-                    <span className="text-xs text-green-600">✓ USBC Verified</span>
+                    <span className="text-xs text-green-600 dark:text-green-400">✓ USBC Verified</span>
                   </div>
                 )}
               </div>
             ))
           )}
+          </div>
         </div>
-      </main>
-    </div>
+      </section>
+    </>
   );
 }
