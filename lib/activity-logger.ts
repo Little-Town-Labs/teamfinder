@@ -132,5 +132,85 @@ export async function logProfileUpdated(params: {
   });
 }
 
+// Bowling Center Activities
+
+export async function logBowlingCenterAdded(params: {
+  userId: uuid;
+  centerId: uuid;
+  centerName: string;
+}) {
+  return logActivity({
+    userId: params.userId,
+    activityType: "profile_updated", // Using profile_updated as placeholder since activity type doesn't have center-specific types yet
+    message: `You added ${params.centerName} to the bowling center directory`,
+    actionUrl: `/bowling-centers/${params.centerId}`,
+    metadata: {
+      centerName: params.centerName,
+      centerId: params.centerId,
+      action: "center_added",
+    },
+  });
+}
+
+export async function logCenterEditSuggested(params: {
+  userId: uuid;
+  centerId: uuid;
+  centerName: string;
+}) {
+  return logActivity({
+    userId: params.userId,
+    activityType: "profile_updated", // Using profile_updated as placeholder
+    message: `You suggested edits to ${params.centerName}`,
+    actionUrl: `/bowling-centers/${params.centerId}`,
+    metadata: {
+      centerName: params.centerName,
+      centerId: params.centerId,
+      action: "edit_suggested",
+    },
+  });
+}
+
+export async function logCenterEditApproved(params: {
+  userId: uuid; // The user who suggested the edit
+  centerId: uuid;
+  centerName: string;
+  reviewerName: string;
+}) {
+  return logActivity({
+    userId: params.userId,
+    activityType: "profile_verified", // Using profile_verified as placeholder for approval
+    message: `Your suggested edits to ${params.centerName} were approved by ${params.reviewerName}`,
+    actionUrl: `/bowling-centers/${params.centerId}`,
+    metadata: {
+      centerName: params.centerName,
+      centerId: params.centerId,
+      reviewerName: params.reviewerName,
+      action: "edit_approved",
+    },
+  });
+}
+
+export async function logCenterEditRejected(params: {
+  userId: uuid; // The user who suggested the edit
+  centerId: uuid;
+  centerName: string;
+  reviewerName: string;
+  reason?: string;
+}) {
+  return logActivity({
+    userId: params.userId,
+    activityType: "profile_updated", // Using profile_updated as placeholder
+    message: `Your suggested edits to ${params.centerName} were not approved${params.reason ? `: ${params.reason}` : ""}`,
+    actionUrl: `/bowling-centers/${params.centerId}`,
+    metadata: {
+      centerName: params.centerName,
+      centerId: params.centerId,
+      reviewerName: params.reviewerName,
+      reason: params.reason,
+      action: "edit_rejected",
+    },
+  });
+}
+
 // TypeScript helper for UUID
 type uuid = string;

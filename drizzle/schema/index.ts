@@ -10,4 +10,5 @@ export * from "./messages";
 export * from "./leagues";
 export * from "./affiliations";
 export * from "./activity-logs";
+export * from "./center-edit-suggestions";
 export * from "./relations";

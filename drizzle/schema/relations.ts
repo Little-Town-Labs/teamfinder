@@ -1,6 +1,9 @@
 import { relations } from "drizzle-orm";
 import { activityLogs } from "./activity-logs";
 import { affiliations } from "./affiliations";
+import { bowlingCenters } from "./bowling-centers";
+import { centerEditSuggestions } from "./center-edit-suggestions";
+import { leagues } from "./leagues";
 import { playerProfiles } from "./player-profiles";
 import { teamMembers } from "./team-members";
 import { teams } from "./teams";
@@ -15,12 +18,17 @@ export const usersRelations = relations(users, ({ one, many }) => ({
   teamMemberships: many(teamMembers),
   affiliations: many(affiliations),
   activityLogs: many(activityLogs),
+  centerEditSuggestions: many(centerEditSuggestions),
 }));
 
 export const playerProfilesRelations = relations(playerProfiles, ({ one }) => ({
   user: one(users, {
     fields: [playerProfiles.userId],
     references: [users.id],
+  }),
+  homeBowlingCenter: one(bowlingCenters, {
+    fields: [playerProfiles.homeBowlingCenterId],
+    references: [bowlingCenters.id],
   }),
 }));
 
@@ -41,6 +49,10 @@ export const teamsRelations = relations(teams, ({ one, many }) => ({
     references: [users.id],
   }),
   members: many(teamMembers),
+  homeBowlingCenter: one(bowlingCenters, {
+    fields: [teams.homeBowlingCenterId],
+    references: [bowlingCenters.id],
+  }),
 }));
 
 export const affiliationsRelations = relations(affiliations, ({ one }) => ({
@@ -62,5 +74,34 @@ export const activityLogsRelations = relations(activityLogs, ({ one }) => ({
   team: one(teams, {
     fields: [activityLogs.teamId],
     references: [teams.id],
+  }),
+}));
+
+export const bowlingCentersRelations = relations(bowlingCenters, ({ many }) => ({
+  teams: many(teams),
+  leagues: many(leagues),
+  playerProfiles: many(playerProfiles),
+  editSuggestions: many(centerEditSuggestions),
+}));
+
+export const leaguesRelations = relations(leagues, ({ one }) => ({
+  bowlingCenter: one(bowlingCenters, {
+    fields: [leagues.bowlingCenterId],
+    references: [bowlingCenters.id],
+  }),
+}));
+
+export const centerEditSuggestionsRelations = relations(centerEditSuggestions, ({ one }) => ({
+  bowlingCenter: one(bowlingCenters, {
+    fields: [centerEditSuggestions.bowlingCenterId],
+    references: [bowlingCenters.id],
+  }),
+  suggestor: one(users, {
+    fields: [centerEditSuggestions.suggestedBy],
+    references: [users.id],
+  }),
+  reviewer: one(users, {
+    fields: [centerEditSuggestions.reviewedBy],
+    references: [users.id],
   }),
 }));

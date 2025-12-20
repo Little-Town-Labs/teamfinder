@@ -7,6 +7,9 @@ const isPublicRoute = createRouteMatcher([
   "/sign-up(.*)",
   "/api/health(.*)",
   "/api/webhooks(.*)",
+  "/bowling-centers/browse(.*)",
+  "/bowling-centers/[id](.*)",
+  "/api/bowling-centers(.*)", // Allow public access to view centers
 ]);
 
 export default clerkMiddleware(async (auth, request) => {
