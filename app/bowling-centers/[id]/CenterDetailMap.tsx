@@ -3,9 +3,8 @@
 import "mapbox-gl/dist/mapbox-gl.css";
 
 import { useEffect, useRef, useState } from "react";
-// eslint-disable-next-line import/no-unresolved
-import { Map, Marker, NavigationControl } from "react-map-gl";
-import type { MapRef } from "react-map-gl";
+import { Map, Marker, NavigationControl } from "react-map-gl/mapbox";
+import type { MapRef } from "react-map-gl/mapbox";
 
 interface CenterDetailMapProps {
   latitude: string;

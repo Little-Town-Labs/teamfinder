@@ -3,9 +3,8 @@
 import "mapbox-gl/dist/mapbox-gl.css";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-// eslint-disable-next-line import/no-unresolved
-import { Map, Marker, NavigationControl, Popup } from "react-map-gl";
-import type { MapRef } from "react-map-gl";
+import { Map, Marker, NavigationControl, Popup } from "react-map-gl/mapbox";
+import type { MapRef } from "react-map-gl/mapbox";
 import Supercluster from "supercluster";
 
 import type { BowlingCenter } from "@/drizzle/schema";
