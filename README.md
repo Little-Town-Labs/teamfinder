@@ -1,105 +1,248 @@
 
-# [Next.js Enterprise Boilerplate](https://blazity.com/open-source/nextjs-enterprise-boilerplate) 
+# TeamFinder
 
-A production-ready template for building enterprise applications with Next.js. This boilerplate provides a solid foundation with carefully selected technologies and ready-to-go infrastructure to help you develop high-quality applications efficiently.
+A modern bowling team finder application built with Next.js 15. TeamFinder helps bowlers discover teams, find bowling centers, manage leagues, and connect with other players.
 
-## Motivation
+Built on the [Next.js Enterprise Boilerplate](https://blazity.com/open-source/nextjs-enterprise-boilerplate) foundation.
 
-While most Next.js boilerplates focus on individual developer needs with excessive complexity, **next-enterprise** prioritizes strategic simplicity for enterprise teams. It offers a streamlined foundation with high-impact features that maximize developer productivity and accelerate time-to-market for business-critical applications.
+## Features
 
-<a href="https://blazity.com/">
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="/assets/blazity-logo-dark.svg">
-  <source media="(prefers-color-scheme: light)" srcset="/assets/blazity-logo-light.svg">
-  <img alt="Logo" align="right" height="80" src="/assets/blazity-logo-light.svg">
-</picture>
-</a>
+### 🎳 Bowling Center Directory
+- **Browse & Search** - Find bowling centers by location, name, or amenities
+- **Interactive Maps** - Mapbox integration with marker clustering
+- **Proximity Search** - Find centers near you with distance filtering
+- **Detailed Information** - Contact details, facility info, hours, and amenities
+- **Community Edits** - Users can suggest updates, admins review and approve
+- **Activity Integration** - See teams, leagues, and players at each center
 
-> [!NOTE]
-> **Blazity** is a group of Next.js architects. We help organizations architect, optimize, and deploy high-performance Next.js applications at scale. Contact us at [contact@blazity.com](https://blazity.com) if you’d like to talk about your project.
+### 👥 Team Management
+- Create and manage bowling teams
+- Team profiles with roster management
+- Browse teams by location and type
+- Team activity feeds
 
+### 👤 Player Profiles
+- Personal bowling profiles with stats
+- Affiliation management (USBC, state associations)
+- Home bowling center assignment
+- Player activity tracking
 
+### 🏆 League Management
+- League information and schedules
+- Association with bowling centers
+- Player and team integration
+
+### 🔐 Authentication & Access Control
+- Clerk authentication integration
+- Role-based access (admin/user)
+- Protected routes and API endpoints
+- Activity logging and audit trails
+
+### 📊 Admin Panel
+- Review and approve center edit suggestions
+- Content moderation
+- User management via Clerk
+- Activity monitoring
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 20.0.0 or higher
+- pnpm 10.0.0 (managed via Corepack)
+- PostgreSQL database
+- Clerk account for authentication
+- Mapbox account for maps
+
+### Environment Variables
+
+Create a `.env.local` file with the following variables:
+
+```env
+# Database
+DATABASE_URL=postgresql://user:password@localhost:5432/teamfinder
+
+# Clerk Authentication
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_...
+CLERK_SECRET_KEY=sk_test_...
+NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
+NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
+
+# Mapbox
+NEXT_PUBLIC_MAPBOX_TOKEN=pk.ey...
+
+# Application
+NEXT_PUBLIC_BASE_URL=http://localhost:3000
+```
+
+### Installation
+
+```bash
+# Enable Corepack for pnpm
+corepack enable
+
+# Install dependencies
+pnpm install
+
+# Run database migrations
+pnpm db:push
+
+# Start development server
+pnpm dev
+```
+
+Visit `http://localhost:3000` to see the application.
+
+### Admin Setup
+
+To make a user an admin:
+
+1. Sign up through the application
+2. Go to your Clerk Dashboard
+3. Find the user and edit their metadata
+4. Add to `publicMetadata`:
+   ```json
+   {
+     "role": "admin"
+   }
+   ```
 
 ## Documentation
 
-There is a separate documentation that explains its functionality, highlights core business values and technical decisions, provides guidelines for future development, and includes architectural diagrams.
+- **[CLAUDE.md](./CLAUDE.md)** - Development notes and recent work by Claude AI
+- **[docs/bowling-center-directory-plan.md](./docs/bowling-center-directory-plan.md)** - Bowling center feature implementation plan
+- **[docs/organizations-feature.md](./docs/organizations-feature.md)** - Organizations feature documentation
+- **[Next.js Enterprise Docs](https://docs.blazity.com)** - Original boilerplate documentation
 
-We encourage you to [visit our docs (docs.blazity.com)](https://docs.blazity.com) to learn more
+## Technology Stack
 
-## Integrated features
+### Application
 
-### Boilerplate
-With this template you will get all the boilerplate features included:
+* **[Clerk](https://clerk.com/)** - Authentication and user management
+* **[Drizzle ORM](https://orm.drizzle.team/)** - Type-safe database ORM for PostgreSQL
+* **[PostgreSQL](https://www.postgresql.org/)** - Primary database
+* **[Mapbox GL JS](https://www.mapbox.com/)** - Interactive maps with clustering
+* **[react-map-gl](https://visgl.github.io/react-map-gl/)** - React wrapper for Mapbox
+* **[Supercluster](https://github.com/mapbox/supercluster)** - Fast marker clustering
+* **[Zod](https://zod.dev/)** - Schema validation
+* **[Resend](https://resend.com/)** - Transactional email
 
-* [Next.js 15](https://nextjs.org/) - Performance-optimized configuration using App Directory
-* [Tailwind CSS v4](https://tailwindcss.com/) - Utility-first CSS framework for efficient UI development
-* [ESlint 9](https://eslint.org/) and [Prettier](https://prettier.io/) - Code consistency and error prevention
-* [Corepack](https://github.com/nodejs/corepack) & [pnpm](https://pnpm.io/) as the package manager - For project management without compromises 
-* [Strict TypeScript](https://www.typescriptlang.org/) - Enhanced type safety with carefully crafted config and [ts-reset](https://github.com/total-typescript/ts-reset) library
-* [GitHub Actions](https://github.com/features/actions) - Pre-configured workflows including bundle size and performance tracking
-* Perfect Lighthouse score - Optimized performance metrics
-* [Bundle analyzer](https://www.npmjs.com/package/@next/bundle-analyzer) - Monitor and manage bundle size during development
-* Testing suite - [Vitest](https://vitest.dev), [React Testing Library](https://testing-library.com/react), and [Playwright](https://playwright.dev/) for comprehensive testing
-* [Storybook](https://storybook.js.org/) - Component development and documentation
-* Advanced testing - Smoke and acceptance testing capabilities
-* [Conventional commits](https://www.conventionalcommits.org/) - Standardized commit history management
-* [Observability](https://opentelemetry.io/) - Open Telemetry integration
-* [Absolute imports](https://nextjs.org/docs/advanced-features/module-path-aliases) - Simplified import structure
-* [Health checks](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) - Kubernetes-compatible monitoring
-* [Radix UI](https://www.radix-ui.com/) - Headless components for customization
-* [CVA](http://cva.style/) (Class Variance Authority) - Consistent design system creation
-* [Renovate BOT](https://www.whitesourcesoftware.com/free-developer-tools/renovate) - Automated dependency and security updates
-* [Patch-package](https://www.npmjs.com/package/patch-package) - External dependency fixes without compromises
-* Component relationship tools - Graph for managing coupling and cohesion
-* [Semantic Release](https://github.com/semantic-release/semantic-release) - Automated changelog generation
-* [T3 Env](https://env.t3.gg/) - Streamlined environment variable management
+### Core Framework
 
-### Infrastructure & deployments
+* **[Next.js 15](https://nextjs.org/)** - React framework with App Router
+* **[React 19](https://react.dev/)** - UI library
+* **[Tailwind CSS v4](https://tailwindcss.com/)** - Utility-first CSS
+* **[TypeScript](https://www.typescriptlang.org/)** - Type safety with strict mode
+* **[Radix UI](https://www.radix-ui.com/)** - Accessible component primitives
+* **[CVA](http://cva.style/)** - Component variant system
 
-#### Vercel
+### Developer Experience
 
-Easily deploy your Next.js app with [Vercel](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=github&utm_campaign=next-enterprise) by clicking the button below:
+* **[ESLint 9](https://eslint.org/)** & **[Prettier](https://prettier.io/)** - Code quality
+* **[Vitest](https://vitest.dev)** - Unit testing
+* **[Playwright](https://playwright.dev/)** - E2E testing
+* **[Storybook](https://storybook.js.org/)** - Component development
+* **[pnpm](https://pnpm.io/)** - Fast package manager
+* **[T3 Env](https://env.t3.gg/)** - Type-safe environment variables
+* **[Conventional Commits](https://www.conventionalcommits.org/)** - Commit standards
 
-[![Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https://github.com/Blazity/next-enterprise)
+## Available Scripts
 
-#### Custom cloud infrastructure
+```bash
+# Development
+pnpm dev              # Start development server
+pnpm build            # Build for production
+pnpm start            # Start production server
+pnpm lint             # Run ESLint
+pnpm lint:fix         # Fix ESLint errors
+pnpm prettier         # Check code formatting
+pnpm prettier:fix     # Fix code formatting
 
-**next-enterprise** offers dedicated infrastructure as code (IaC) solutions built with Terraform, designed specifically for deploying Next.js applications based on our extensive experience working with enterprise clients.
+# Database
+pnpm db:generate      # Generate Drizzle migrations
+pnpm db:push          # Push schema to database
+pnpm db:studio        # Open Drizzle Studio
 
-Learn more in our [documentation (docs.blazity.com)][docs] how to quickstart with the deployments using simple CLI.
+# Testing
+pnpm test             # Run unit tests
+pnpm test:watch       # Run tests in watch mode
+pnpm test:ui          # Open Vitest UI
+pnpm test:coverage    # Generate coverage report
+pnpm e2e:headless     # Run E2E tests
+pnpm e2e:ui           # Run E2E tests with UI
 
-#### Available cloud providers and theirs features:
+# Storybook
+pnpm storybook        # Start Storybook
+pnpm build-storybook  # Build Storybook
 
-* **AWS (Amazon Web Services)**
-  * Automated provisioning of AWS infrastructure
-  * Scalable & secure setup using:
-     * VPC - Isolated network infrastructure
-     * Elastic Container Service (ECS) - Container orchestration
-     * Elastic Container Registry (ECR) - Container image storage
-     * Application Load Balancer - Traffic distribution
-     * S3 + CloudFront - Static asset delivery and caching
-     * AWS WAF - Web Application Firewall protection
-     * Redis Cluster - Caching
-  * CI/CD ready - Continuous integration and deployment pipeline
+# Analysis
+pnpm analyze          # Analyze bundle size
+```
 
-*... more coming soon*
+## Project Structure
 
-### Team & maintenance
+```
+teamfinder/
+├── app/                          # Next.js App Router
+│   ├── api/                      # API routes
+│   │   ├── admin/                # Admin endpoints
+│   │   ├── bowling-centers/      # Bowling center CRUD
+│   │   ├── teams/                # Team management
+│   │   └── ...
+│   ├── admin/                    # Admin pages
+│   │   └── center-suggestions/   # Review edit suggestions
+│   ├── bowling-centers/          # Bowling center pages
+│   │   ├── browse/               # Browse & search
+│   │   └── [id]/                 # Center details
+│   ├── teams/                    # Team pages
+│   ├── players/                  # Player pages
+│   └── profile/                  # User profile
+├── components/                   # Reusable components
+├── drizzle/                      # Database schema
+│   └── schema/                   # Table definitions
+├── lib/                          # Utility functions
+│   ├── db.ts                     # Database connection
+│   ├── geo-utils.ts              # Geospatial utilities
+│   └── activity-logger.ts        # Activity logging
+├── docs/                         # Documentation
+└── public/                       # Static assets
+```
 
-**next-enterprise** is backed and maintained by [Blazity](https://blazity.com), providing up to date security features and integrated feature updates.
+## Deployment
 
-#### Active maintainers
+### Vercel (Recommended)
 
-- Igor Klepacki ([neg4n](https://github.com/neg4n)) - Open Source Software Developer
-- Tomasz Czechowski ([tomaszczechowski](https://github.com/tomaszczechowski)) - Solutions Architect & DevOps
-- Jakub Jabłoński ([jjablonski-it](https://github.com/jjablonski-it)) - Head of Integrations
+TeamFinder is optimized for [Vercel](https://vercel.com) deployment:
 
-#### All-time contributors
-[bmstefanski](https://github.com/bmstefanski)
+1. Push your code to GitHub
+2. Import the repository in Vercel
+3. Configure environment variables
+4. Deploy
+
+### Environment Variables for Production
+
+Ensure these are set in your production environment:
+
+- `DATABASE_URL` - PostgreSQL connection string
+- `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` - Clerk public key
+- `CLERK_SECRET_KEY` - Clerk secret key
+- `NEXT_PUBLIC_MAPBOX_TOKEN` - Mapbox access token
+- `NEXT_PUBLIC_BASE_URL` - Your production URL
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes using conventional commits
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
 ## License
 
 MIT
 
+---
 
-[docs]: https://docs.blazity.com/next-enterprise/deployments/enterprise-cli
+Built with ❤️ using the [Next.js Enterprise Boilerplate](https://github.com/Blazity/next-enterprise)
