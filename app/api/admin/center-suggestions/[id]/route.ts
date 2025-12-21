@@ -94,7 +94,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
         userId: suggestion.suggestedBy,
         centerId: suggestion.bowlingCenterId,
         centerName: suggestion.bowlingCenter.name,
-        reviewerName: user.name,
+        reviewerName: `${user.firstName || ""} ${user.lastName || ""}`.trim() || user.email,
       });
     } else {
       // Log rejection
@@ -102,7 +102,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
         userId: suggestion.suggestedBy,
         centerId: suggestion.bowlingCenterId,
         centerName: suggestion.bowlingCenter.name,
-        reviewerName: user.name,
+        reviewerName: `${user.firstName || ""} ${user.lastName || ""}`.trim() || user.email,
         reason: reviewNotes,
       });
     }

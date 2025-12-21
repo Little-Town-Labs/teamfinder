@@ -126,7 +126,8 @@ export async function GET(request: NextRequest) {
     if (conditions.length > 0) {
       countQuery = countQuery.where(and(...conditions)) as typeof countQuery;
     }
-    const [{ count: totalCount }] = await countQuery;
+    const countResult = await countQuery;
+    const totalCount = countResult[0]?.count ?? 0;
 
     return NextResponse.json({
       centers: centersWithDistance,
@@ -183,7 +184,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Create bowling center
-    const [newCenter] = await db
+    const result = await db
       .insert(bowlingCenters)
       .values({
         name: validatedData.name,
@@ -202,6 +203,11 @@ export async function POST(request: NextRequest) {
         verified: true, // Auto-verify admin-added centers
       })
       .returning();
+
+    const newCenter = result[0];
+    if (!newCenter) {
+      return NextResponse.json({ error: "Failed to create bowling center" }, { status: 500 });
+    }
 
     // Log activity
     await logBowlingCenterAdded({

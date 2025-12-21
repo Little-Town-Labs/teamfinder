@@ -27,17 +27,19 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
         captain: {
           columns: {
             id: true,
-            name: true,
+            firstName: true,
+            lastName: true,
           },
         },
       },
     });
 
     // Get total teams count
-    const [{ count: teamsCount }] = await db
+    const teamsCountResult = await db
       .select({ count: sql<number>`count(*)` })
       .from(teams)
       .where(eq(teams.homeBowlingCenterId, id));
+    const teamsCount = teamsCountResult[0]?.count ?? 0;
 
     // Get associated leagues (limit to 10)
     const associatedLeagues = await db.query.leagues.findMany({
@@ -46,10 +48,11 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     });
 
     // Get total leagues count
-    const [{ count: leaguesCount }] = await db
+    const leaguesCountResult = await db
       .select({ count: sql<number>`count(*)` })
       .from(leagues)
       .where(eq(leagues.bowlingCenterId, id));
+    const leaguesCount = leaguesCountResult[0]?.count ?? 0;
 
     // Get associated player profiles (limit to 10, eager load user)
     const associatedPlayers = await db.query.playerProfiles.findMany({
@@ -59,17 +62,19 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
         user: {
           columns: {
             id: true,
-            name: true,
+            firstName: true,
+            lastName: true,
           },
         },
       },
     });
 
     // Get total player profiles count
-    const [{ count: playersCount }] = await db
+    const playersCountResult = await db
       .select({ count: sql<number>`count(*)` })
       .from(playerProfiles)
       .where(eq(playerProfiles.homeBowlingCenterId, id));
+    const playersCount = playersCountResult[0]?.count ?? 0;
 
     return NextResponse.json({
       center,

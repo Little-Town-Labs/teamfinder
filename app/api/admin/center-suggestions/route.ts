@@ -43,14 +43,16 @@ export async function GET(request: NextRequest) {
         suggestor: {
           columns: {
             id: true,
-            name: true,
+            firstName: true,
+            lastName: true,
             email: true,
           },
         },
         reviewer: {
           columns: {
             id: true,
-            name: true,
+            firstName: true,
+            lastName: true,
           },
         },
       },

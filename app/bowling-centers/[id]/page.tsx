@@ -1,4 +1,3 @@
-import dynamic from "next/dynamic";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -6,16 +5,7 @@ import { ErrorBoundary } from "@/app/bowling-centers/ErrorBoundary";
 import { Header } from "@/components/Header/Header";
 
 import CenterDetailClient from "./CenterDetailClient";
-
-// Dynamically import CenterDetailMap to avoid SSR issues with Mapbox
-const CenterDetailMap = dynamic(() => import("./CenterDetailMap"), {
-  ssr: false,
-  loading: () => (
-    <div className="flex h-[300px] items-center justify-center rounded-lg bg-gray-100 dark:bg-gray-800">
-      <div className="text-sm text-gray-600 dark:text-gray-400">Loading map...</div>
-    </div>
-  ),
-});
+import CenterDetailMapWrapper from "./CenterDetailMapWrapper";
 
 export const dynamic = "force-dynamic";
 
@@ -44,19 +34,22 @@ export default async function CenterDetailPage({ params }: CenterDetailPageProps
       city: string;
       state: string;
       zipCode: string;
+      country: string;
       phone: string | null;
       email: string | null;
       website: string | null;
       numberOfLanes: string | null;
       amenities: string[] | null;
       verified: boolean;
+      latitude: string | null;
+      longitude: string | null;
     };
     teams: {
       items: Array<{
         id: string;
         name: string;
         teamType: string;
-        captain: { id: string; name: string };
+        captain: { id: string; firstName: string | null; lastName: string | null };
       }>;
       total: number;
     };
@@ -72,7 +65,7 @@ export default async function CenterDetailPage({ params }: CenterDetailPageProps
     players: {
       items: Array<{
         id: string;
-        user: { id: string; name: string };
+        user: { id: string; firstName: string | null; lastName: string | null };
         currentAverage: number | null;
       }>;
       total: number;
@@ -229,7 +222,7 @@ export default async function CenterDetailPage({ params }: CenterDetailPageProps
                   </a>
                 </div>
                 <ErrorBoundary>
-                  <CenterDetailMap
+                  <CenterDetailMapWrapper
                     latitude={center.latitude}
                     longitude={center.longitude}
                     verified={center.verified}
@@ -297,7 +290,7 @@ export default async function CenterDetailPage({ params }: CenterDetailPageProps
                       <div>
                         <h3 className="font-medium text-gray-900 dark:text-white">{team.name}</h3>
                         <p className="text-sm text-gray-600 dark:text-gray-400">
-                          Captain: {team.captain.name}
+                          Captain: {`${team.captain.firstName || ""} ${team.captain.lastName || ""}`.trim() || "Unknown"}
                         </p>
                       </div>
                       <svg
@@ -354,7 +347,9 @@ export default async function CenterDetailPage({ params }: CenterDetailPageProps
                       className="flex items-center justify-between rounded-lg border border-gray-200 p-4 dark:border-gray-700"
                     >
                       <div>
-                        <h3 className="font-medium text-gray-900 dark:text-white">{player.user.name}</h3>
+                        <h3 className="font-medium text-gray-900 dark:text-white">
+                          {`${player.user.firstName || ""} ${player.user.lastName || ""}`.trim() || "Unknown"}
+                        </h3>
                         {player.currentAverage && (
                           <p className="text-sm text-gray-600 dark:text-gray-400">
                             Average: {player.currentAverage}

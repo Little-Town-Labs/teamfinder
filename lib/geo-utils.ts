@@ -76,8 +76,9 @@ export async function geocodeAddress(address: string): Promise<{
       }>;
     };
 
-    if (data.features && data.features.length > 0) {
-      const [longitude, latitude] = data.features[0].center;
+    const firstFeature = data.features?.[0];
+    if (firstFeature) {
+      const [longitude, latitude] = firstFeature.center;
       return { latitude, longitude };
     }
 

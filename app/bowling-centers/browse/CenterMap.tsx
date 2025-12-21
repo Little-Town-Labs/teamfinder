@@ -149,21 +149,23 @@ export default function CenterMap({ centers, userLat, userLng }: CenterMapProps)
         )}
 
         {/* Clustered Markers */}
-        {clusters.map((cluster) => {
+        {clusters.map((cluster, index) => {
           const [lng, lat] = cluster.geometry.coordinates;
-          const { cluster: isCluster, point_count } = cluster.properties;
+          const properties = cluster.properties as { cluster?: boolean; point_count?: number } & BowlingCenter;
+          const { cluster: isCluster, point_count } = properties;
+          const clusterId = (cluster as { id?: number }).id;
 
           if (isCluster) {
             // Render cluster marker
             const size = 30 + (point_count ? Math.min(point_count, 100) / 3 : 0);
 
             return (
-              <Marker key={`cluster-${cluster.id}`} longitude={lng} latitude={lat}>
+              <Marker key={`cluster-${clusterId ?? index}`} longitude={lng} latitude={lat}>
                 <button
                   onClick={() => {
-                    if (supercluster && cluster.id !== undefined) {
+                    if (supercluster && clusterId !== undefined) {
                       const zoom = Math.min(
-                        supercluster.getClusterExpansionZoom(cluster.id as number),
+                        supercluster.getClusterExpansionZoom(clusterId),
                         16,
                       );
                       mapRef.current?.flyTo({ center: [lng, lat], zoom, duration: 500 });
@@ -179,7 +181,7 @@ export default function CenterMap({ centers, userLat, userLng }: CenterMapProps)
           }
 
           // Render individual center marker
-          const center = cluster.properties;
+          const center = properties;
           return (
             <Marker key={center.id} longitude={lng} latitude={lat} anchor="bottom">
               <button
