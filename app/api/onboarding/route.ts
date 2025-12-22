@@ -16,7 +16,11 @@ const onboardingSchema = z.object({
   yearsExperience: z.string().optional(),
   preferredTeamTypes: z.array(z.enum(["singles", "doubles", "team"])).optional(),
   preferredTeamGenderTypes: z.array(z.enum(["male", "female", "mixed"])).optional(),
-  preferredCompetitionLevel: z.enum(["recreational", "league", "competitive", "professional"]).optional(),
+  preferredCompetitionLevel: z
+    .enum(["recreational", "league", "competitive", "professional"])
+    .optional()
+    .or(z.literal(""))
+    .transform((val) => (val === "" ? undefined : val)),
   lookingForTeam: z.boolean().optional(),
   openToSubstitute: z.boolean().optional(),
   bio: z.string().optional(),
