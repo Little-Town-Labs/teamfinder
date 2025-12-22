@@ -23,8 +23,15 @@ export const bowlingCenters = pgTable(
     // Additional info
     numberOfLanes: text("number_of_lanes"),
     amenities: text("amenities").array(), // ['pro shop', 'food', 'bar', etc.]
-    // Admin verification
+
+    // Admin verification and moderation
     verified: boolean("verified").notNull().default(false),
+    flaggedForReview: boolean("flagged_for_review").notNull().default(false),
+    flaggedReason: text("flagged_reason"),
+    addedBy: uuid("added_by"), // Soft reference to users.id (admin who created)
+    lastVerifiedAt: timestamp("last_verified_at"),
+    lastVerifiedBy: uuid("last_verified_by"), // Soft reference to users.id (admin who verified)
+
     createdAt: timestamp("created_at").notNull().defaultNow(),
     updatedAt: timestamp("updated_at").notNull().defaultNow(),
   },

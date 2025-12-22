@@ -12,7 +12,18 @@ const isPublicRoute = createRouteMatcher([
   "/api/bowling-centers(.*)", // Allow public access to view centers
 ]);
 
+// Define admin routes that require authentication
+const isAdminRoute = createRouteMatcher(["/admin(.*)", "/api/admin(.*)"]);
+
 export default clerkMiddleware(async (auth, request) => {
+  // Admin routes always require authentication
+  // Detailed permission checking happens in the admin layout and API routes
+  if (isAdminRoute(request)) {
+    await auth.protect();
+    return;
+  }
+
+  // Other protected routes
   if (!isPublicRoute(request)) {
     await auth.protect();
   }

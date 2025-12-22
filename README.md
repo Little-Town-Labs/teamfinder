@@ -38,11 +38,15 @@ Built on the [Next.js Enterprise Boilerplate](https://blazity.com/open-source/ne
 - Protected routes and API endpoints
 - Activity logging and audit trails
 
-### 📊 Admin Panel
-- Review and approve center edit suggestions
-- Content moderation
-- User management via Clerk
-- Activity monitoring
+### 📊 Admin Panel (Full-Featured)
+- **User Management** - Ban, lock, unlock users via Clerk API; USBC verification
+- **Team Moderation** - Flag/unflag teams, delete teams, full CRUD operations
+- **Reports System** - User-submitted reports with review workflow (pending/investigating/resolved/dismissed)
+- **Bowling Center Management** - Full CRUD operations, review edit suggestions
+- **Analytics Dashboard** - User growth charts, team stats, report metrics with CSV export
+- **Audit Logs** - Complete audit trail of all admin actions with search and filtering
+- **Role-Based Access Control** - 4 admin roles (super_admin, moderator, content_reviewer, support) with granular permissions
+- **Admin Settings** - Manage admin roles, assign/revoke permissions
 
 ## Getting Started
 
@@ -103,13 +107,25 @@ To make a user an admin:
 4. Add to `publicMetadata`:
    ```json
    {
-     "role": "admin"
+     "role": "super_admin"
    }
    ```
+
+#### Admin Roles
+
+- **super_admin** - Full system access, can manage other admins
+- **moderator** - User & team moderation, content management
+- **content_reviewer** - Review reports and content only
+- **support** - Read-only access for customer support
+
+Access the admin panel at `/admin` after being assigned a role.
 
 ## Documentation
 
 - **[CLAUDE.md](./CLAUDE.md)** - Development notes and recent work by Claude AI
+- **[docs/admin-panel-guide.md](./docs/admin-panel-guide.md)** - Complete admin panel user guide
+- **[docs/admin-permissions-reference.md](./docs/admin-permissions-reference.md)** - Permission system reference
+- **[docs/admin-panel-implementation-summary.md](./docs/admin-panel-implementation-summary.md)** - Implementation details
 - **[docs/bowling-center-directory-plan.md](./docs/bowling-center-directory-plan.md)** - Bowling center feature implementation plan
 - **[docs/organizations-feature.md](./docs/organizations-feature.md)** - Organizations feature documentation
 - **[Next.js Enterprise Docs](https://docs.blazity.com)** - Original boilerplate documentation
@@ -126,6 +142,8 @@ To make a user an admin:
 * **[Supercluster](https://github.com/mapbox/supercluster)** - Fast marker clustering
 * **[Zod](https://zod.dev/)** - Schema validation
 * **[Resend](https://resend.com/)** - Transactional email
+* **[Recharts](https://recharts.org/)** - Analytics charts and visualizations
+* **[React Hot Toast](https://react-hot-toast.com/)** - Toast notifications
 
 ### Core Framework
 
@@ -185,12 +203,25 @@ pnpm analyze          # Analyze bundle size
 teamfinder/
 ├── app/                          # Next.js App Router
 │   ├── api/                      # API routes
-│   │   ├── admin/                # Admin endpoints
-│   │   ├── bowling-centers/      # Bowling center CRUD
+│   │   ├── admin/                # Admin API endpoints
+│   │   │   ├── analytics/        # Analytics data
+│   │   │   ├── audit-logs/       # Audit log queries
+│   │   │   ├── centers/          # Center CRUD
+│   │   │   ├── reports/          # Report management
+│   │   │   ├── settings/         # Admin settings
+│   │   │   ├── teams/            # Team moderation
+│   │   │   └── users/            # User management
+│   │   ├── bowling-centers/      # Public bowling center API
 │   │   ├── teams/                # Team management
-│   │   └── ...
-│   ├── admin/                    # Admin pages
-│   │   └── center-suggestions/   # Review edit suggestions
+│   │   └── reports/              # User report submission
+│   ├── admin/                    # Admin panel pages
+│   │   ├── analytics/            # Analytics dashboard
+│   │   ├── audit-logs/           # Audit log viewer
+│   │   ├── centers/              # Center management
+│   │   ├── reports/              # Report review
+│   │   ├── settings/             # Admin settings
+│   │   ├── teams/                # Team moderation
+│   │   └── users/                # User management
 │   ├── bowling-centers/          # Bowling center pages
 │   │   ├── browse/               # Browse & search
 │   │   └── [id]/                 # Center details
@@ -198,12 +229,17 @@ teamfinder/
 │   ├── players/                  # Player pages
 │   └── profile/                  # User profile
 ├── components/                   # Reusable components
+│   └── Admin/                    # Admin-specific components
 ├── drizzle/                      # Database schema
 │   └── schema/                   # Table definitions
 ├── lib/                          # Utility functions
+│   ├── admin/                    # Admin utilities
+│   │   ├── permissions.ts        # Permission system
+│   │   ├── clerk-integration.ts  # Clerk API integration
+│   │   └── audit-logger.ts       # Admin action logging
 │   ├── db.ts                     # Database connection
 │   ├── geo-utils.ts              # Geospatial utilities
-│   └── activity-logger.ts        # Activity logging
+│   └── activity-logger.ts        # User activity logging
 ├── docs/                         # Documentation
 └── public/                       # Static assets
 ```

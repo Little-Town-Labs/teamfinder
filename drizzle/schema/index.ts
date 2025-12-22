@@ -11,4 +11,8 @@ export * from "./leagues";
 export * from "./affiliations";
 export * from "./activity-logs";
 export * from "./center-edit-suggestions";
+export * from "./admin-roles";
+export * from "./permissions";
+export * from "./reports";
+export * from "./admin-actions";
 export * from "./relations";

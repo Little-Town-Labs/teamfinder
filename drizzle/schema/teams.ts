@@ -54,6 +54,15 @@ export const teams = pgTable("teams", {
 
   // Metadata
   isActive: boolean("is_active").notNull().default(true),
+
+  // Admin Moderation
+  flaggedForReview: boolean("flagged_for_review").notNull().default(false),
+  flaggedReason: text("flagged_reason"),
+  flaggedAt: timestamp("flagged_at"),
+  moderationNotes: text("moderation_notes"),
+  moderatedBy: uuid("moderated_by"), // Soft reference to users.id
+  moderatedAt: timestamp("moderated_at"),
+
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
