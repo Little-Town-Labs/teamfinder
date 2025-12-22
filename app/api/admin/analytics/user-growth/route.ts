@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getAllUsers } from "@/lib/admin/clerk-integration";
 import { requirePermission } from "@/lib/admin/permissions";
 
-export async function GET(_request: NextRequest) {
+export async function GET(request: NextRequest) {
   try {
     const { userId: clerkUserId } = await auth();
     if (!clerkUserId) {
