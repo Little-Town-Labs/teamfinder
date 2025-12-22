@@ -263,7 +263,7 @@ export default function OnboardingForm(_props: OnboardingFormProps) {
 
             <div>
               <label htmlFor="highGame" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                High Game
+                High Game (Optional)
               </label>
               <input
                 type="number"
@@ -280,7 +280,7 @@ export default function OnboardingForm(_props: OnboardingFormProps) {
 
             <div>
               <label htmlFor="highSeries" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                High Series (3 games)
+                High Series (Optional)
               </label>
               <input
                 type="number"
