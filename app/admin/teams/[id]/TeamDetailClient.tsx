@@ -39,7 +39,7 @@ interface TeamDetailClientProps {
   adminClerkUserId: string;
 }
 
-export function TeamDetailClient({ teamData, adminClerkUserId }: TeamDetailClientProps) {
+export function TeamDetailClient({ teamData, adminClerkUserId: _adminClerkUserId }: TeamDetailClientProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);

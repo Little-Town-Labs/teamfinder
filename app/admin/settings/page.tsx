@@ -1,13 +1,13 @@
 import { auth } from "@clerk/nextjs/server";
 import { desc, eq } from "drizzle-orm";
-import { Shield, UserPlus } from "lucide-react";
+import { Shield } from "lucide-react";
 
-import { AdminSettingsClient } from "./AdminSettingsClient";
 import { adminRoles } from "@/drizzle/schema/admin-roles";
 import { users } from "@/drizzle/schema/users";
 import { getClerkUser } from "@/lib/admin/clerk-integration";
 import { requirePermission } from "@/lib/admin/permissions";
 import { db } from "@/lib/db";
+import { AdminSettingsClient } from "./AdminSettingsClient";
 
 export default async function AdminSettingsPage() {
   const { userId: clerkUserId } = await auth();

@@ -2,7 +2,6 @@ import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
 
-import { ReportDetailClient } from "./ReportDetailClient";
 import { bowlingCenters } from "@/drizzle/schema/bowling-centers";
 import { messages } from "@/drizzle/schema/messages";
 import { reports } from "@/drizzle/schema/reports";
@@ -10,6 +9,7 @@ import { teams } from "@/drizzle/schema/teams";
 import { users } from "@/drizzle/schema/users";
 import { requirePermission } from "@/lib/admin/permissions";
 import { db } from "@/lib/db";
+import { ReportDetailClient } from "./ReportDetailClient";
 
 interface ReportDetailPageProps {
   params: Promise<{ id: string }>;

@@ -9,7 +9,8 @@
       "Bash(./node_modules/.bin/tsc:*)",
       "Bash(cat:*)",
       "Bash(git commit:*)",
-      "Bash(pnpm run build:*)"
+      "Bash(pnpm run build:*)",
+      "Bash(pnpm lint:*)"
     ],
     "deny": [],
     "ask": []

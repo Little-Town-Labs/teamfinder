@@ -4,8 +4,8 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { adminRoles } from "@/drizzle/schema/admin-roles";
 import { users } from "@/drizzle/schema/users";
-import { getClerkUser, revokeAdminRole } from "@/lib/admin/clerk-integration";
 import { logAdminAction } from "@/lib/admin/audit-logger";
+import { getClerkUser, revokeAdminRole } from "@/lib/admin/clerk-integration";
 import { requirePermission } from "@/lib/admin/permissions";
 import { db } from "@/lib/db";
 

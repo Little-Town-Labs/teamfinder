@@ -1,5 +1,5 @@
 import { auth } from "@clerk/nextjs/server";
-import { and, count, desc, eq, ilike, or } from "drizzle-orm";
+import { and, count, desc, eq, ilike } from "drizzle-orm";
 import { Flag, Search, Shield } from "lucide-react";
 import Link from "next/link";
 

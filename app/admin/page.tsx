@@ -12,7 +12,7 @@ import { db } from "@/lib/db";
 
 export default async function AdminDashboard() {
   const { userId } = await auth();
-  const role = await getAdminRole(userId!);
+  const _role = await getAdminRole(userId!);
 
   // Fetch stats in parallel
   const [clerkUsers, teamsResult, pendingReportsResult, centersResult, recentActions] =

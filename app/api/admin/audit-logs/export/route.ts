@@ -7,7 +7,7 @@ import { adminActions } from "@/drizzle/schema/admin-actions";
 import { requirePermission } from "@/lib/admin/permissions";
 import { db } from "@/lib/db";
 
-export async function POST(request: NextRequest) {
+export async function POST(_request: NextRequest) {
   try {
     const { userId: clerkUserId } = await auth();
     if (!clerkUserId) {

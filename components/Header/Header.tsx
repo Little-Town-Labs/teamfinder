@@ -1,9 +1,9 @@
-import { auth } from "@clerk/nextjs/server";
 import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs/server";
 import Link from "next/link";
+import { isAdmin } from "@/lib/admin/permissions";
 import { Button } from "components/Button/Button";
 
-import { isAdmin } from "@/lib/admin/permissions";
 
 export async function Header() {
   // Check if user is an admin

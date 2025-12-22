@@ -1,12 +1,12 @@
+import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 import { notFound } from "next/navigation";
 
-import { UserDetailClient } from "./UserDetailClient";
 import { users } from "@/drizzle/schema/users";
 import { getClerkUser } from "@/lib/admin/clerk-integration";
 import { requirePermission } from "@/lib/admin/permissions";
 import { db } from "@/lib/db";
-import { auth } from "@clerk/nextjs/server";
+import { UserDetailClient } from "./UserDetailClient";
 
 interface UserDetailPageProps {
   params: Promise<{ id: string }>;
@@ -22,7 +22,7 @@ export default async function UserDetailPage({ params }: UserDetailPageProps) {
   let clerkUser;
   try {
     clerkUser = await getClerkUser(clerkUserId);
-  } catch (error) {
+  } catch {
     notFound();
   }
 

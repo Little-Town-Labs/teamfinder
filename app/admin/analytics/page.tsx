@@ -1,7 +1,7 @@
 import { auth } from "@clerk/nextjs/server";
 
-import { AnalyticsDashboard } from "./AnalyticsDashboard";
 import { requirePermission } from "@/lib/admin/permissions";
+import { AnalyticsDashboard } from "./AnalyticsDashboard";
 
 export default async function AnalyticsPage() {
   const { userId: clerkUserId } = await auth();

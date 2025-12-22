@@ -73,7 +73,7 @@ const US_STATES = [
   "WY",
 ];
 
-export function CenterForm({ mode, adminClerkUserId, initialData }: CenterFormProps) {
+export function CenterForm({ mode, adminClerkUserId: _adminClerkUserId, initialData }: CenterFormProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);

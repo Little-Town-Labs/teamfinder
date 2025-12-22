@@ -1,12 +1,13 @@
+import { auth } from "@clerk/nextjs/server";
 import { inArray } from "drizzle-orm";
 import { Ban, Lock, Search, ShieldCheck } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
 import { users } from "@/drizzle/schema/users";
 import { getAllUsers, searchUsers } from "@/lib/admin/clerk-integration";
 import { requirePermission } from "@/lib/admin/permissions";
 import { db } from "@/lib/db";
-import { auth } from "@clerk/nextjs/server";
 
 interface UserListPageProps {
   searchParams: Promise<{ q?: string; page?: string }>;
@@ -118,9 +119,11 @@ export default async function UserListPage({ searchParams }: UserListPageProps) 
                 <tr key={clerkUser.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
                   <td className="whitespace-nowrap px-6 py-4">
                     <div className="flex items-center">
-                      <img
+                      <Image
                         src={clerkUser.imageUrl}
                         alt={name}
+                        width={40}
+                        height={40}
                         className="h-10 w-10 rounded-full"
                       />
                       <div className="ml-4">

@@ -1,8 +1,8 @@
 import { auth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 
-import { getClerkUser, lockUser } from "@/lib/admin/clerk-integration";
 import { logUserLock } from "@/lib/admin/audit-logger";
+import { getClerkUser, lockUser } from "@/lib/admin/clerk-integration";
 import { requirePermission } from "@/lib/admin/permissions";
 
 export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {

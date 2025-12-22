@@ -146,7 +146,7 @@
     "webpack": "5.94.0"
   },
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=20.0.0 <25.0.0"
   },
   "packageManager": "pnpm@10.0.0"
 }

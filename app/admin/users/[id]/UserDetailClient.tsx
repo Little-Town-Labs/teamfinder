@@ -1,6 +1,7 @@
 "use client";
 
 import { Ban, Lock, ShieldCheck, Unlock } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -26,7 +27,7 @@ interface UserDetailClientProps {
   adminClerkUserId: string;
 }
 
-export function UserDetailClient({ userData, adminClerkUserId }: UserDetailClientProps) {
+export function UserDetailClient({ userData, adminClerkUserId: _adminClerkUserId }: UserDetailClientProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -74,7 +75,13 @@ export function UserDetailClient({ userData, adminClerkUserId }: UserDetailClien
         </Link>
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-4">
-            <img src={userData.imageUrl} alt={fullName} className="h-20 w-20 rounded-full" />
+            <Image
+              src={userData.imageUrl}
+              alt={fullName}
+              width={80}
+              height={80}
+              className="h-20 w-20 rounded-full"
+            />
             <div>
               <h1 className="text-3xl font-bold text-gray-900 dark:text-white">{fullName}</h1>
               <p className="mt-1 text-gray-600 dark:text-gray-400">{userData.email}</p>

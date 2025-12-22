@@ -1,8 +1,8 @@
 import { auth } from "@clerk/nextjs/server";
 import Link from "next/link";
 
-import { CenterForm } from "../CenterForm";
 import { requirePermission } from "@/lib/admin/permissions";
+import { CenterForm } from "../CenterForm";
 
 export default async function NewCenterPage() {
   const { userId: clerkUserId } = await auth();

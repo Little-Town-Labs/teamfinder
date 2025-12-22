@@ -3,10 +3,10 @@ import { eq } from "drizzle-orm";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
-import { CenterForm } from "../../CenterForm";
 import { bowlingCenters } from "@/drizzle/schema/bowling-centers";
 import { requirePermission } from "@/lib/admin/permissions";
 import { db } from "@/lib/db";
+import { CenterForm } from "../../CenterForm";
 
 interface EditCenterPageProps {
   params: Promise<{ id: string }>;

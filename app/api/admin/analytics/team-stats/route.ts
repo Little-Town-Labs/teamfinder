@@ -6,7 +6,7 @@ import { teams } from "@/drizzle/schema/teams";
 import { requirePermission } from "@/lib/admin/permissions";
 import { db } from "@/lib/db";
 
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     const { userId: clerkUserId } = await auth();
     if (!clerkUserId) {

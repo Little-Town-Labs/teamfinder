@@ -2,11 +2,11 @@ import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 import { notFound } from "next/navigation";
 
-import { TeamDetailClient } from "./TeamDetailClient";
 import { teams } from "@/drizzle/schema/teams";
 import { users } from "@/drizzle/schema/users";
 import { requirePermission } from "@/lib/admin/permissions";
 import { db } from "@/lib/db";
+import { TeamDetailClient } from "./TeamDetailClient";
 
 interface TeamDetailPageProps {
   params: Promise<{ id: string }>;

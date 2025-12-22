@@ -38,7 +38,7 @@ interface ReportDetailClientProps {
 export function ReportDetailClient({
   reportData,
   reportedContent,
-  adminClerkUserId,
+  adminClerkUserId: _adminClerkUserId,
 }: ReportDetailClientProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);

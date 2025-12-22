@@ -3,8 +3,8 @@ import { eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 
 import { teams } from "@/drizzle/schema/teams";
-import { getClerkUser } from "@/lib/admin/clerk-integration";
 import { logTeamDeletion } from "@/lib/admin/audit-logger";
+import { getClerkUser } from "@/lib/admin/clerk-integration";
 import { requirePermission } from "@/lib/admin/permissions";
 import { db } from "@/lib/db";
 
