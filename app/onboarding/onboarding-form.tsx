@@ -116,34 +116,54 @@ export default function OnboardingForm(_props: OnboardingFormProps) {
             <div key={s} className="flex items-center flex-1">
               <div
                 className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold ${
-                  step >= s ? "bg-blue-600 text-white" : "bg-gray-200 text-gray-600"
+                  step >= s
+                    ? "bg-blue-600 text-white dark:bg-blue-700"
+                    : "bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-400"
                 }`}
               >
                 {s}
               </div>
               {s < 3 && (
                 <div
-                  className={`flex-1 h-1 mx-2 ${step > s ? "bg-blue-600" : "bg-gray-200"}`}
+                  className={`flex-1 h-1 mx-2 ${step > s ? "bg-blue-600 dark:bg-blue-700" : "bg-gray-200 dark:bg-gray-700"}`}
                 />
               )}
             </div>
           ))}
         </div>
         <div className="flex justify-between mt-2 text-sm">
-          <span className={step >= 1 ? "text-blue-600 font-medium" : "text-gray-500"}>
+          <span
+            className={
+              step >= 1
+                ? "text-blue-600 font-medium dark:text-blue-400"
+                : "text-gray-500 dark:text-gray-400"
+            }
+          >
             Essential Info
           </span>
-          <span className={step >= 2 ? "text-blue-600 font-medium" : "text-gray-500"}>
+          <span
+            className={
+              step >= 2
+                ? "text-blue-600 font-medium dark:text-blue-400"
+                : "text-gray-500 dark:text-gray-400"
+            }
+          >
             Bowling Stats
           </span>
-          <span className={step >= 3 ? "text-blue-600 font-medium" : "text-gray-500"}>
+          <span
+            className={
+              step >= 3
+                ? "text-blue-600 font-medium dark:text-blue-400"
+                : "text-gray-500 dark:text-gray-400"
+            }
+          >
             Preferences
           </span>
         </div>
       </div>
 
       {error && (
-        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded dark:bg-red-900/20 dark:border-red-800 dark:text-red-200">
           {error}
         </div>
       )}
@@ -151,13 +171,13 @@ export default function OnboardingForm(_props: OnboardingFormProps) {
       {/* Step 1: Essential Information */}
       {step === 1 && (
         <div className="space-y-6">
-          <h2 className="text-2xl font-bold text-gray-900">Essential Information</h2>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Essential Information</h2>
 
           <div>
-            <label htmlFor="usbcMemberId" className="block text-sm font-medium text-gray-700">
-              USBC Member ID <span className="text-red-500">*</span>
+            <label htmlFor="usbcMemberId" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              USBC Member ID <span className="text-red-500 dark:text-red-400">*</span>
             </label>
-            <p className="text-xs text-gray-500 mb-2">
+            <p className="text-xs text-gray-500 mb-2 dark:text-gray-400">
               Your USBC Member ID is required for verification and credibility
             </p>
             <input
@@ -167,14 +187,14 @@ export default function OnboardingForm(_props: OnboardingFormProps) {
               required
               value={formData.usbcMemberId}
               onChange={handleInputChange}
-              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-blue-500"
+              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-800 dark:text-white"
               placeholder="e.g., 1234-56789"
             />
           </div>
 
           <div>
-            <label htmlFor="gender" className="block text-sm font-medium text-gray-700">
-              Gender <span className="text-red-500">*</span>
+            <label htmlFor="gender" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              Gender <span className="text-red-500 dark:text-red-400">*</span>
             </label>
             <select
               id="gender"
@@ -182,7 +202,7 @@ export default function OnboardingForm(_props: OnboardingFormProps) {
               required
               value={formData.gender}
               onChange={handleInputChange}
-              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-blue-500"
+              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-800 dark:text-white"
             >
               <option value="">Select gender</option>
               <option value="male">Male</option>
@@ -193,8 +213,8 @@ export default function OnboardingForm(_props: OnboardingFormProps) {
           </div>
 
           <div>
-            <label htmlFor="bowlingHand" className="block text-sm font-medium text-gray-700">
-              Bowling Hand <span className="text-red-500">*</span>
+            <label htmlFor="bowlingHand" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              Bowling Hand <span className="text-red-500 dark:text-red-400">*</span>
             </label>
             <select
               id="bowlingHand"
@@ -202,7 +222,7 @@ export default function OnboardingForm(_props: OnboardingFormProps) {
               required
               value={formData.bowlingHand}
               onChange={handleInputChange}
-              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-blue-500"
+              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-800 dark:text-white"
             >
               <option value="">Select hand</option>
               <option value="right">Right</option>
@@ -215,12 +235,17 @@ export default function OnboardingForm(_props: OnboardingFormProps) {
       {/* Step 2: Bowling Statistics */}
       {step === 2 && (
         <div className="space-y-6">
-          <h2 className="text-2xl font-bold text-gray-900">Bowling Statistics</h2>
-          <p className="text-sm text-gray-600">These fields are optional but help teams find you</p>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Bowling Statistics</h2>
+          <p className="text-sm text-gray-600 dark:text-gray-400">
+            These fields are optional but help teams find you
+          </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label htmlFor="currentAverage" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="currentAverage"
+                className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+              >
                 Current Average
               </label>
               <input
@@ -231,13 +256,13 @@ export default function OnboardingForm(_props: OnboardingFormProps) {
                 max="300"
                 value={formData.currentAverage}
                 onChange={handleInputChange}
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-blue-500"
+                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-800 dark:text-white"
                 placeholder="e.g., 180"
               />
             </div>
 
             <div>
-              <label htmlFor="highGame" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="highGame" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                 High Game
               </label>
               <input
@@ -248,13 +273,13 @@ export default function OnboardingForm(_props: OnboardingFormProps) {
                 max="300"
                 value={formData.highGame}
                 onChange={handleInputChange}
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-blue-500"
+                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-800 dark:text-white"
                 placeholder="e.g., 279"
               />
             </div>
 
             <div>
-              <label htmlFor="highSeries" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="highSeries" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                 High Series (3 games)
               </label>
               <input
@@ -265,13 +290,16 @@ export default function OnboardingForm(_props: OnboardingFormProps) {
                 max="900"
                 value={formData.highSeries}
                 onChange={handleInputChange}
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-blue-500"
+                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-800 dark:text-white"
                 placeholder="e.g., 720"
               />
             </div>
 
             <div>
-              <label htmlFor="yearsExperience" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="yearsExperience"
+                className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+              >
                 Years of Experience
               </label>
               <input
@@ -281,7 +309,7 @@ export default function OnboardingForm(_props: OnboardingFormProps) {
                 min="0"
                 value={formData.yearsExperience}
                 onChange={handleInputChange}
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-blue-500"
+                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-800 dark:text-white"
                 placeholder="e.g., 5"
               />
             </div>
@@ -292,10 +320,10 @@ export default function OnboardingForm(_props: OnboardingFormProps) {
       {/* Step 3: Preferences */}
       {step === 3 && (
         <div className="space-y-6">
-          <h2 className="text-2xl font-bold text-gray-900">Team Preferences</h2>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Team Preferences</h2>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-300">
               Preferred Team Types
             </label>
             <div className="space-y-2">
@@ -305,16 +333,16 @@ export default function OnboardingForm(_props: OnboardingFormProps) {
                     type="checkbox"
                     checked={formData.preferredTeamTypes.includes(type)}
                     onChange={() => handleTeamTypeToggle(type)}
-                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 dark:border-gray-600"
                   />
-                  <span className="ml-2 text-sm text-gray-700 capitalize">{type}</span>
+                  <span className="ml-2 text-sm text-gray-700 capitalize dark:text-gray-300">{type}</span>
                 </label>
               ))}
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-300">
               Preferred Team Gender Types
             </label>
             <div className="space-y-2">
@@ -324,9 +352,9 @@ export default function OnboardingForm(_props: OnboardingFormProps) {
                     type="checkbox"
                     checked={formData.preferredTeamGenderTypes.includes(type)}
                     onChange={() => handleTeamGenderTypeToggle(type)}
-                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 dark:border-gray-600"
                   />
-                  <span className="ml-2 text-sm text-gray-700 capitalize">
+                  <span className="ml-2 text-sm text-gray-700 capitalize dark:text-gray-300">
                     {type === "male" ? "Men's Team" : type === "female" ? "Women's Team" : "Mixed Team"}
                   </span>
                 </label>
@@ -337,7 +365,7 @@ export default function OnboardingForm(_props: OnboardingFormProps) {
           <div>
             <label
               htmlFor="preferredCompetitionLevel"
-              className="block text-sm font-medium text-gray-700"
+              className="block text-sm font-medium text-gray-700 dark:text-gray-300"
             >
               Competition Level
             </label>
@@ -346,7 +374,7 @@ export default function OnboardingForm(_props: OnboardingFormProps) {
               name="preferredCompetitionLevel"
               value={formData.preferredCompetitionLevel}
               onChange={handleInputChange}
-              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-blue-500"
+              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-800 dark:text-white"
             >
               <option value="">Select level</option>
               <option value="recreational">Recreational</option>
@@ -363,9 +391,11 @@ export default function OnboardingForm(_props: OnboardingFormProps) {
                 name="lookingForTeam"
                 checked={formData.lookingForTeam}
                 onChange={handleInputChange}
-                className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 dark:border-gray-600"
               />
-              <span className="ml-2 text-sm text-gray-700">I'm currently looking for a team</span>
+              <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">
+                I'm currently looking for a team
+              </span>
             </label>
 
             <label className="flex items-center">
@@ -374,16 +404,16 @@ export default function OnboardingForm(_props: OnboardingFormProps) {
                 name="openToSubstitute"
                 checked={formData.openToSubstitute}
                 onChange={handleInputChange}
-                className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 dark:border-gray-600"
               />
-              <span className="ml-2 text-sm text-gray-700">
+              <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">
                 I'm open to being a substitute bowler
               </span>
             </label>
           </div>
 
           <div>
-            <label htmlFor="bio" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="bio" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
               Bio (Optional)
             </label>
             <textarea
@@ -392,7 +422,7 @@ export default function OnboardingForm(_props: OnboardingFormProps) {
               rows={4}
               value={formData.bio}
               onChange={handleInputChange}
-              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-blue-500"
+              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-800 dark:text-white"
               placeholder="Tell us about your bowling experience, goals, and what you're looking for in a team..."
             />
           </div>
@@ -400,13 +430,13 @@ export default function OnboardingForm(_props: OnboardingFormProps) {
       )}
 
       {/* Navigation Buttons */}
-      <div className="flex justify-between pt-6 border-t">
+      <div className="flex justify-between pt-6 border-t dark:border-gray-700">
         {step > 1 && (
           <button
             type="button"
             onClick={prevStep}
             disabled={isSubmitting}
-            className="px-6 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+            className="px-6 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 disabled:opacity-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-800"
           >
             Previous
           </button>
@@ -416,7 +446,7 @@ export default function OnboardingForm(_props: OnboardingFormProps) {
           <button
             type="button"
             onClick={nextStep}
-            className="ml-auto px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+            className="ml-auto px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800"
           >
             Next
           </button>
@@ -424,7 +454,7 @@ export default function OnboardingForm(_props: OnboardingFormProps) {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="ml-auto px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
+            className="ml-auto px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 dark:bg-blue-700 dark:hover:bg-blue-800"
           >
             {isSubmitting ? "Creating Profile..." : "Complete Profile"}
           </button>
