@@ -20,8 +20,10 @@ export default async function DashboardPage() {
     where: eq(users.clerkUserId, userId),
   });
 
+  // If user is authenticated but not in database, send to onboarding
+  // This handles cases where webhook hasn't fired yet or user was created outside normal flow
   if (!user) {
-    redirect("/sign-in");
+    redirect("/onboarding");
   }
 
   // Get player profile
