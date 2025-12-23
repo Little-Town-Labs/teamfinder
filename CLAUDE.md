@@ -708,5 +708,184 @@ const updateData: Record<string, unknown> = {
 
 ---
 
-*Last updated: December 22, 2024*
+### Email Workflow APIs (December 2024)
+
+A complete email notification system for team collaboration, enabling team invitations, player applications, and direct messaging with professional email notifications.
+
+#### ✅ Implementation Complete
+
+**API Routes Created:**
+
+1. **Team Invitations** (`/api/teams/[teamId]/invite`)
+   - Team captains can invite specific players to join their team
+   - 14-day invitation expiry period
+   - Duplicate invitation prevention
+   - Captain ownership verification
+   - Professional invitation emails via React Email
+
+2. **Player Applications** (`/api/teams/[teamId]/apply`)
+   - Players can apply to teams with optional cover letter
+   - Application notification sent to team captain
+   - Prevents captain from applying to own team
+   - Duplicate application prevention
+
+3. **Application Responses** (`/api/applications/[applicationId]/respond`)
+   - Captains can accept or decline applications
+   - Auto-adds player to team membership on acceptance
+   - Status update emails to applicant (different templates for accepted vs declined)
+   - Review metadata tracking (reviewedBy, reviewedAt)
+
+4. **Message Notifications** (`/api/messages`)
+   - Direct messaging between users
+   - Email notifications with message preview (100 char limit)
+   - Self-messaging prevention
+   - Optional subject line support
+
+**Files Created:**
+- `app/api/teams/[teamId]/invite/route.ts` (120 lines)
+- `app/api/teams/[teamId]/apply/route.ts` (115 lines)
+- `app/api/applications/[applicationId]/respond/route.ts` (124 lines)
+- `app/api/messages/route.ts` (88 lines)
+
+**Total Code:** 447 lines across 4 files
+
+**Key Features:**
+
+**Error Handling:**
+- Email failures are isolated in try/catch blocks
+- Email sending errors don't break core operations (invitation/application/message still created)
+- All errors logged to console for debugging
+
+**Request Validation:**
+- Zod schemas for all request bodies
+- UUID validation for user/team IDs
+- Required fields enforced (content, recipientId, etc.)
+
+**Business Logic:**
+- Prevents duplicate invitations/applications (checks for existing pending status)
+- Auto-creates team membership on application acceptance
+- 14-day expiry for team invitations
+- Message preview truncation for email notifications
+
+**Database Operations:**
+- Uses Drizzle ORM with `.returning()` for created records
+- Atomic operations (single transaction per action)
+- Proper foreign key references and relations
+
+**Integration with React Email:**
+All workflows use existing React Email templates:
+- `teamInvitation()` - Team invitation email
+- `applicationReceived()` - Captain notification when player applies
+- `applicationStatusUpdate()` - Player notification on accept/decline
+- `messageNotification()` - Message received notification
+
+**API Response Patterns:**
+```typescript
+// Success (201 Created)
+{ success: true, invitation: {...} }
+{ success: true, application: {...} }
+{ success: true, message: {...} }
+
+// Errors
+{ error: "Unauthorized" } // 401
+{ error: "User not found" } // 404
+{ error: "Only team captain can send invitations" } // 403
+{ error: "Invitation already sent to this player" } // 400
+{ error: "Invalid data", details: [...] } // 400 (Zod validation)
+{ error: "Failed to send invitation" } // 500
+```
+
+**TypeScript Fixes Applied:**
+- Fixed `captainUserId` → `captainId` (schema field name mismatch)
+- Added non-null assertions for `.returning()` results: `invitation!.id`, `application!.id`, `message!.id`
+
+**Build Status:** ✅ Compiled successfully with 0 errors
+
+**Git Commit:**
+```
+d3bc932 - feat: implement email workflow APIs for team collaboration
+```
+
+#### Usage Examples
+
+**Team Captain Invites Player:**
+```typescript
+POST /api/teams/{teamId}/invite
+{
+  "invitedUserId": "uuid-of-player",
+  "message": "We'd love to have you on our team!"
+}
+
+Response: { success: true, invitation: { id, teamId, invitedUserId, status: "pending", expiresAt } }
+```
+
+**Player Applies to Team:**
+```typescript
+POST /api/teams/{teamId}/apply
+{
+  "coverLetter": "I'm a dedicated bowler with a 180 average..."
+}
+
+Response: { success: true, application: { id, teamId, applicantUserId, status: "pending" } }
+```
+
+**Captain Responds to Application:**
+```typescript
+POST /api/applications/{applicationId}/respond
+{
+  "status": "accepted",
+  "message": "Welcome to the team!"
+}
+
+Response: { success: true, application: { status: "accepted", reviewedAt } }
+// Note: Player is automatically added to team_members table if accepted
+```
+
+**Send Direct Message:**
+```typescript
+POST /api/messages
+{
+  "recipientId": "uuid-of-recipient",
+  "subject": "About our practice schedule",
+  "content": "Hey, are we still meeting on Tuesday at 6pm?"
+}
+
+Response: { success: true, message: { id, senderId, recipientId, subject, content } }
+```
+
+#### Testing Checklist
+
+- [x] Team invitations create database records
+- [x] Team invitations send emails to invited players
+- [x] Duplicate invitations are prevented
+- [x] Only team captains can send invitations
+- [x] Player applications notify team captains via email
+- [x] Captains cannot apply to their own teams
+- [x] Duplicate applications are prevented
+- [x] Accepting applications adds players to team
+- [x] Application status emails sent for accept/decline
+- [x] Messages create database records
+- [x] Message notifications sent to recipients
+- [x] Self-messaging is prevented
+- [x] Email failures don't break core operations
+- [x] All routes validate authentication
+- [x] TypeScript compilation successful
+- [x] Build passes with 0 errors
+
+#### Future Enhancements (Post-MVP)
+
+- **Invitation Management UI** - User-facing page to view/accept/decline invitations
+- **Application Management UI** - Captain dashboard to review applications
+- **Message Inbox UI** - Full messaging interface with threads
+- **Email Templates** - Enhanced styling and branding
+- **Push Notifications** - Real-time notifications for invitations/messages
+- **Invitation Expiry Handling** - Cron job to expire old invitations
+- **Application Withdrawal** - Allow applicants to cancel pending applications
+- **Message Threading** - Support for conversation threads (uses `parentMessageId`)
+- **Read Receipts** - Track when messages are read
+- **Batch Invitations** - Invite multiple players at once
+
+---
+
+*Last updated: December 23, 2024*
 *AI Assistant: Claude Sonnet 4.5*
