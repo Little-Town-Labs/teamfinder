@@ -25,7 +25,7 @@ export async function POST(request: Request) {
     }
 
     // Send test welcome email
-    const emailData = emailTemplates.welcome(body.to, body.firstName);
+    const emailData = await emailTemplates.welcome(body.to, body.firstName);
 
     const result = await resend.emails.send(emailData);
 

@@ -102,12 +102,12 @@ export async function POST(request: Request) {
 
     // Send welcome email
     try {
-      const emailData = emailTemplates.welcome(
-        user.email,
-        user.firstName || "Bowler",
+      const emailData = await emailTemplates.welcome(
+        user!.email,
+        user!.firstName || "Bowler",
       );
       await resend.emails.send(emailData);
-      console.log("Welcome email sent to:", user.email);
+      console.log("Welcome email sent to:", user!.email);
     } catch (emailError) {
       // Log error but don't fail onboarding if email fails
       console.error("Failed to send welcome email:", emailError);
