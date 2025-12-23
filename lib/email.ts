@@ -10,7 +10,7 @@ export const emailTemplates = {
    * Welcome email when user signs up
    */
   welcome: (to: string, firstName: string) => ({
-    from: "TeamFinder <noreply@yourdomain.com>",
+    from: "TeamFinder <noreply@littletownlabs.site>",
     to,
     subject: "Welcome to TeamFinder - Find Your Perfect Bowling Team!",
     html: `
@@ -33,7 +33,7 @@ export const emailTemplates = {
     captainName: string,
     invitationId: string,
   ) => ({
-    from: "TeamFinder <noreply@yourdomain.com>",
+    from: "TeamFinder <noreply@littletownlabs.site>",
     to,
     subject: `You've been invited to join ${teamName}!`,
     html: `
@@ -55,7 +55,7 @@ export const emailTemplates = {
     teamName: string,
     applicationId: string,
   ) => ({
-    from: "TeamFinder <noreply@yourdomain.com>",
+    from: "TeamFinder <noreply@littletownlabs.site>",
     to,
     subject: `New application for ${teamName}`,
     html: `
@@ -76,7 +76,7 @@ export const emailTemplates = {
     teamName: string,
     status: "accepted" | "declined",
   ) => ({
-    from: "TeamFinder <noreply@yourdomain.com>",
+    from: "TeamFinder <noreply@littletownlabs.site>",
     to,
     subject: `Your application to ${teamName} - ${status === "accepted" ? "Accepted" : "Declined"}`,
     html: `
@@ -107,7 +107,7 @@ export const emailTemplates = {
     senderName: string,
     messageId: string,
   ) => ({
-    from: "TeamFinder <noreply@yourdomain.com>",
+    from: "TeamFinder <noreply@littletownlabs.site>",
     to,
     subject: `New message from ${senderName}`,
     html: `

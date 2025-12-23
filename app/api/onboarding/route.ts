@@ -5,6 +5,7 @@ import { z } from "zod";
 
 import { type NewPlayerProfile, playerProfiles, users } from "@/drizzle/schema";
 import { db } from "@/lib/db";
+import { emailTemplates, resend } from "@/lib/email";
 
 const onboardingSchema = z.object({
   usbcMemberId: z.string().min(1),
@@ -98,6 +99,19 @@ export async function POST(request: Request) {
       .insert(playerProfiles)
       .values(profileData)
       .returning();
+
+    // Send welcome email
+    try {
+      const emailData = emailTemplates.welcome(
+        user.email,
+        user.firstName || "Bowler",
+      );
+      await resend.emails.send(emailData);
+      console.log("Welcome email sent to:", user.email);
+    } catch (emailError) {
+      // Log error but don't fail onboarding if email fails
+      console.error("Failed to send welcome email:", emailError);
+    }
 
     return NextResponse.json({ success: true, profile }, { status: 201 });
   } catch (error) {
