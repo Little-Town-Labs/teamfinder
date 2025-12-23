@@ -20,6 +20,9 @@ Built on the [Next.js Enterprise Boilerplate](https://blazity.com/open-source/ne
 - Team profiles with roster management
 - Browse teams by location and type
 - Team activity feeds
+- **Team Invitations** - Captains can invite players via email
+- **Player Applications** - Players apply to teams with cover letters
+- **Application Management** - Accept/decline applications with auto-roster updates
 
 ### 👤 Player Profiles
 - Personal bowling profiles with stats
@@ -31,6 +34,12 @@ Built on the [Next.js Enterprise Boilerplate](https://blazity.com/open-source/ne
 - League information and schedules
 - Association with bowling centers
 - Player and team integration
+
+### 💬 Communication & Notifications
+- **Direct Messaging** - Send messages between users with email notifications
+- **Team Invitations** - Professional email invitations with 14-day expiry
+- **Application Notifications** - Automated emails for team applications
+- **Status Updates** - Email alerts for accepted/declined applications
 
 ### 🔐 Authentication & Access Control
 - Clerk authentication integration
@@ -141,7 +150,8 @@ Access the admin panel at `/admin` after being assigned a role.
 * **[react-map-gl](https://visgl.github.io/react-map-gl/)** - React wrapper for Mapbox
 * **[Supercluster](https://github.com/mapbox/supercluster)** - Fast marker clustering
 * **[Zod](https://zod.dev/)** - Schema validation
-* **[Resend](https://resend.com/)** - Transactional email
+* **[Resend](https://resend.com/)** - Transactional email service
+* **[React Email](https://react.email/)** - Email templates with React components
 * **[Recharts](https://recharts.org/)** - Analytics charts and visualizations
 * **[React Hot Toast](https://react-hot-toast.com/)** - Toast notifications
 
@@ -211,8 +221,10 @@ teamfinder/
 │   │   │   ├── settings/         # Admin settings
 │   │   │   ├── teams/            # Team moderation
 │   │   │   └── users/            # User management
+│   │   ├── applications/         # Application responses
 │   │   ├── bowling-centers/      # Public bowling center API
-│   │   ├── teams/                # Team management
+│   │   ├── messages/             # Direct messaging
+│   │   ├── teams/                # Team management & invitations
 │   │   └── reports/              # User report submission
 │   ├── admin/                    # Admin panel pages
 │   │   ├── analytics/            # Analytics dashboard
