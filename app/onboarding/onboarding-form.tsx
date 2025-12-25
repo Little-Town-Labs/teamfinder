@@ -32,6 +32,11 @@ export default function OnboardingForm(_props: OnboardingFormProps) {
     lookingForTeam: false,
     openToSubstitute: false,
     bio: "",
+
+    // Privacy & Legal
+    acceptPrivacyPolicy: false,
+    acceptTermsOfService: false,
+    optInMarketing: false,
   });
 
   const handleInputChange = (
@@ -425,6 +430,72 @@ export default function OnboardingForm(_props: OnboardingFormProps) {
               className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-800 dark:text-white"
               placeholder="Tell us about your bowling experience, goals, and what you're looking for in a team..."
             />
+          </div>
+
+          {/* Legal Agreements */}
+          <div className="space-y-4 border-t pt-6 dark:border-gray-700">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+              Legal Agreements
+            </h3>
+
+            <label className="flex items-start">
+              <input
+                type="checkbox"
+                name="acceptPrivacyPolicy"
+                checked={formData.acceptPrivacyPolicy}
+                onChange={handleInputChange}
+                required
+                className="mt-1 rounded border-gray-300 text-blue-600 focus:ring-blue-500 dark:border-gray-600"
+              />
+              <span className="ml-3 text-sm text-gray-700 dark:text-gray-300">
+                I have read and agree to the{" "}
+                <a
+                  href="/privacy"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 underline dark:text-blue-400"
+                >
+                  Privacy Policy
+                </a>{" "}
+                <span className="text-red-500 dark:text-red-400">*</span>
+              </span>
+            </label>
+
+            <label className="flex items-start">
+              <input
+                type="checkbox"
+                name="acceptTermsOfService"
+                checked={formData.acceptTermsOfService}
+                onChange={handleInputChange}
+                required
+                className="mt-1 rounded border-gray-300 text-blue-600 focus:ring-blue-500 dark:border-gray-600"
+              />
+              <span className="ml-3 text-sm text-gray-700 dark:text-gray-300">
+                I agree to the{" "}
+                <a
+                  href="/terms"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 underline dark:text-blue-400"
+                >
+                  Terms of Service
+                </a>{" "}
+                <span className="text-red-500 dark:text-red-400">*</span>
+              </span>
+            </label>
+
+            <label className="flex items-start">
+              <input
+                type="checkbox"
+                name="optInMarketing"
+                checked={formData.optInMarketing}
+                onChange={handleInputChange}
+                className="mt-1 rounded border-gray-300 text-blue-600 focus:ring-blue-500 dark:border-gray-600"
+              />
+              <span className="ml-3 text-sm text-gray-700 dark:text-gray-300">
+                I want to receive updates and news about TeamFinder (optional)
+              </span>
+            </label>
           </div>
         </div>
       )}

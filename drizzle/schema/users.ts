@@ -1,4 +1,4 @@
-import { index, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
+import { boolean, index, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 
 /**
  * Users table - Synced with Clerk authentication
@@ -21,6 +21,14 @@ export const users = pgTable(
     usbcVerificationNotes: text("usbc_verification_notes"), // Admin notes for USBC verification
     lastVerifiedAt: timestamp("last_verified_at"), // When USBC was last verified
     lastVerifiedBy: uuid("last_verified_by"), // Admin who verified (soft reference to users.id)
+
+    // Privacy and legal compliance fields
+    privacyPolicyAcceptedAt: timestamp("privacy_policy_accepted_at"),
+    privacyPolicyVersion: text("privacy_policy_version"), // e.g., "1.0", "1.1"
+    termsAcceptedAt: timestamp("terms_accepted_at"),
+    termsVersion: text("terms_version"), // e.g., "1.0", "1.1"
+    cookieConsentGiven: boolean("cookie_consent_given").default(false),
+    marketingEmailsOptIn: boolean("marketing_emails_opt_in").default(false),
 
     createdAt: timestamp("created_at").notNull().defaultNow(),
     updatedAt: timestamp("updated_at").notNull().defaultNow(),

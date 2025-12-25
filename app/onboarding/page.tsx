@@ -2,6 +2,7 @@ import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
 
+import { Footer } from "@/components/Footer/Footer";
 import { Header } from "@/components/Header/Header";
 import { users } from "@/drizzle/schema";
 import { db } from "@/lib/db";
@@ -53,6 +54,8 @@ export default async function OnboardingPage() {
           </div>
         </div>
       </section>
+
+      <Footer />
     </>
   );
 }

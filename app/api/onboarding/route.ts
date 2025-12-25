@@ -3,7 +3,12 @@ import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
-import { type NewPlayerProfile, playerProfiles, users } from "@/drizzle/schema";
+import {
+  type NewPlayerProfile,
+  playerProfiles,
+  privacyConsents,
+  users,
+} from "@/drizzle/schema";
 import { db } from "@/lib/db";
 import { emailTemplates, resend } from "@/lib/email";
 
@@ -25,6 +30,10 @@ const onboardingSchema = z.object({
   lookingForTeam: z.boolean().optional(),
   openToSubstitute: z.boolean().optional(),
   bio: z.string().optional(),
+  // Privacy & Legal
+  acceptPrivacyPolicy: z.boolean(),
+  acceptTermsOfService: z.boolean(),
+  optInMarketing: z.boolean().optional(),
 });
 
 export async function POST(request: Request) {
@@ -99,6 +108,41 @@ export async function POST(request: Request) {
       .insert(playerProfiles)
       .values(profileData)
       .returning();
+
+    // Log privacy consents
+    const ipAddress = request.headers.get("x-forwarded-for") || null;
+    const userAgent = request.headers.get("user-agent") || null;
+
+    await db.insert(privacyConsents).values([
+      {
+        userId: user!.id,
+        consentType: "privacy_policy",
+        consentVersion: "1.0",
+        accepted: true,
+        ipAddress,
+        userAgent,
+      },
+      {
+        userId: user!.id,
+        consentType: "terms_of_service",
+        consentVersion: "1.0",
+        accepted: true,
+        ipAddress,
+        userAgent,
+      },
+    ]);
+
+    // Update user record with privacy acceptance
+    await db
+      .update(users)
+      .set({
+        privacyPolicyAcceptedAt: new Date(),
+        privacyPolicyVersion: "1.0",
+        termsAcceptedAt: new Date(),
+        termsVersion: "1.0",
+        marketingEmailsOptIn: body.optInMarketing || false,
+      })
+      .where(eq(users.id, user!.id));
 
     // Send welcome email
     try {

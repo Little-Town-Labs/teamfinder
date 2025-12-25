@@ -1,5 +1,6 @@
 import { Metadata } from "next"
 import { Button } from "components/Button/Button"
+import { Footer } from "components/Footer/Footer"
 import { Header } from "components/Header/Header"
 
 import { LP_GRID_ITEMS } from "lp-items"
@@ -129,6 +130,8 @@ export default function Web() {
           </div>
         </div>
       </section>
+
+      <Footer />
     </>
   )
 }

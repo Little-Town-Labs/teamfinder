@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 
 import { ActivityFeed } from "@/components/ActivityFeed/ActivityFeed";
 import { Button } from "@/components/Button/Button";
+import { Footer } from "@/components/Footer/Footer";
 import { Header } from "@/components/Header/Header";
 import { activityLogs, type PlayerProfile, playerProfiles, users } from "@/drizzle/schema";
 import { db } from "@/lib/db";
@@ -157,6 +158,8 @@ export default async function DashboardPage() {
           </div>
         </div>
       </section>
+
+      <Footer />
     </>
   );
 }

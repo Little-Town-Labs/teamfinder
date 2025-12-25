@@ -7,6 +7,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <ClerkProvider>
       <html lang="en">
+        <head>
+          {/*
+            TODO: Add GetTerms Cookie Consent Script after account setup
+
+            <script
+              id="getterms-consent"
+              src="https://cdn.getterms.io/banner.js"
+              data-site-id="YOUR_SITE_ID"
+              async
+            />
+          */}
+        </head>
         <body>
           {children}
           <Toaster position="top-right" richColors />

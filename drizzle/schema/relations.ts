@@ -5,6 +5,7 @@ import { bowlingCenters } from "./bowling-centers";
 import { centerEditSuggestions } from "./center-edit-suggestions";
 import { leagues } from "./leagues";
 import { playerProfiles } from "./player-profiles";
+import { privacyConsents } from "./privacy-consents";
 import { teamMembers } from "./team-members";
 import { teams } from "./teams";
 import { users } from "./users";
@@ -19,6 +20,7 @@ export const usersRelations = relations(users, ({ one, many }) => ({
   affiliations: many(affiliations),
   activityLogs: many(activityLogs),
   centerEditSuggestions: many(centerEditSuggestions),
+  privacyConsents: many(privacyConsents),
 }));
 
 export const playerProfilesRelations = relations(playerProfiles, ({ one }) => ({
@@ -102,6 +104,13 @@ export const centerEditSuggestionsRelations = relations(centerEditSuggestions, (
   }),
   reviewer: one(users, {
     fields: [centerEditSuggestions.reviewedBy],
+    references: [users.id],
+  }),
+}));
+
+export const privacyConsentsRelations = relations(privacyConsents, ({ one }) => ({
+  user: one(users, {
+    fields: [privacyConsents.userId],
     references: [users.id],
   }),
 }));
