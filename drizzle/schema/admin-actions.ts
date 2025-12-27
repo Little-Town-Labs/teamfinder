@@ -36,6 +36,9 @@ export const adminActionTypeEnum = pgEnum("admin_action_type", [
   // Admin management
   "admin_role_assigned",
   "admin_role_revoked",
+
+  // System settings
+  "settings_update",
 ]);
 
 /**
@@ -103,4 +106,5 @@ export type AdminActionType =
   | "report_dismissed"
   | "content_deleted"
   | "admin_role_assigned"
-  | "admin_role_revoked";
+  | "admin_role_revoked"
+  | "settings_update";

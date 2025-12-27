@@ -36,6 +36,20 @@
       "when": 1766619550675,
       "tag": "0004_dashing_harrier",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1766838591363,
+      "tag": "0005_brave_scalphunter",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1766839646601,
+      "tag": "0006_dashing_firestar",
+      "breakpoints": true
     }
   ]
 }

@@ -7,7 +7,9 @@ import { users } from "@/drizzle/schema/users";
 import { getClerkUser } from "@/lib/admin/clerk-integration";
 import { requirePermission } from "@/lib/admin/permissions";
 import { db } from "@/lib/db";
+import { FeatureFlags, isSettingEnabled } from "@/lib/settings";
 import { AdminSettingsClient } from "./AdminSettingsClient";
+import { FeatureToggles } from "./FeatureToggles";
 
 export default async function AdminSettingsPage() {
   const { userId: clerkUserId } = await auth();
@@ -48,6 +50,9 @@ export default async function AdminSettingsPage() {
     }),
   );
 
+  // Fetch feature toggle settings
+  const cookieBannerEnabled = await isSettingEnabled(FeatureFlags.COOKIE_BANNER_ENABLED);
+
   return (
     <div>
       {/* Header */}
@@ -61,6 +66,11 @@ export default async function AdminSettingsPage() {
           </div>
           <Shield className="h-16 w-16 text-blue-600" />
         </div>
+      </div>
+
+      {/* Feature Toggles */}
+      <div className="mb-8">
+        <FeatureToggles initialCookieBannerEnabled={cookieBannerEnabled} />
       </div>
 
       {/* Admin List */}

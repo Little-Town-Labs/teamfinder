@@ -18,7 +18,7 @@ export interface LogAdminActionParams {
   adminClerkUserId: string;
   adminName: string;
   actionType: AdminActionType;
-  targetType: "user" | "team" | "center" | "report" | "admin";
+  targetType: "user" | "team" | "center" | "report" | "admin" | "setting";
   targetId: string;
   targetDescription?: string;
   reason?: string;

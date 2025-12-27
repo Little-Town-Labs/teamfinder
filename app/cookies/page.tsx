@@ -1,6 +1,6 @@
+import { Metadata } from "next";
 import { Footer } from "@/components/Footer/Footer";
 import { Header } from "@/components/Header/Header";
-import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Cookie Policy - TeamFinder",
@@ -67,7 +67,7 @@ export default function CookiePolicyPage() {
               You can manage your cookie preferences through the cookie consent banner that appears when you first visit the site.
             </p>
             <p className="mt-6 text-sm text-yellow-700 dark:text-yellow-300">
-              Contact: privacy@littletownlabs.site
+              Contact: support@littletownlabs.site
             </p>
           </div>
         </div>

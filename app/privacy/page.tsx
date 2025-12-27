@@ -1,6 +1,6 @@
+import { Metadata } from "next";
 import { Footer } from "@/components/Footer/Footer";
 import { Header } from "@/components/Header/Header";
-import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Privacy Policy - TeamFinder",
@@ -70,7 +70,7 @@ export default function PrivacyPolicyPage() {
               </ul>
             </div>
             <p className="mt-6 text-sm text-yellow-700 dark:text-yellow-300">
-              Contact: privacy@littletownlabs.site
+              Contact: support@littletownlabs.site
             </p>
           </div>
         </div>

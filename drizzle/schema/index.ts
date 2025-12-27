@@ -16,4 +16,5 @@ export * from "./permissions";
 export * from "./reports";
 export * from "./admin-actions";
 export * from "./privacy-consents";
+export * from "./settings";
 export * from "./relations";
