@@ -122,15 +122,17 @@ export default function FeedbackList({ feedbackList, loading, onRefresh }: Feedb
 
   if (feedbackList.length === 0) {
     return (
-      <div className="rounded-lg bg-white p-12 text-center shadow dark:bg-gray-800">
-        <MessageSquare className="mx-auto mb-4 h-16 w-16 text-gray-400" />
-        <h3 className="mb-2 text-xl font-semibold text-gray-900 dark:text-white">No feedback yet</h3>
-        <p className="mb-6 text-gray-600 dark:text-gray-400">
+      <div className="rounded-2xl bg-gradient-to-br from-white to-gray-50/50 p-16 text-center shadow-lg dark:from-gray-800 dark:to-gray-900/50">
+        <div className="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-950/20 dark:to-purple-950/10">
+          <MessageSquare className="h-12 w-12 text-blue-500" />
+        </div>
+        <h3 className="mb-3 text-2xl font-bold text-gray-900 dark:text-white">No feedback yet</h3>
+        <p className="mb-8 text-gray-600 dark:text-gray-400">
           You haven&apos;t submitted any feedback. Share your ideas to help us improve!
         </p>
         <button
           onClick={onRefresh}
-          className="text-sm font-medium text-blue-600 hover:text-blue-700 dark:text-blue-500 dark:hover:text-blue-400"
+          className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-500/30 transition-all hover:scale-105 hover:from-blue-700 hover:to-blue-800 hover:shadow-xl hover:shadow-blue-500/40"
         >
           Refresh
         </button>
@@ -139,7 +141,7 @@ export default function FeedbackList({ feedbackList, loading, onRefresh }: Feedb
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-5">
       {feedbackList.map((item) => {
         const categoryInfo = getCategoryIcon(item.category);
         const CategoryIcon = categoryInfo.icon;
@@ -150,25 +152,25 @@ export default function FeedbackList({ feedbackList, loading, onRefresh }: Feedb
         return (
           <div
             key={item.id}
-            className="overflow-hidden rounded-lg bg-white shadow transition-all hover:shadow-md dark:bg-gray-800"
+            className="group overflow-hidden rounded-2xl bg-gradient-to-br from-white to-gray-50/30 shadow-md transition-all hover:-translate-y-0.5 hover:shadow-xl dark:from-gray-800 dark:to-gray-900/30"
           >
             {/* Card Header */}
             <button
               onClick={() => setExpandedId(isExpanded ? null : item.id)}
-              className="w-full p-6 text-left"
+              className="w-full p-6 text-left transition-colors hover:bg-white/50 dark:hover:bg-gray-800/50"
             >
               <div className="flex items-start justify-between gap-4">
                 <div className="flex items-start gap-4">
                   {/* Category Icon */}
-                  <div className={`rounded-lg p-2.5 ${categoryInfo.bgColor}`}>
+                  <div className={`rounded-xl p-3 shadow-sm transition-transform group-hover:scale-110 ${categoryInfo.bgColor}`}>
                     <CategoryIcon className={`h-6 w-6 ${categoryInfo.color}`} />
                   </div>
 
                   {/* Title & Category */}
                   <div className="flex-1">
-                    <h3 className="mb-1 text-lg font-semibold text-gray-900 dark:text-white">{item.title}</h3>
+                    <h3 className="mb-2 text-lg font-bold text-gray-900 transition-colors group-hover:text-blue-600 dark:text-white dark:group-hover:text-blue-400">{item.title}</h3>
                     <div className="flex flex-wrap items-center gap-2">
-                      <span className="text-sm text-gray-600 dark:text-gray-400">
+                      <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
                         {getCategoryLabel(item.category)}
                       </span>
                       <span className="text-gray-400 dark:text-gray-600">•</span>
@@ -181,11 +183,11 @@ export default function FeedbackList({ feedbackList, loading, onRefresh }: Feedb
 
                 {/* Status & Priority Badges */}
                 <div className="flex flex-col items-end gap-2">
-                  <span className={`rounded-full px-3 py-1 text-xs font-medium ${statusBadge.color}`}>
+                  <span className={`rounded-full px-3 py-1.5 text-xs font-semibold shadow-sm ${statusBadge.color}`}>
                     {statusBadge.label}
                   </span>
                   {priorityBadge && (
-                    <span className={`rounded-full px-3 py-1 text-xs font-medium ${priorityBadge.color}`}>
+                    <span className={`rounded-full px-3 py-1.5 text-xs font-semibold shadow-sm ${priorityBadge.color}`}>
                       {priorityBadge.label}
                     </span>
                   )}
@@ -195,31 +197,40 @@ export default function FeedbackList({ feedbackList, loading, onRefresh }: Feedb
 
             {/* Expanded Content */}
             {isExpanded && (
-              <div className="border-t border-gray-200 bg-gray-50 p-6 dark:border-gray-700 dark:bg-gray-900/50">
+              <div className="animate-in fade-in slide-in-from-top-2 duration-300 border-t border-gray-200/50 bg-gradient-to-b from-gray-50 to-white p-6 dark:border-gray-700/50 dark:from-gray-900/50 dark:to-gray-800/30">
                 {/* Description */}
-                <div className="mb-4">
-                  <h4 className="mb-2 text-sm font-semibold text-gray-700 dark:text-gray-300">Description</h4>
-                  <p className="whitespace-pre-wrap text-sm text-gray-600 dark:text-gray-400">{item.description}</p>
+                <div className="mb-6">
+                  <h4 className="mb-3 text-sm font-bold uppercase tracking-wide text-gray-500 dark:text-gray-400">Description</h4>
+                  <div className="rounded-xl bg-white/80 p-4 shadow-sm dark:bg-gray-800/80">
+                    <p className="whitespace-pre-wrap text-sm leading-relaxed text-gray-700 dark:text-gray-300">{item.description}</p>
+                  </div>
                 </div>
 
                 {/* Admin Response */}
                 {item.adminResponse && (
-                  <div className="rounded-lg border-l-4 border-blue-500 bg-white p-4 dark:bg-gray-800">
-                    <div className="mb-2 flex items-center gap-2">
+                  <div className="rounded-xl border-l-4 border-blue-500 bg-gradient-to-br from-blue-50 to-blue-100/30 p-5 shadow-md dark:from-blue-950/30 dark:to-blue-900/10">
+                    <div className="mb-3 flex items-center gap-2">
                       {item.status === "completed" ? (
-                        <CheckCircle2 className="h-5 w-5 text-green-600" />
+                        <div className="rounded-lg bg-green-500/10 p-1.5">
+                          <CheckCircle2 className="h-5 w-5 text-green-600 dark:text-green-500" />
+                        </div>
                       ) : item.status === "declined" ? (
-                        <XCircle className="h-5 w-5 text-red-600" />
+                        <div className="rounded-lg bg-red-500/10 p-1.5">
+                          <XCircle className="h-5 w-5 text-red-600 dark:text-red-500" />
+                        </div>
                       ) : (
-                        <Clock className="h-5 w-5 text-blue-600" />
+                        <div className="rounded-lg bg-blue-500/10 p-1.5">
+                          <Clock className="h-5 w-5 text-blue-600 dark:text-blue-500" />
+                        </div>
                       )}
-                      <h4 className="text-sm font-semibold text-gray-900 dark:text-white">Admin Response</h4>
+                      <h4 className="text-sm font-bold text-gray-900 dark:text-white">Admin Response</h4>
                     </div>
-                    <p className="mb-2 whitespace-pre-wrap text-sm text-gray-700 dark:text-gray-300">
+                    <p className="mb-3 whitespace-pre-wrap text-sm leading-relaxed text-gray-700 dark:text-gray-200">
                       {item.adminResponse}
                     </p>
                     {item.respondedAt && (
-                      <p className="text-xs text-gray-500 dark:text-gray-400">
+                      <p className="flex items-center gap-1.5 text-xs font-medium text-gray-500 dark:text-gray-400">
+                        <Clock className="h-3.5 w-3.5" />
                         Responded {getRelativeTime(item.respondedAt)}
                       </p>
                     )}

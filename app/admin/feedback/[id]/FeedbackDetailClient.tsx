@@ -153,8 +153,8 @@ export default function FeedbackDetailClient({ feedbackId, canRespond, canManage
     return (
       <div className="space-y-6">
         <div className="animate-pulse">
-          <div className="mb-4 h-8 w-1/3 rounded bg-gray-200 dark:bg-gray-700" />
-          <div className="h-64 rounded-lg bg-gray-200 dark:bg-gray-700" />
+          <div className="mb-4 h-8 w-1/3 rounded-xl bg-gray-200 dark:bg-gray-700" />
+          <div className="h-64 rounded-2xl bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800" />
         </div>
       </div>
     );
@@ -169,20 +169,22 @@ export default function FeedbackDetailClient({ feedbackId, canRespond, canManage
       <div className="flex items-center gap-4">
         <Link
           href="/admin/feedback"
-          className="rounded-lg p-2 hover:bg-gray-100 dark:hover:bg-gray-700"
+          className="group rounded-xl bg-white p-2.5 shadow-md transition-all hover:scale-105 hover:shadow-lg dark:bg-gray-800"
         >
-          <ArrowLeft className="h-5 w-5" />
+          <ArrowLeft className="h-5 w-5 text-gray-700 transition-transform group-hover:-translate-x-1 dark:text-gray-300" />
         </Link>
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Feedback Details</h1>
-          <p className="mt-1 text-gray-600 dark:text-gray-400">Review and respond to user feedback</p>
+          <h1 className="bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-3xl font-extrabold text-transparent dark:from-white dark:to-gray-300">
+            Feedback Details
+          </h1>
+          <p className="mt-1 text-base text-gray-600 dark:text-gray-400">Review and respond to user feedback</p>
         </div>
       </div>
 
       {/* Feedback Information */}
-      <div className="rounded-lg bg-white p-6 shadow dark:bg-gray-800">
+      <div className="overflow-hidden rounded-2xl bg-gradient-to-br from-white to-gray-50/50 p-6 shadow-lg dark:from-gray-800 dark:to-gray-900/50">
         <div className="mb-6 flex items-start gap-4">
-          <div className={`rounded-lg p-3 ${categoryInfo.bgColor}`}>
+          <div className={`rounded-xl p-3 shadow-sm ${categoryInfo.bgColor}`}>
             <CategoryIcon className={`h-8 w-8 ${categoryInfo.color}`} />
           </div>
           <div className="flex-1">
@@ -190,10 +192,10 @@ export default function FeedbackDetailClient({ feedbackId, canRespond, canManage
               <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{feedback.title}</h2>
             </div>
             <div className="flex flex-wrap items-center gap-3">
-              <span className="rounded-full bg-gray-100 px-3 py-1 text-sm text-gray-700 dark:bg-gray-700 dark:text-gray-300">
+              <span className="rounded-full bg-gradient-to-r from-gray-100 to-gray-200/50 px-3 py-1.5 text-sm font-semibold text-gray-700 shadow-sm dark:from-gray-700 dark:to-gray-600/50 dark:text-gray-300">
                 {categoryInfo.label}
               </span>
-              <span className="text-sm text-gray-500 dark:text-gray-400">
+              <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
                 Submitted {new Date(feedback.createdAt).toLocaleDateString()}
               </span>
             </div>
@@ -201,17 +203,17 @@ export default function FeedbackDetailClient({ feedbackId, canRespond, canManage
         </div>
 
         {/* Submitter Info */}
-        <div className="mb-6 rounded-lg border border-gray-200 p-4 dark:border-gray-700">
-          <h3 className="mb-2 text-sm font-semibold text-gray-700 dark:text-gray-300">Submitted By</h3>
+        <div className="mb-6 rounded-xl border-2 border-gray-200/50 bg-gradient-to-br from-white to-gray-50/50 p-4 shadow-sm dark:border-gray-700/50 dark:from-gray-800/50 dark:to-gray-900/30">
+          <h3 className="mb-3 text-sm font-bold uppercase tracking-wide text-gray-500 dark:text-gray-400">Submitted By</h3>
           {feedback.submitter ? (
             <div>
-              <div className="font-medium text-gray-900 dark:text-white">
+              <div className="font-bold text-gray-900 dark:text-white">
                 {feedback.submitter.firstName} {feedback.submitter.lastName}
               </div>
-              <div className="text-sm text-gray-500 dark:text-gray-400">{feedback.submitter.email}</div>
+              <div className="mt-1 text-sm font-medium text-gray-500 dark:text-gray-400">{feedback.submitter.email}</div>
               <Link
                 href={`/admin/users/${feedback.submitter.clerkUserId}`}
-                className="mt-2 inline-block text-sm font-medium text-blue-600 hover:text-blue-700 dark:text-blue-500"
+                className="mt-3 inline-flex items-center gap-1 rounded-lg bg-gradient-to-r from-blue-600 to-blue-700 px-3 py-1.5 text-sm font-semibold text-white shadow-md shadow-blue-500/20 transition-all hover:scale-105 hover:from-blue-700 hover:to-blue-800 hover:shadow-lg hover:shadow-blue-500/30"
               >
                 View User Profile →
               </Link>
@@ -223,19 +225,21 @@ export default function FeedbackDetailClient({ feedbackId, canRespond, canManage
 
         {/* Description */}
         <div>
-          <h3 className="mb-2 text-sm font-semibold text-gray-700 dark:text-gray-300">Description</h3>
-          <p className="whitespace-pre-wrap text-gray-600 dark:text-gray-400">{feedback.description}</p>
+          <h3 className="mb-3 text-sm font-bold uppercase tracking-wide text-gray-500 dark:text-gray-400">Description</h3>
+          <div className="rounded-xl bg-white/80 p-4 shadow-sm dark:bg-gray-800/80">
+            <p className="whitespace-pre-wrap text-sm leading-relaxed text-gray-700 dark:text-gray-300">{feedback.description}</p>
+          </div>
         </div>
 
         {/* Current Tags */}
         {feedback.tags && feedback.tags.length > 0 && (
-          <div className="mt-4">
-            <h3 className="mb-2 text-sm font-semibold text-gray-700 dark:text-gray-300">Tags</h3>
+          <div className="mt-6">
+            <h3 className="mb-3 text-sm font-bold uppercase tracking-wide text-gray-500 dark:text-gray-400">Tags</h3>
             <div className="flex flex-wrap gap-2">
               {feedback.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="rounded-full bg-blue-100 px-3 py-1 text-xs font-medium text-blue-800 dark:bg-blue-900/20 dark:text-blue-400"
+                  className="rounded-full bg-gradient-to-r from-blue-100 to-blue-200/50 px-3 py-1.5 text-xs font-semibold text-blue-800 shadow-sm dark:from-blue-900/30 dark:to-blue-800/20 dark:text-blue-400"
                 >
                   {tag}
                 </span>
@@ -247,12 +251,12 @@ export default function FeedbackDetailClient({ feedbackId, canRespond, canManage
 
       {/* Previous Response */}
       {feedback.adminResponse && (
-        <div className="rounded-lg bg-white p-6 shadow dark:bg-gray-800">
-          <h3 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">Previous Response</h3>
-          <div className="rounded-lg border-l-4 border-blue-500 bg-gray-50 p-4 dark:bg-gray-900/50">
-            <p className="mb-2 whitespace-pre-wrap text-gray-700 dark:text-gray-300">{feedback.adminResponse}</p>
+        <div className="overflow-hidden rounded-2xl bg-gradient-to-br from-white to-gray-50/50 p-6 shadow-lg dark:from-gray-800 dark:to-gray-900/50">
+          <h3 className="mb-4 text-lg font-bold text-gray-900 dark:text-white">Previous Response</h3>
+          <div className="rounded-xl border-l-4 border-blue-500 bg-gradient-to-br from-blue-50 to-blue-100/30 p-5 shadow-md dark:from-blue-950/30 dark:to-blue-900/10">
+            <p className="mb-3 whitespace-pre-wrap text-sm leading-relaxed text-gray-700 dark:text-gray-200">{feedback.adminResponse}</p>
             {feedback.responder && (
-              <p className="text-sm text-gray-500 dark:text-gray-400">
+              <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
                 By {feedback.responder.firstName} {feedback.responder.lastName}
                 {feedback.respondedAt && ` • ${new Date(feedback.respondedAt).toLocaleDateString()}`}
               </p>
@@ -263,21 +267,21 @@ export default function FeedbackDetailClient({ feedbackId, canRespond, canManage
 
       {/* Response Form */}
       {canRespond && (
-        <form onSubmit={handleSubmit} className="rounded-lg bg-white p-6 shadow dark:bg-gray-800">
-          <h3 className="mb-6 text-lg font-semibold text-gray-900 dark:text-white">
+        <form onSubmit={handleSubmit} className="overflow-hidden rounded-2xl bg-gradient-to-br from-white to-gray-50/50 p-6 shadow-lg dark:from-gray-800 dark:to-gray-900/50">
+          <h3 className="mb-6 text-lg font-bold text-gray-900 dark:text-white">
             {feedback.adminResponse ? "Update Response" : "Send Response"}
           </h3>
 
           {/* Status & Priority */}
           <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
-              <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label className="mb-2 block text-sm font-semibold text-gray-700 dark:text-gray-300">
                 Status <span className="text-red-500">*</span>
               </label>
               <select
                 value={status}
                 onChange={(e) => setStatus(e.target.value)}
-                className="w-full rounded-lg border border-gray-300 px-4 py-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                className="w-full rounded-xl border-2 border-gray-200 bg-white px-4 py-2.5 font-medium transition-all focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white dark:focus:border-blue-500"
                 required
               >
                 <option value="submitted">Submitted</option>
@@ -291,13 +295,13 @@ export default function FeedbackDetailClient({ feedbackId, canRespond, canManage
 
             {canManage && (
               <div>
-                <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                <label className="mb-2 block text-sm font-semibold text-gray-700 dark:text-gray-300">
                   Priority
                 </label>
                 <select
                   value={priority}
                   onChange={(e) => setPriority(e.target.value)}
-                  className="w-full rounded-lg border border-gray-300 px-4 py-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                  className="w-full rounded-xl border-2 border-gray-200 bg-white px-4 py-2.5 font-medium transition-all focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white dark:focus:border-blue-500"
                 >
                   <option value="">None</option>
                   <option value="low">Low</option>
@@ -311,18 +315,18 @@ export default function FeedbackDetailClient({ feedbackId, canRespond, canManage
 
           {/* Admin Response */}
           <div className="mb-6">
-            <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
+            <label className="mb-2 block text-sm font-semibold text-gray-700 dark:text-gray-300">
               Admin Response (visible to user)
             </label>
             <textarea
               value={adminResponse}
               onChange={(e) => setAdminResponse(e.target.value)}
               rows={6}
-              className="w-full rounded-lg border border-gray-300 p-4 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+              className="w-full rounded-xl border-2 border-gray-200 bg-white p-4 font-medium transition-all focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white dark:focus:border-blue-500"
               placeholder="Explain the status update and any next steps..."
               maxLength={2000}
             />
-            <div className="mt-1 text-right text-sm text-gray-500 dark:text-gray-400">
+            <div className="mt-2 text-right text-sm font-medium text-gray-500 dark:text-gray-400">
               {adminResponse.length}/2000
             </div>
           </div>
@@ -330,18 +334,18 @@ export default function FeedbackDetailClient({ feedbackId, canRespond, canManage
           {/* Internal Notes */}
           {canManage && (
             <div className="mb-6">
-              <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label className="mb-2 block text-sm font-semibold text-gray-700 dark:text-gray-300">
                 Internal Notes (admin only, not visible to user)
               </label>
               <textarea
                 value={internalNotes}
                 onChange={(e) => setInternalNotes(e.target.value)}
                 rows={4}
-                className="w-full rounded-lg border border-gray-300 p-4 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                className="w-full rounded-xl border-2 border-gray-200 bg-white p-4 font-medium transition-all focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white dark:focus:border-blue-500"
                 placeholder="Private notes for internal reference..."
                 maxLength={5000}
               />
-              <div className="mt-1 text-right text-sm text-gray-500 dark:text-gray-400">
+              <div className="mt-2 text-right text-sm font-medium text-gray-500 dark:text-gray-400">
                 {internalNotes.length}/5000
               </div>
             </div>
@@ -350,7 +354,7 @@ export default function FeedbackDetailClient({ feedbackId, canRespond, canManage
           {/* Tags */}
           {canManage && (
             <div className="mb-6">
-              <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label className="mb-2 block text-sm font-semibold text-gray-700 dark:text-gray-300">
                 Tags
               </label>
               <div className="flex gap-2">
@@ -359,13 +363,13 @@ export default function FeedbackDetailClient({ feedbackId, canRespond, canManage
                   value={tagInput}
                   onChange={(e) => setTagInput(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), handleAddTag())}
-                  className="flex-1 rounded-lg border border-gray-300 px-4 py-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                  className="flex-1 rounded-xl border-2 border-gray-200 bg-white px-4 py-2.5 font-medium transition-all focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white dark:focus:border-blue-500"
                   placeholder="Add a tag and press Enter"
                 />
                 <button
                   type="button"
                   onClick={handleAddTag}
-                  className="rounded-lg bg-gray-200 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+                  className="rounded-xl bg-gradient-to-r from-gray-200 to-gray-300 px-4 py-2.5 text-sm font-semibold text-gray-700 shadow-sm transition-all hover:scale-105 hover:from-gray-300 hover:to-gray-400 hover:shadow-md dark:from-gray-700 dark:to-gray-600 dark:text-gray-300 dark:hover:from-gray-600 dark:hover:to-gray-500"
                 >
                   Add
                 </button>
@@ -375,13 +379,13 @@ export default function FeedbackDetailClient({ feedbackId, canRespond, canManage
                   {tags.map((tag) => (
                     <span
                       key={tag}
-                      className="flex items-center gap-2 rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-800 dark:bg-blue-900/20 dark:text-blue-400"
+                      className="flex items-center gap-2 rounded-full bg-gradient-to-r from-blue-100 to-blue-200/50 px-3 py-1.5 text-sm font-semibold text-blue-800 shadow-sm dark:from-blue-900/30 dark:to-blue-800/20 dark:text-blue-400"
                     >
                       {tag}
                       <button
                         type="button"
                         onClick={() => handleRemoveTag(tag)}
-                        className="hover:text-blue-900 dark:hover:text-blue-300"
+                        className="transition-transform hover:scale-125 hover:text-blue-900 dark:hover:text-blue-300"
                       >
                         ×
                       </button>
@@ -396,10 +400,22 @@ export default function FeedbackDetailClient({ feedbackId, canRespond, canManage
           <button
             type="submit"
             disabled={submitting}
-            className="flex items-center gap-2 rounded-lg bg-blue-600 px-6 py-2 font-medium text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-blue-700 dark:hover:bg-blue-800"
+            className="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-3 font-semibold text-white shadow-lg shadow-blue-500/30 transition-all hover:scale-105 hover:from-blue-700 hover:to-blue-800 hover:shadow-xl hover:shadow-blue-500/40 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100 dark:from-blue-600 dark:to-blue-700"
           >
-            <Send className="h-4 w-4" />
-            {submitting ? "Sending..." : "Send Response"}
+            {submitting ? (
+              <>
+                <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                </svg>
+                Sending...
+              </>
+            ) : (
+              <>
+                <Send className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                Send Response
+              </>
+            )}
           </button>
         </form>
       )}

@@ -158,13 +158,15 @@ export default function FeedbackListClient({ initialStats }: FeedbackListClientP
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div>
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Feedback Management</h1>
-        <p className="mt-2 text-gray-600 dark:text-gray-400">Review and respond to user feedback</p>
+      <div className="space-y-2">
+        <h1 className="bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-4xl font-extrabold text-transparent dark:from-white dark:to-gray-300">
+          Feedback Management
+        </h1>
+        <p className="text-base text-gray-600 dark:text-gray-400">Review and respond to user feedback</p>
       </div>
 
       {/* Stats Tabs */}
-      <div className="flex flex-wrap gap-2 border-b border-gray-200 dark:border-gray-700">
+      <div className="flex flex-wrap gap-2 rounded-xl bg-white/80 p-2 shadow-md backdrop-blur-sm dark:bg-gray-800/80">
         {STATUS_TABS.map((tab) => {
           const count = initialStats[tab.key as keyof typeof initialStats];
           return (
@@ -174,29 +176,29 @@ export default function FeedbackListClient({ initialStats }: FeedbackListClientP
                 setStatusFilter(tab.value);
                 setCurrentPage(1);
               }}
-              className={`px-4 py-2 text-sm font-medium transition-colors ${
+              className={`rounded-lg px-4 py-2.5 text-sm font-semibold transition-all ${
                 statusFilter === tab.value
-                  ? "border-b-2 border-blue-600 text-blue-600 dark:text-blue-500"
-                  : "text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200"
+                  ? "bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg shadow-blue-500/30"
+                  : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700"
               }`}
             >
-              {tab.label} ({count})
+              {tab.label} <span className={`ml-1.5 rounded-full px-2 py-0.5 text-xs ${statusFilter === tab.value ? "bg-white/20" : "bg-gray-200 dark:bg-gray-700"}`}>{count}</span>
             </button>
           );
         })}
       </div>
 
       {/* Filters */}
-      <div className="flex flex-wrap gap-4">
-        <div>
-          <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">Category</label>
+      <div className="flex flex-wrap gap-4 rounded-xl bg-white/80 p-6 shadow-md backdrop-blur-sm dark:bg-gray-800/80">
+        <div className="flex-1 min-w-[200px]">
+          <label className="mb-2 block text-sm font-semibold text-gray-700 dark:text-gray-300">Category</label>
           <select
             value={categoryFilter}
             onChange={(e) => {
               setCategoryFilter(e.target.value);
               setCurrentPage(1);
             }}
-            className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm dark:border-gray-600 dark:bg-gray-800 dark:text-white"
+            className="w-full rounded-xl border-2 border-gray-200 bg-white px-4 py-2.5 text-sm font-medium transition-all focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white dark:focus:border-blue-500"
           >
             <option value="all">All Categories</option>
             <option value="bug_report">Bug Reports</option>
@@ -205,15 +207,15 @@ export default function FeedbackListClient({ initialStats }: FeedbackListClientP
             <option value="other">Other</option>
           </select>
         </div>
-        <div>
-          <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">Priority</label>
+        <div className="flex-1 min-w-[200px]">
+          <label className="mb-2 block text-sm font-semibold text-gray-700 dark:text-gray-300">Priority</label>
           <select
             value={priorityFilter}
             onChange={(e) => {
               setPriorityFilter(e.target.value);
               setCurrentPage(1);
             }}
-            className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm dark:border-gray-600 dark:bg-gray-800 dark:text-white"
+            className="w-full rounded-xl border-2 border-gray-200 bg-white px-4 py-2.5 text-sm font-medium transition-all focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white dark:focus:border-blue-500"
           >
             <option value="all">All Priorities</option>
             <option value="critical">Critical</option>
@@ -235,37 +237,39 @@ export default function FeedbackListClient({ initialStats }: FeedbackListClientP
           ))}
         </div>
       ) : feedbackList.length === 0 ? (
-        <div className="rounded-lg bg-white p-12 text-center shadow dark:bg-gray-800">
-          <MessageSquare className="mx-auto mb-4 h-16 w-16 text-gray-400" />
-          <h3 className="mb-2 text-xl font-semibold text-gray-900 dark:text-white">No feedback found</h3>
+        <div className="rounded-2xl bg-gradient-to-br from-white to-gray-50/50 p-16 text-center shadow-lg dark:from-gray-800 dark:to-gray-900/50">
+          <div className="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
+            <MessageSquare className="h-12 w-12 text-gray-400" />
+          </div>
+          <h3 className="mb-2 text-2xl font-bold text-gray-900 dark:text-white">No feedback found</h3>
           <p className="text-gray-600 dark:text-gray-400">Try adjusting your filters</p>
         </div>
       ) : (
-        <div className="overflow-hidden rounded-lg bg-white shadow dark:bg-gray-800">
+        <div className="overflow-hidden rounded-2xl bg-gradient-to-br from-white to-gray-50/50 shadow-lg dark:from-gray-800 dark:to-gray-900/50">
           <table className="w-full">
-            <thead className="border-b border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-900">
+            <thead className="border-b-2 border-gray-200/50 bg-gradient-to-r from-gray-50 to-gray-100/50 dark:border-gray-700/50 dark:from-gray-900/50 dark:to-gray-800/50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                <th className="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider text-gray-600 dark:text-gray-400">
                   Feedback
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                <th className="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider text-gray-600 dark:text-gray-400">
                   Submitter
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                <th className="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider text-gray-600 dark:text-gray-400">
                   Status
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                <th className="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider text-gray-600 dark:text-gray-400">
                   Priority
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                <th className="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider text-gray-600 dark:text-gray-400">
                   Date
                 </th>
-                <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                <th className="px-6 py-4 text-right text-xs font-bold uppercase tracking-wider text-gray-600 dark:text-gray-400">
                   Actions
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+            <tbody className="divide-y divide-gray-200/50 dark:divide-gray-700/50">
               {feedbackList.map((item) => {
                 const categoryInfo = getCategoryIcon(item.category);
                 const CategoryIcon = categoryInfo.icon;
@@ -273,15 +277,15 @@ export default function FeedbackListClient({ initialStats }: FeedbackListClientP
                 const priorityBadge = item.priority ? getPriorityBadge(item.priority) : null;
 
                 return (
-                  <tr key={item.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                  <tr key={item.id} className="transition-colors hover:bg-white/80 dark:hover:bg-gray-800/80">
                     <td className="px-6 py-4">
                       <div className="flex items-start gap-3">
-                        <div className={`rounded-lg p-2 ${categoryInfo.bgColor}`}>
+                        <div className={`rounded-xl p-2.5 shadow-sm ${categoryInfo.bgColor}`}>
                           <CategoryIcon className={`h-5 w-5 ${categoryInfo.color}`} />
                         </div>
                         <div>
-                          <div className="font-medium text-gray-900 dark:text-white">{item.title}</div>
-                          <div className="text-sm text-gray-500 dark:text-gray-400">
+                          <div className="font-semibold text-gray-900 dark:text-white">{item.title}</div>
+                          <div className="text-sm font-medium text-gray-500 dark:text-gray-400">
                             {getCategoryLabel(item.category)}
                           </div>
                         </div>
@@ -300,26 +304,26 @@ export default function FeedbackListClient({ initialStats }: FeedbackListClientP
                       )}
                     </td>
                     <td className="px-6 py-4">
-                      <span className={`rounded-full px-3 py-1 text-xs font-medium ${statusBadge.color}`}>
+                      <span className={`inline-flex rounded-full px-3 py-1.5 text-xs font-semibold shadow-sm ${statusBadge.color}`}>
                         {item.status.replace("_", " ")}
                       </span>
                     </td>
                     <td className="px-6 py-4">
                       {priorityBadge ? (
-                        <span className={`rounded-full px-3 py-1 text-xs font-medium ${priorityBadge.color}`}>
+                        <span className={`inline-flex rounded-full px-3 py-1.5 text-xs font-semibold shadow-sm ${priorityBadge.color}`}>
                           {priorityBadge.label}
                         </span>
                       ) : (
                         <span className="text-sm text-gray-400">-</span>
                       )}
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+                    <td className="px-6 py-4 text-sm font-medium text-gray-500 dark:text-gray-400">
                       {getRelativeTime(item.createdAt)}
                     </td>
                     <td className="px-6 py-4 text-right">
                       <Link
                         href={`/admin/feedback/${item.id}`}
-                        className="text-sm font-medium text-blue-600 hover:text-blue-700 dark:text-blue-500 dark:hover:text-blue-400"
+                        className="inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-blue-600 to-blue-700 px-4 py-2 text-sm font-semibold text-white shadow-md shadow-blue-500/20 transition-all hover:scale-105 hover:from-blue-700 hover:to-blue-800 hover:shadow-lg hover:shadow-blue-500/30"
                       >
                         Review
                       </Link>
