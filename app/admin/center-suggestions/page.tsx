@@ -1,6 +1,10 @@
 import { auth } from "@clerk/nextjs/server";
-import type { CenterEditSuggestion } from "@/drizzle/schema";
+import { desc, eq } from "drizzle-orm";
+
+import { centerEditSuggestions } from "@/drizzle/schema/center-edit-suggestions";
 import { requirePermission } from "@/lib/admin/permissions";
+import { db } from "@/lib/db";
+
 import CenterSuggestionsClient from "./CenterSuggestionsClient";
 
 export const dynamic = "force-dynamic";
@@ -9,26 +13,53 @@ export default async function AdminCenterSuggestionsPage() {
   const { userId: clerkUserId } = await auth();
   await requirePermission(clerkUserId!, "review_center_suggestions");
 
-  // Fetch initial suggestions (pending)
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
-  const response = await fetch(`${baseUrl}/api/admin/center-suggestions?status=pending`, {
-    cache: "no-store",
-    headers: {
-      Cookie: `__session=${clerkUserId}`, // Pass auth
+  // Fetch pending suggestions with related data
+  const suggestions = await db.query.centerEditSuggestions.findMany({
+    where: eq(centerEditSuggestions.status, "pending"),
+    with: {
+      bowlingCenter: {
+        columns: {
+          id: true,
+          name: true,
+          city: true,
+          state: true,
+        },
+      },
+      suggestor: {
+        columns: {
+          id: true,
+          firstName: true,
+          lastName: true,
+          email: true,
+        },
+      },
+      reviewer: {
+        columns: {
+          id: true,
+          firstName: true,
+          lastName: true,
+        },
+      },
     },
+    orderBy: [desc(centerEditSuggestions.createdAt)],
   });
 
-  type SuggestionWithRelations = CenterEditSuggestion & {
-    bowlingCenter: { id: string; name: string; city: string; state: string };
-    suggestor: { id: string; name: string; email: string };
-    reviewer: { id: string; name: string } | null;
-  };
-
-  let initialSuggestions: SuggestionWithRelations[] = [];
-  if (response.ok) {
-    const data = (await response.json()) as { suggestions: SuggestionWithRelations[] };
-    initialSuggestions = data.suggestions;
-  }
+  // Transform to match expected format
+  const initialSuggestions = suggestions.map((s) => ({
+    ...s,
+    bowlingCenter: s.bowlingCenter,
+    suggestor: {
+      id: s.suggestor.id,
+      name: [s.suggestor.firstName, s.suggestor.lastName].filter(Boolean).join(" "),
+      email: s.suggestor.email,
+    },
+    reviewer: s.reviewer
+      ? {
+          id: s.reviewer.id,
+          name: [s.reviewer.firstName, s.reviewer.lastName].filter(Boolean).join(" "),
+        }
+      : null,
+  }));
 
   return (
     <div>
