@@ -66,81 +66,83 @@ export default async function AdminDashboard() {
   return (
     <div>
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Admin Dashboard</h1>
-        <p className="mt-2 text-gray-600 dark:text-gray-400">
+        <h1 className="bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-3xl font-extrabold text-transparent dark:from-white dark:to-gray-300">
+          Admin Dashboard
+        </h1>
+        <p className="mt-2 text-base font-medium text-gray-600 dark:text-gray-400">
           Welcome to the TeamFinder admin panel
         </p>
       </div>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-        <div className="rounded-lg bg-white p-6 shadow dark:bg-gray-800">
-          <div className="text-sm font-medium text-gray-600 dark:text-gray-400">Total Users</div>
-          <div className="mt-2 text-3xl font-bold text-gray-900 dark:text-white">
+        <div className="group overflow-hidden rounded-2xl bg-gradient-to-br from-white to-gray-50/50 p-6 shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-xl dark:from-gray-900 dark:to-gray-800/50">
+          <div className="text-sm font-semibold text-gray-600 dark:text-gray-400">Total Users</div>
+          <div className="mt-2 text-3xl font-extrabold text-gray-900 dark:text-white">
             {stats.totalUsers.toLocaleString()}
           </div>
-          <div className="mt-2 flex items-center text-sm text-green-600 dark:text-green-400">
+          <div className="mt-2 flex items-center text-sm font-medium text-green-600 dark:text-green-400">
             <TrendingUp className="mr-1 h-4 w-4" />
             From Clerk
           </div>
         </div>
 
-        <div className="rounded-lg bg-white p-6 shadow dark:bg-gray-800">
-          <div className="text-sm font-medium text-gray-600 dark:text-gray-400">Active Teams</div>
-          <div className="mt-2 text-3xl font-bold text-gray-900 dark:text-white">
+        <div className="group overflow-hidden rounded-2xl bg-gradient-to-br from-white to-gray-50/50 p-6 shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-xl dark:from-gray-900 dark:to-gray-800/50">
+          <div className="text-sm font-semibold text-gray-600 dark:text-gray-400">Active Teams</div>
+          <div className="mt-2 text-3xl font-extrabold text-gray-900 dark:text-white">
             {stats.activeTeams.toLocaleString()}
           </div>
-          <div className="mt-2 text-sm text-gray-500 dark:text-gray-500">Currently active</div>
+          <div className="mt-2 text-sm font-medium text-gray-500 dark:text-gray-500">Currently active</div>
         </div>
 
-        <div className="rounded-lg bg-white p-6 shadow dark:bg-gray-800">
-          <div className="text-sm font-medium text-gray-600 dark:text-gray-400">
+        <div className="group overflow-hidden rounded-2xl bg-gradient-to-br from-white to-gray-50/50 p-6 shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-xl dark:from-gray-900 dark:to-gray-800/50">
+          <div className="text-sm font-semibold text-gray-600 dark:text-gray-400">
             Pending Reports
           </div>
-          <div className="mt-2 text-3xl font-bold text-gray-900 dark:text-white">
+          <div className="mt-2 text-3xl font-extrabold text-gray-900 dark:text-white">
             {stats.pendingReports.toLocaleString()}
           </div>
-          <div className="mt-2 text-sm text-gray-500 dark:text-gray-500">
+          <div className="mt-2 text-sm font-medium text-gray-500 dark:text-gray-500">
             {stats.pendingReports > 0 ? "Needs review" : "All clear"}
           </div>
         </div>
 
-        <div className="rounded-lg bg-white p-6 shadow dark:bg-gray-800">
-          <div className="text-sm font-medium text-gray-600 dark:text-gray-400">
+        <div className="group overflow-hidden rounded-2xl bg-gradient-to-br from-white to-gray-50/50 p-6 shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-xl dark:from-gray-900 dark:to-gray-800/50">
+          <div className="text-sm font-semibold text-gray-600 dark:text-gray-400">
             Bowling Centers
           </div>
-          <div className="mt-2 text-3xl font-bold text-gray-900 dark:text-white">
+          <div className="mt-2 text-3xl font-extrabold text-gray-900 dark:text-white">
             {stats.bowlingCenters.toLocaleString()}
           </div>
-          <div className="mt-2 text-sm text-gray-500 dark:text-gray-500">In directory</div>
+          <div className="mt-2 text-sm font-medium text-gray-500 dark:text-gray-500">In directory</div>
         </div>
       </div>
 
       {/* Recent Activity */}
       <div className="mt-8">
-        <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Recent Activity</h2>
-        <div className="mt-4 rounded-lg bg-white shadow dark:bg-gray-800">
+        <h2 className="text-xl font-bold text-gray-900 dark:text-white">Recent Activity</h2>
+        <div className="mt-4 overflow-hidden rounded-2xl bg-gradient-to-br from-white to-gray-50/50 shadow-lg dark:from-gray-900 dark:to-gray-800/50">
           {recentActions.length === 0 ? (
-            <div className="p-6 text-center text-gray-600 dark:text-gray-400">
+            <div className="p-8 text-center text-gray-600 dark:text-gray-400">
               No admin actions yet
             </div>
           ) : (
-            <div className="divide-y divide-gray-200 dark:divide-gray-700">
+            <div className="divide-y divide-gray-200/50 dark:divide-gray-700/50">
               {recentActions.map((action) => (
-                <div key={action.id} className="p-4 hover:bg-gray-50 dark:hover:bg-gray-700">
+                <div key={action.id} className="p-4 transition-colors hover:bg-white/80 dark:hover:bg-gray-800/80">
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
-                      <p className="text-sm font-medium text-gray-900 dark:text-white">
+                      <p className="text-sm font-semibold text-gray-900 dark:text-white">
                         {action.adminName}
                       </p>
-                      <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                      <p className="mt-1 text-sm font-medium text-gray-600 dark:text-gray-400">
                         {formatActionType(action.actionType)}
                         {action.targetDescription && (
-                          <span className="text-gray-500"> · {action.targetDescription}</span>
+                          <span className="text-gray-500 dark:text-gray-500"> · {action.targetDescription}</span>
                         )}
                       </p>
                     </div>
-                    <div className="ml-4 flex items-center text-sm text-gray-500 dark:text-gray-500">
+                    <div className="ml-4 flex items-center text-sm font-medium text-gray-500 dark:text-gray-500">
                       <Clock className="mr-1 h-4 w-4" />
                       {formatRelativeTime(action.createdAt)}
                     </div>

@@ -49,13 +49,13 @@ export default async function DashboardPage() {
       <Header />
 
       {/* Hero Section */}
-      <section className="bg-white dark:bg-gray-900">
-        <div className="mx-auto max-w-(--breakpoint-xl) px-4 py-8 lg:py-16">
+      <section className="bg-gradient-to-br from-white via-blue-50/30 to-purple-50/20 dark:from-gray-900 dark:via-gray-900 dark:to-gray-900">
+        <div className="mx-auto max-w-(--breakpoint-xl) px-4 py-12 lg:py-20">
           <div className="text-center">
-            <h1 className="mb-4 text-4xl font-extrabold tracking-tight text-gray-900 md:text-5xl dark:text-white">
+            <h1 className="mb-4 bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-4xl font-extrabold tracking-tight text-transparent md:text-5xl dark:from-white dark:to-gray-300">
               Welcome back, {user.firstName || "Bowler"}!
             </h1>
-            <p className="font-light text-gray-500 md:text-lg dark:text-gray-400">
+            <p className="text-base font-medium text-gray-600 md:text-lg dark:text-gray-400">
               {profile.lookingForTeam
                 ? "You're actively looking for a team. Check out available teams below!"
                 : "Your bowling profile is all set up. Explore teams or create your own!"}
@@ -65,17 +65,17 @@ export default async function DashboardPage() {
       </section>
 
       {/* Profile Overview Section */}
-      <section className="bg-gray-50 dark:bg-gray-800">
+      <section className="bg-gradient-to-br from-gray-50 via-blue-50/20 to-gray-50 dark:from-gray-800 dark:via-gray-800 dark:to-gray-800">
         <div className="mx-auto max-w-(--breakpoint-xl) px-4 py-8 sm:py-16 lg:px-6">
           <div className="mb-8 text-center lg:mb-16">
-            <h2 className="mb-4 text-4xl font-extrabold tracking-tight text-gray-900 dark:text-white">
+            <h2 className="mb-4 bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-4xl font-extrabold tracking-tight text-transparent dark:from-white dark:to-gray-300">
               Your Dashboard
             </h2>
           </div>
 
           <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
             {/* Your Profile Card */}
-            <div className="rounded-lg bg-white p-6 shadow dark:bg-gray-900">
+            <div className="group overflow-hidden rounded-2xl bg-gradient-to-br from-white to-gray-50/50 p-6 shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-xl dark:from-gray-900 dark:to-gray-800/50">
               <h3 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">Your Profile</h3>
               <dl className="space-y-2">
                 <div>
@@ -108,7 +108,7 @@ export default async function DashboardPage() {
             </div>
 
             {/* Quick Stats Card */}
-            <div className="rounded-lg bg-white p-6 shadow dark:bg-gray-900">
+            <div className="group overflow-hidden rounded-2xl bg-gradient-to-br from-white to-gray-50/50 p-6 shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-xl dark:from-gray-900 dark:to-gray-800/50">
               <h3 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">Quick Stats</h3>
               <dl className="space-y-2">
                 <div>
@@ -127,7 +127,7 @@ export default async function DashboardPage() {
             </div>
 
             {/* Quick Actions Card */}
-            <div className="rounded-lg bg-white p-6 shadow dark:bg-gray-900">
+            <div className="group overflow-hidden rounded-2xl bg-gradient-to-br from-white to-gray-50/50 p-6 shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-xl dark:from-gray-900 dark:to-gray-800/50">
               <h3 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">Quick Actions</h3>
               <div className="space-y-2">
                 <Button href="/teams/browse" className="w-full">
@@ -146,14 +146,14 @@ export default async function DashboardPage() {
       </section>
 
       {/* Activity Feed Section */}
-      <section className="bg-white dark:bg-gray-900">
+      <section className="bg-gradient-to-br from-white via-blue-50/20 to-white dark:from-gray-900 dark:via-gray-900 dark:to-gray-900">
         <div className="mx-auto max-w-(--breakpoint-xl) px-4 py-8 sm:py-16 lg:px-6">
           <div className="mb-8 text-center lg:mb-16">
-            <h2 className="mb-4 text-4xl font-extrabold tracking-tight text-gray-900 dark:text-white">
+            <h2 className="mb-4 bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-4xl font-extrabold tracking-tight text-transparent dark:from-white dark:to-gray-300">
               Recent Activity
             </h2>
           </div>
-          <div className="mx-auto max-w-5xl rounded-lg bg-gray-50 p-6 dark:bg-gray-800">
+          <div className="mx-auto max-w-5xl overflow-hidden rounded-2xl bg-gradient-to-br from-gray-50 to-white/50 p-6 shadow-lg dark:from-gray-800 dark:to-gray-900/50">
             <ActivityFeed activities={recentActivities} />
           </div>
         </div>
