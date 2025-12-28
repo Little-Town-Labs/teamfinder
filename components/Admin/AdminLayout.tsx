@@ -3,6 +3,7 @@
 import {
   Activity,
   BarChart3,
+  FileEdit,
   Flag,
   Home,
   MapPin,
@@ -61,6 +62,12 @@ const navItems: NavItem[] = [
     label: "Centers",
     icon: MapPin,
     permission: PERMISSIONS.VIEW_CENTERS,
+  },
+  {
+    href: "/admin/center-suggestions",
+    label: "Center Suggestions",
+    icon: FileEdit,
+    permission: PERMISSIONS.REVIEW_CENTER_SUGGESTIONS,
   },
   {
     href: "/admin/analytics",
