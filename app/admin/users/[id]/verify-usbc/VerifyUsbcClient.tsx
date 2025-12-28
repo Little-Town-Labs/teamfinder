@@ -1,6 +1,6 @@
 "use client";
 
-import { ShieldCheck } from "lucide-react";
+import { ExternalLink, ShieldCheck } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -26,6 +26,25 @@ export function VerifyUsbcClient({
   const [loading, setLoading] = useState(false);
   const [usbcId, setUsbcId] = useState(currentUsbcId || "");
   const [notes, setNotes] = useState(currentNotes || "");
+
+  const handleOpenUsbcLookup = () => {
+    // Open USBC member search in new tab
+    window.open("https://webapps.bowl.com/USBCFindA/Home/Member", "_blank");
+
+    // If user has entered a USBC ID, copy it to clipboard for easy pasting
+    if (usbcId.trim()) {
+      navigator.clipboard
+        .writeText(usbcId.trim())
+        .then(() => {
+          toast.success("USBC ID copied to clipboard! Paste it in the USBC search.");
+        })
+        .catch(() => {
+          toast("USBC search opened in new tab", { icon: "🔍" });
+        });
+    } else {
+      toast("USBC search opened in new tab", { icon: "🔍" });
+    }
+  };
 
   const handleVerify = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -114,18 +133,30 @@ export function VerifyUsbcClient({
             >
               USBC ID <span className="text-red-500">*</span>
             </label>
-            <input
-              type="text"
-              id="usbcId"
-              value={usbcId}
-              onChange={(e) => setUsbcId(e.target.value)}
-              placeholder="e.g., 1234-5678"
-              required
-              disabled={loading || !dbUserId}
-              className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:cursor-not-allowed disabled:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:disabled:bg-gray-800"
-            />
+            <div className="flex gap-2">
+              <input
+                type="text"
+                id="usbcId"
+                value={usbcId}
+                onChange={(e) => setUsbcId(e.target.value)}
+                placeholder="e.g., 1234-5678"
+                required
+                disabled={loading || !dbUserId}
+                className="flex-1 rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:cursor-not-allowed disabled:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:disabled:bg-gray-800"
+              />
+              <button
+                type="button"
+                onClick={handleOpenUsbcLookup}
+                className="inline-flex items-center gap-2 rounded-lg border border-blue-600 bg-white px-4 py-2 text-sm font-medium text-blue-600 hover:bg-blue-50 dark:border-blue-500 dark:bg-gray-800 dark:text-blue-400 dark:hover:bg-gray-700"
+                title="Open USBC member search in new tab"
+              >
+                <ExternalLink className="h-4 w-4" />
+                Lookup
+              </button>
+            </div>
             <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-              Enter the user's USBC membership ID number
+              Enter the user's USBC membership ID number, or click "Lookup" to search USBC
+              database
             </p>
           </div>
 
@@ -179,10 +210,11 @@ export function VerifyUsbcClient({
           Verification Guidelines
         </h3>
         <ul className="list-inside list-disc space-y-1 text-sm text-blue-800 dark:text-blue-200">
+          <li>Click "Lookup" to search the official USBC member database</li>
           <li>Verify the USBC ID matches official USBC records</li>
           <li>Cross-reference the user's name and bowling statistics</li>
           <li>Document your verification method in the notes field</li>
-          <li>Contact USBC directly if you need to verify membership status</li>
+          <li>The USBC ID will be copied to your clipboard for easy searching</li>
         </ul>
       </div>
     </div>
