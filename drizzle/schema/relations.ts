@@ -3,6 +3,7 @@ import { activityLogs } from "./activity-logs";
 import { affiliations } from "./affiliations";
 import { bowlingCenters } from "./bowling-centers";
 import { centerEditSuggestions } from "./center-edit-suggestions";
+import { feedback } from "./feedback";
 import { leagues } from "./leagues";
 import { playerProfiles } from "./player-profiles";
 import { privacyConsents } from "./privacy-consents";
@@ -21,6 +22,7 @@ export const usersRelations = relations(users, ({ one, many }) => ({
   activityLogs: many(activityLogs),
   centerEditSuggestions: many(centerEditSuggestions),
   privacyConsents: many(privacyConsents),
+  feedbackSubmissions: many(feedback),
 }));
 
 export const playerProfilesRelations = relations(playerProfiles, ({ one }) => ({
@@ -111,6 +113,17 @@ export const centerEditSuggestionsRelations = relations(centerEditSuggestions, (
 export const privacyConsentsRelations = relations(privacyConsents, ({ one }) => ({
   user: one(users, {
     fields: [privacyConsents.userId],
+    references: [users.id],
+  }),
+}));
+
+export const feedbackRelations = relations(feedback, ({ one }) => ({
+  submitter: one(users, {
+    fields: [feedback.submittedBy],
+    references: [users.id],
+  }),
+  responder: one(users, {
+    fields: [feedback.respondedBy],
     references: [users.id],
   }),
 }));

@@ -3,6 +3,7 @@ import { Resend } from "resend";
 
 import ApplicationReceivedEmail from "@/emails/ApplicationReceived";
 import ApplicationStatusEmail from "@/emails/ApplicationStatus";
+import FeedbackResponseEmail from "@/emails/FeedbackResponse";
 import MessageNotificationEmail from "@/emails/MessageNotification";
 import TeamInvitationEmail from "@/emails/TeamInvitation";
 import WelcomeEmail from "@/emails/Welcome";
@@ -109,6 +110,37 @@ export const emailTemplates = {
       from: "TeamFinder <noreply@littletownlabs.site>",
       to,
       subject: `New message from ${senderName}`,
+      html,
+    };
+  },
+
+  /**
+   * Feedback response notification (to user)
+   */
+  feedbackResponse: async (
+    to: string,
+    userName: string,
+    feedbackTitle: string,
+    feedbackStatus: "submitted" | "under_review" | "planned" | "in_progress" | "completed" | "declined",
+    adminResponse: string,
+  ) => {
+    const html = await render(
+      FeedbackResponseEmail({ userName, feedbackTitle, feedbackStatus, adminResponse }),
+    );
+
+    const statusLabels = {
+      submitted: "Submitted",
+      under_review: "Under Review",
+      planned: "Planned",
+      in_progress: "In Progress",
+      completed: "Completed",
+      declined: "Declined",
+    };
+
+    return {
+      from: "TeamFinder <noreply@littletownlabs.site>",
+      to,
+      subject: `Response to your feedback: ${feedbackTitle} - ${statusLabels[feedbackStatus]}`,
       html,
     };
   },

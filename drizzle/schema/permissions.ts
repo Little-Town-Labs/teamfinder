@@ -74,6 +74,11 @@ export const PERMISSIONS = {
   RESOLVE_REPORTS: "resolve_reports",
   DELETE_CONTENT: "delete_content",
 
+  // Feedback
+  VIEW_FEEDBACK: "view_feedback",
+  RESPOND_TO_FEEDBACK: "respond_to_feedback",
+  MANAGE_FEEDBACK: "manage_feedback",
+
   // Analytics
   VIEW_ANALYTICS: "view_analytics",
   EXPORT_DATA: "export_data",

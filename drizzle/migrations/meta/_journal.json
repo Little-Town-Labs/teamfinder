@@ -50,6 +50,20 @@
       "when": 1766839646601,
       "tag": "0006_dashing_firestar",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1766949494652,
+      "tag": "0007_nebulous_manta",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1766951006184,
+      "tag": "0008_useful_toxin",
+      "breakpoints": true
     }
   ]
 }

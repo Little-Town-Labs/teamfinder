@@ -31,6 +31,9 @@ export async function Header() {
             <Button href="/dashboard" intent="secondary" size="sm">
               Dashboard
             </Button>
+            <Button href="/feedback" intent="secondary" size="sm">
+              Feedback
+            </Button>
             {userIsAdmin && (
               <Button href="/admin" intent="secondary" size="sm">
                 Admin Panel

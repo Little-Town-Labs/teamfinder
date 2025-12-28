@@ -7,6 +7,7 @@ import {
   Flag,
   Home,
   MapPin,
+  MessageSquare,
   Settings,
   Shield,
   Users,
@@ -56,6 +57,12 @@ const navItems: NavItem[] = [
     label: "Reports",
     icon: Flag,
     permission: PERMISSIONS.VIEW_REPORTS,
+  },
+  {
+    href: "/admin/feedback",
+    label: "Feedback",
+    icon: MessageSquare,
+    permission: PERMISSIONS.VIEW_FEEDBACK,
   },
   {
     href: "/admin/centers",

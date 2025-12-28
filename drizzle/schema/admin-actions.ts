@@ -33,6 +33,11 @@ export const adminActionTypeEnum = pgEnum("admin_action_type", [
   "report_dismissed",
   "content_deleted",
 
+  // Feedback management
+  "feedback_responded",
+  "feedback_status_updated",
+  "feedback_priority_set",
+
   // Admin management
   "admin_role_assigned",
   "admin_role_revoked",
@@ -59,7 +64,7 @@ export const adminActions = pgTable(
 
     // Action details
     actionType: adminActionTypeEnum("action_type").notNull(),
-    targetType: text("target_type").notNull(), // "user", "team", "center", "report"
+    targetType: text("target_type").notNull(), // "user", "team", "center", "report", "feedback", "admin", "setting"
     targetId: uuid("target_id").notNull(),
     targetDescription: text("target_description"), // Human-readable description
 
@@ -105,6 +110,9 @@ export type AdminActionType =
   | "report_reviewed"
   | "report_dismissed"
   | "content_deleted"
+  | "feedback_responded"
+  | "feedback_status_updated"
+  | "feedback_priority_set"
   | "admin_role_assigned"
   | "admin_role_revoked"
   | "settings_update";
