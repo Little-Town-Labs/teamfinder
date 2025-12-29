@@ -1,4 +1,6 @@
 import { Metadata } from "next"
+import { auth } from "@clerk/nextjs/server"
+import { redirect } from "next/navigation"
 import { Button } from "components/Button/Button"
 import { Footer } from "components/Footer/Footer"
 import { Header } from "components/Header/Header"
@@ -18,7 +20,14 @@ export const metadata: Metadata = {
   },
 }
 
-export default function Web() {
+export default async function Web() {
+  // Redirect authenticated users to dashboard
+  const { userId } = await auth()
+
+  if (userId) {
+    redirect("/dashboard")
+  }
+
   return (
     <>
       <Header />
