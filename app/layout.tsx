@@ -2,6 +2,8 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Toaster } from "sonner";
 import { FeatureFlags, isSettingEnabled } from "@/lib/settings";
+import { ThemeProvider } from "@/components/ThemeProvider";
+import { themeScript } from "@/lib/theme-script";
 import "styles/tailwind.css";
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
@@ -9,8 +11,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 
   return (
     <ClerkProvider>
-      <html lang="en">
+      <html lang="en" suppressHydrationWarning>
         <head>
+          {/* Theme script - runs immediately to prevent flash */}
+          <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+
           {/* GetTerms Cookie Consent Platform */}
           {cookieBannerEnabled && (
             <script
@@ -21,9 +26,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           )}
         </head>
         <body>
-          {children}
-          <Toaster position="top-right" richColors />
-          <SpeedInsights />
+          <ThemeProvider>
+            {children}
+            <Toaster position="top-right" richColors />
+            <SpeedInsights />
+          </ThemeProvider>
         </body>
       </html>
     </ClerkProvider>

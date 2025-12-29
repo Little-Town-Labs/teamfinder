@@ -3,6 +3,7 @@ import { auth } from "@clerk/nextjs/server";
 import Link from "next/link";
 import { isAdmin } from "@/lib/admin/permissions";
 import { Button } from "components/Button/Button";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 
 export async function Header() {
@@ -19,6 +20,7 @@ export async function Header() {
           </span>
         </Link>
         <div className="flex items-center gap-4">
+          <ThemeToggle />
           <SignedOut>
             <Button href="/sign-in" intent="secondary" size="sm">
               Sign In
