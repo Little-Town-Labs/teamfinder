@@ -55,11 +55,14 @@ export default function CenterList({ centers, loading }: CenterListProps) {
   return (
     <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
       {centers.map((center) => (
-        <Link
+        <div
           key={center.id}
-          href={`/bowling-centers/${center.id}`}
-          className="group block overflow-hidden rounded-2xl bg-gradient-to-br from-white to-gray-50/50 p-6 shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-xl dark:from-gray-900 dark:to-gray-800/50"
+          className="group relative overflow-hidden rounded-3xl bg-gradient-to-br from-orange-500 via-amber-500 to-yellow-500 p-[2px] shadow-2xl transition-all duration-500 hover:scale-105 hover:shadow-orange-500/50"
         >
+          <Link
+            href={`/bowling-centers/${center.id}`}
+            className="block h-full rounded-3xl bg-white p-6 transition-all dark:bg-gray-900"
+          >
           <div className="mb-2 flex items-start justify-between">
             <h3 className="text-lg font-bold text-gray-900 transition-colors group-hover:text-blue-600 dark:text-white dark:group-hover:text-blue-400">
               {center.name}
@@ -153,6 +156,7 @@ export default function CenterList({ centers, loading }: CenterListProps) {
             )}
           </div>
         </Link>
+        </div>
       ))}
     </div>
   );

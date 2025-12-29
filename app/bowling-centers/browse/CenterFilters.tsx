@@ -101,8 +101,16 @@ export default function CenterFilters({ filters, setFilters }: CenterFiltersProp
     filters.search || filters.state || filters.city || filters.verified || filters.useLocation;
 
   return (
-    <div className="overflow-hidden rounded-2xl bg-gradient-to-br from-white to-gray-50/50 p-6 shadow-lg dark:from-gray-900 dark:to-gray-800/50">
-      <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">Filter Centers</h2>
+    <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-orange-500 via-red-500 to-pink-500 p-[2px] shadow-2xl">
+      <div className="rounded-3xl bg-white p-6 dark:bg-gray-900">
+        <div className="mb-4 flex items-center gap-3">
+          <div className="rounded-2xl bg-gradient-to-br from-orange-500 to-pink-500 p-3">
+            <svg className="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+            </svg>
+          </div>
+          <h2 className="text-2xl font-black text-gray-900 dark:text-white">Filter Centers</h2>
+        </div>
 
       <div className="space-y-4">
         {/* Search */}
@@ -223,11 +231,12 @@ export default function CenterFilters({ filters, setFilters }: CenterFiltersProp
         {hasActiveFilters && (
           <button
             onClick={handleClearFilters}
-            className="w-full rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
+            className="w-full rounded-xl border-2 border-gray-300 bg-white px-4 py-2.5 text-sm font-semibold text-gray-700 transition-all hover:border-orange-500 hover:bg-orange-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
           >
             Clear All Filters
           </button>
         )}
+      </div>
       </div>
     </div>
   );
