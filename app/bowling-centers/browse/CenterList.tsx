@@ -17,11 +17,11 @@ export default function CenterList({ centers, loading }: CenterListProps) {
         {[...Array(6)].map((_, i) => (
           <div
             key={i}
-            className="animate-pulse rounded-lg bg-white p-6 shadow-md dark:bg-gray-900"
+            className="animate-pulse rounded-2xl bg-gradient-to-br from-gray-200 to-gray-300 p-6 shadow-lg dark:from-gray-700 dark:to-gray-800"
           >
-            <div className="mb-2 h-6 rounded bg-gray-200 dark:bg-gray-700" />
-            <div className="mb-4 h-4 rounded bg-gray-200 dark:bg-gray-700" />
-            <div className="h-4 w-2/3 rounded bg-gray-200 dark:bg-gray-700" />
+            <div className="mb-2 h-6 rounded bg-gray-300 dark:bg-gray-600" />
+            <div className="mb-4 h-4 rounded bg-gray-300 dark:bg-gray-600" />
+            <div className="h-4 w-2/3 rounded bg-gray-300 dark:bg-gray-600" />
           </div>
         ))}
       </div>
@@ -30,7 +30,7 @@ export default function CenterList({ centers, loading }: CenterListProps) {
 
   if (centers.length === 0) {
     return (
-      <div className="rounded-lg bg-white p-12 text-center shadow-md dark:bg-gray-900">
+      <div className="rounded-2xl bg-gradient-to-br from-white to-gray-50/50 p-12 text-center shadow-lg dark:from-gray-900 dark:to-gray-800/50">
         <svg
           className="mx-auto mb-4 h-12 w-12 text-gray-400"
           fill="none"
@@ -44,8 +44,8 @@ export default function CenterList({ centers, loading }: CenterListProps) {
             d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
           />
         </svg>
-        <h3 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">No centers found</h3>
-        <p className="text-gray-600 dark:text-gray-400">
+        <h3 className="mb-2 text-lg font-bold text-gray-900 dark:text-white">No centers found</h3>
+        <p className="font-medium text-gray-600 dark:text-gray-400">
           Try adjusting your filters, expanding your search radius, or changing your search criteria
         </p>
       </div>
@@ -58,14 +58,14 @@ export default function CenterList({ centers, loading }: CenterListProps) {
         <Link
           key={center.id}
           href={`/bowling-centers/${center.id}`}
-          className="block rounded-lg bg-white p-6 shadow-md transition-shadow hover:shadow-lg dark:bg-gray-900"
+          className="group block overflow-hidden rounded-2xl bg-gradient-to-br from-white to-gray-50/50 p-6 shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-xl dark:from-gray-900 dark:to-gray-800/50"
         >
           <div className="mb-2 flex items-start justify-between">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+            <h3 className="text-lg font-bold text-gray-900 transition-colors group-hover:text-blue-600 dark:text-white dark:group-hover:text-blue-400">
               {center.name}
             </h3>
             {center.verified && (
-              <span className="ml-2 inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+              <span className="ml-2 inline-flex items-center rounded-full bg-gradient-to-r from-blue-100 to-blue-200/50 px-2.5 py-0.5 text-xs font-semibold text-blue-800 shadow-sm dark:from-blue-900/30 dark:to-blue-800/20 dark:text-blue-200">
                 <svg
                   className="-ml-0.5 mr-1 h-3 w-3"
                   fill="currentColor"

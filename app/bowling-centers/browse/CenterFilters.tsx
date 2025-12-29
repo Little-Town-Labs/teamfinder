@@ -101,13 +101,13 @@ export default function CenterFilters({ filters, setFilters }: CenterFiltersProp
     filters.search || filters.state || filters.city || filters.verified || filters.useLocation;
 
   return (
-    <div className="rounded-lg bg-white p-6 shadow-md dark:bg-gray-900">
-      <h2 className="mb-4 text-xl font-semibold text-gray-900 dark:text-white">Filter Centers</h2>
+    <div className="overflow-hidden rounded-2xl bg-gradient-to-br from-white to-gray-50/50 p-6 shadow-lg dark:from-gray-900 dark:to-gray-800/50">
+      <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">Filter Centers</h2>
 
       <div className="space-y-4">
         {/* Search */}
         <div>
-          <label htmlFor="search" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label htmlFor="search" className="block text-sm font-semibold text-gray-700 dark:text-gray-300">
             Search
           </label>
           <input
@@ -116,14 +116,14 @@ export default function CenterFilters({ filters, setFilters }: CenterFiltersProp
             value={filters.search}
             onChange={handleSearchChange}
             placeholder="Search by name, city, or address..."
-            className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+            className="mt-1 block w-full rounded-xl border-2 border-gray-200 bg-white px-4 py-2.5 font-medium transition-all focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500"
           />
         </div>
 
         {/* State and City */}
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <div>
-            <label htmlFor="state" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            <label htmlFor="state" className="block text-sm font-semibold text-gray-700 dark:text-gray-300">
               State
             </label>
             <input
@@ -132,12 +132,12 @@ export default function CenterFilters({ filters, setFilters }: CenterFiltersProp
               value={filters.state}
               onChange={handleStateChange}
               placeholder="e.g., CA, TX, NY"
-              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+              className="mt-1 block w-full rounded-xl border-2 border-gray-200 bg-white px-4 py-2.5 font-medium transition-all focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500"
             />
           </div>
 
           <div>
-            <label htmlFor="city" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            <label htmlFor="city" className="block text-sm font-semibold text-gray-700 dark:text-gray-300">
               City
             </label>
             <input
@@ -146,7 +146,7 @@ export default function CenterFilters({ filters, setFilters }: CenterFiltersProp
               value={filters.city}
               onChange={handleCityChange}
               placeholder="e.g., Los Angeles"
-              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+              className="mt-1 block w-full rounded-xl border-2 border-gray-200 bg-white px-4 py-2.5 font-medium transition-all focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500"
             />
           </div>
         </div>

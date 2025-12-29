@@ -171,12 +171,12 @@ export default function BrowseCentersClient({ initialCenters }: BrowseCentersCli
         </div>
 
         {/* View Toggle Buttons */}
-        <div className="flex rounded-lg bg-white shadow-sm dark:bg-gray-900">
+        <div className="flex overflow-hidden rounded-xl bg-white shadow-md dark:bg-gray-900">
           <button
             onClick={() => setViewMode("list")}
-            className={`flex items-center gap-2 rounded-l-lg px-4 py-2 text-sm font-medium transition-colors ${
+            className={`flex items-center gap-2 px-4 py-2.5 text-sm font-semibold transition-all ${
               viewMode === "list"
-                ? "bg-blue-600 text-white"
+                ? "bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg shadow-blue-500/30"
                 : "text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-800"
             }`}
           >
@@ -192,9 +192,9 @@ export default function BrowseCentersClient({ initialCenters }: BrowseCentersCli
           </button>
           <button
             onClick={() => setViewMode("map")}
-            className={`flex items-center gap-2 rounded-r-lg px-4 py-2 text-sm font-medium transition-colors ${
+            className={`flex items-center gap-2 px-4 py-2.5 text-sm font-semibold transition-all ${
               viewMode === "map"
-                ? "bg-blue-600 text-white"
+                ? "bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg shadow-blue-500/30"
                 : "text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-800"
             }`}
           >
@@ -220,7 +220,7 @@ export default function BrowseCentersClient({ initialCenters }: BrowseCentersCli
               <button
                 onClick={loadMore}
                 disabled={loadingMore}
-                className="rounded-md bg-blue-600 px-6 py-3 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50 dark:bg-blue-700 dark:hover:bg-blue-800"
+                className="rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-3 font-semibold text-white shadow-lg shadow-blue-500/30 transition-all hover:scale-105 hover:from-blue-700 hover:to-blue-800 hover:shadow-xl hover:shadow-blue-500/40 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100"
               >
                 {loadingMore ? "Loading..." : "Load More Centers"}
               </button>
