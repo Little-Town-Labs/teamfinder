@@ -1,9 +1,7 @@
 @import 'tailwindcss';
 
-/* Dark mode configuration */
-@theme {
-  --color-scheme: light dark;
-}
+/* Dark mode configuration for Tailwind CSS v4 */
+@variant dark (&:where(.dark, .dark *));
 
 /*
   The default border color has changed to `currentColor` in Tailwind CSS v4,
