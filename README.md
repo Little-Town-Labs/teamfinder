@@ -72,21 +72,23 @@ Built on the [Next.js Enterprise Boilerplate](https://blazity.com/open-source/ne
 Create a `.env.local` file with the following variables:
 
 ```env
-# Database
+# Database (Required)
 DATABASE_URL=postgresql://user:password@localhost:5432/teamfinder
 
-# Clerk Authentication
+# Clerk Authentication (Required)
 NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_...
 CLERK_SECRET_KEY=sk_test_...
 NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
 NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
 
-# Mapbox
+# Mapbox (Required for maps - get token at https://account.mapbox.com/access-tokens/)
 NEXT_PUBLIC_MAPBOX_TOKEN=pk.ey...
 
-# Application
+# Application (Required)
 NEXT_PUBLIC_BASE_URL=http://localhost:3000
 ```
+
+**Note:** All variables are required for full functionality. Get Clerk credentials from [clerk.com](https://clerk.com) and Mapbox token from [mapbox.com](https://account.mapbox.com/access-tokens/).
 
 ### Installation
 
@@ -131,13 +133,20 @@ Access the admin panel at `/admin` after being assigned a role.
 
 ## Documentation
 
-- **[CLAUDE.md](./CLAUDE.md)** - Development notes and recent work by Claude AI
-- **[docs/admin-panel-guide.md](./docs/admin-panel-guide.md)** - Complete admin panel user guide
-- **[docs/admin-permissions-reference.md](./docs/admin-permissions-reference.md)** - Permission system reference
-- **[docs/admin-panel-implementation-summary.md](./docs/admin-panel-implementation-summary.md)** - Implementation details
-- **[docs/bowling-center-directory-plan.md](./docs/bowling-center-directory-plan.md)** - Bowling center feature implementation plan
-- **[docs/organizations-feature.md](./docs/organizations-feature.md)** - Organizations feature documentation
-- **[Next.js Enterprise Docs](https://docs.blazity.com)** - Original boilerplate documentation
+### Development Notes & Progress
+- **[CLAUDE.md](./CLAUDE.md)** - Development notes, recent work, and implementation summaries (updated Jan 2026)
+
+### User Guides
+- **[Admin Panel Guide](./docs/admin-panel-guide.md)** - Complete admin panel user guide covering all moderation features and workflows (9,500+ words)
+
+### Implementation & Technical Documentation
+- **[Bowling Center Directory Plan](./docs/bowling-center-directory-plan.md)** - Complete 6-phase implementation plan with retrospective, performance metrics, and lessons learned
+- **[Admin Panel Implementation Summary](./docs/admin-panel-implementation-summary.md)** - Technical architecture, patterns, and implementation details (8,500+ words)
+- **[Admin Permissions Reference](./docs/admin-permissions-reference.md)** - Granular permission system documentation with RBAC details (8,000+ words)
+- **[Organizations Feature](./docs/organizations-feature.md)** - Organizations feature specification
+
+### Framework Documentation
+- **[Next.js Enterprise Docs](https://docs.blazity.com)** - Original boilerplate documentation and best practices
 
 ## Technology Stack
 
