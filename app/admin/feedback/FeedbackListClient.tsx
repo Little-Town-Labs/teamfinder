@@ -3,7 +3,7 @@
 import { Bug, ChevronLeft, ChevronRight, Lightbulb, MessageSquare } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 
 interface FeedbackItem {
   id: string;

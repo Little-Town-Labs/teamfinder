@@ -1,11 +1,61 @@
 "use client";
 
-import { Bug, Lightbulb, MessageSquare, Plus } from "lucide-react";
-import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
+import { Bug, Lightbulb, type LucideIcon, MessageSquare, Plus } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { toast } from "sonner";
 
 import FeedbackList from "./FeedbackList";
 import FeedbackSubmissionModal from "./FeedbackSubmissionModal";
+
+interface StatCardProps {
+  icon: LucideIcon;
+  label: string;
+  cardBg: string;
+  blob: string;
+  iconWrap: string;
+  iconColor: string;
+}
+
+const STAT_CARDS: (StatCardProps & { key: string })[] = [
+  {
+    icon: Bug, label: "Bug Reports", key: "bug_report",
+    cardBg: "from-red-50 to-red-100/50 dark:from-red-950/20 dark:to-red-900/10",
+    blob: "bg-red-500/10",
+    iconWrap: "bg-red-500/10 ring-red-500/20",
+    iconColor: "text-red-600 dark:text-red-500",
+  },
+  {
+    icon: Lightbulb, label: "Feature Requests", key: "feature_request",
+    cardBg: "from-yellow-50 to-yellow-100/50 dark:from-yellow-950/20 dark:to-yellow-900/10",
+    blob: "bg-yellow-500/10",
+    iconWrap: "bg-yellow-500/10 ring-yellow-500/20",
+    iconColor: "text-yellow-600 dark:text-yellow-500",
+  },
+  {
+    icon: MessageSquare, label: "General Feedback", key: "general",
+    cardBg: "from-blue-50 to-blue-100/50 dark:from-blue-950/20 dark:to-blue-900/10",
+    blob: "bg-blue-500/10",
+    iconWrap: "bg-blue-500/10 ring-blue-500/20",
+    iconColor: "text-blue-600 dark:text-blue-500",
+  },
+];
+
+function StatCard({ icon: Icon, label, count, cardBg, blob, iconWrap, iconColor }: StatCardProps & { count: number }) {
+  return (
+    <div className={`group relative overflow-hidden rounded-2xl bg-gradient-to-br ${cardBg} p-6 shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-xl`}>
+      <div className={`absolute right-0 top-0 h-24 w-24 translate-x-8 -translate-y-8 rounded-full ${blob} blur-2xl transition-transform group-hover:scale-150`} />
+      <div className="relative flex items-center gap-4">
+        <div className={`rounded-xl ${iconWrap} p-3 ring-1`}>
+          <Icon className={`h-8 w-8 ${iconColor}`} />
+        </div>
+        <div>
+          <div className="text-3xl font-bold text-gray-900 dark:text-white">{count}</div>
+          <div className="text-sm font-medium text-gray-600 dark:text-gray-400">{label}</div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 interface FeedbackItem {
   id: string;
@@ -22,7 +72,6 @@ interface FeedbackItem {
 
 export default function FeedbackPageClient() {
   const [feedbackList, setFeedbackList] = useState<FeedbackItem[]>([]);
-  const [filteredList, setFilteredList] = useState<FeedbackItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
 
@@ -38,10 +87,8 @@ export default function FeedbackPageClient() {
 
       const data = (await response.json()) as { feedback: FeedbackItem[] };
       setFeedbackList(data.feedback);
-      setFilteredList(data.feedback);
-    } catch (error) {
+    } catch {
       toast.error("Failed to load feedback");
-      console.error(error);
     } finally {
       setLoading(false);
     }
@@ -51,20 +98,16 @@ export default function FeedbackPageClient() {
     fetchFeedback();
   }, []);
 
-  // Apply filters
-  useEffect(() => {
-    let filtered = feedbackList;
-
+  const filteredList = useMemo(() => {
+    let result = feedbackList;
     if (categoryFilter !== "all") {
-      filtered = filtered.filter((f) => f.category === categoryFilter);
+      result = result.filter((f) => f.category === categoryFilter);
     }
-
     if (statusFilter !== "all") {
-      filtered = filtered.filter((f) => f.status === statusFilter);
+      result = result.filter((f) => f.status === statusFilter);
     }
-
-    setFilteredList(filtered);
-  }, [categoryFilter, statusFilter, feedbackList]);
+    return result;
+  }, [feedbackList, categoryFilter, statusFilter]);
 
   const handleSubmitSuccess = () => {
     setShowModal(false);
@@ -72,12 +115,15 @@ export default function FeedbackPageClient() {
     fetchFeedback();
   };
 
-  const categoryStats = {
-    bug_report: feedbackList.filter((f) => f.category === "bug_report").length,
-    feature_request: feedbackList.filter((f) => f.category === "feature_request").length,
-    general_feedback: feedbackList.filter((f) => f.category === "general_feedback").length,
-    other: feedbackList.filter((f) => f.category === "other").length,
-  };
+  const categoryStats = useMemo(() => {
+    const counts = { bug_report: 0, feature_request: 0, general_feedback: 0, other: 0 };
+    for (const f of feedbackList) {
+      if (f.category in counts) {
+        counts[f.category as keyof typeof counts]++;
+      }
+    }
+    return counts;
+  }, [feedbackList]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/20 dark:from-gray-900 dark:via-gray-900 dark:to-gray-900">
@@ -105,48 +151,13 @@ export default function FeedbackPageClient() {
 
         {/* Stats Cards */}
         <div className="mb-8 grid grid-cols-1 gap-6 sm:grid-cols-3">
-          <div className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-red-50 to-red-100/50 p-6 shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-xl dark:from-red-950/20 dark:to-red-900/10">
-            <div className="absolute right-0 top-0 h-24 w-24 translate-x-8 -translate-y-8 rounded-full bg-red-500/10 blur-2xl transition-transform group-hover:scale-150" />
-            <div className="relative flex items-center gap-4">
-              <div className="rounded-xl bg-red-500/10 p-3 ring-1 ring-red-500/20">
-                <Bug className="h-8 w-8 text-red-600 dark:text-red-500" />
-              </div>
-              <div>
-                <div className="text-3xl font-bold text-gray-900 dark:text-white">
-                  {categoryStats.bug_report}
-                </div>
-                <div className="text-sm font-medium text-gray-600 dark:text-gray-400">Bug Reports</div>
-              </div>
-            </div>
-          </div>
-          <div className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-yellow-50 to-yellow-100/50 p-6 shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-xl dark:from-yellow-950/20 dark:to-yellow-900/10">
-            <div className="absolute right-0 top-0 h-24 w-24 translate-x-8 -translate-y-8 rounded-full bg-yellow-500/10 blur-2xl transition-transform group-hover:scale-150" />
-            <div className="relative flex items-center gap-4">
-              <div className="rounded-xl bg-yellow-500/10 p-3 ring-1 ring-yellow-500/20">
-                <Lightbulb className="h-8 w-8 text-yellow-600 dark:text-yellow-500" />
-              </div>
-              <div>
-                <div className="text-3xl font-bold text-gray-900 dark:text-white">
-                  {categoryStats.feature_request}
-                </div>
-                <div className="text-sm font-medium text-gray-600 dark:text-gray-400">Feature Requests</div>
-              </div>
-            </div>
-          </div>
-          <div className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-blue-50 to-blue-100/50 p-6 shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-xl dark:from-blue-950/20 dark:to-blue-900/10">
-            <div className="absolute right-0 top-0 h-24 w-24 translate-x-8 -translate-y-8 rounded-full bg-blue-500/10 blur-2xl transition-transform group-hover:scale-150" />
-            <div className="relative flex items-center gap-4">
-              <div className="rounded-xl bg-blue-500/10 p-3 ring-1 ring-blue-500/20">
-                <MessageSquare className="h-8 w-8 text-blue-600 dark:text-blue-500" />
-              </div>
-              <div>
-                <div className="text-3xl font-bold text-gray-900 dark:text-white">
-                  {categoryStats.general_feedback + categoryStats.other}
-                </div>
-                <div className="text-sm font-medium text-gray-600 dark:text-gray-400">General Feedback</div>
-              </div>
-            </div>
-          </div>
+          {STAT_CARDS.map(({ key, ...cardProps }) => (
+            <StatCard
+              key={key}
+              {...cardProps}
+              count={key === "general" ? categoryStats.general_feedback + categoryStats.other : categoryStats[key as keyof typeof categoryStats]}
+            />
+          ))}
         </div>
 
         {/* Filters */}

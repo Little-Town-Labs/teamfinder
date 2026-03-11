@@ -1,10 +1,31 @@
 import { ClerkProvider } from "@clerk/nextjs";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import type { Metadata } from "next";
 import { Toaster } from "sonner";
-import { FeatureFlags, isSettingEnabled } from "@/lib/settings";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { FeatureFlags, isSettingEnabled } from "@/lib/settings";
 import { themeScript } from "@/lib/theme-script";
 import "styles/tailwind.css";
+
+export const metadata: Metadata = {
+  title: {
+    default: "TeamFinder - Teams Need Players. Players Need Teams.",
+    template: "%s | TeamFinder",
+  },
+  description:
+    "Connect bowlers with teams. Find teammates, recruit players, and join the bowling community.",
+  openGraph: {
+    title: "TeamFinder",
+    description:
+      "The premier platform for bowling team matchmaking. Find your perfect team or recruit talented bowlers.",
+    url: "https://teamfinder.vercel.app/",
+    siteName: "TeamFinder",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+  },
+};
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const cookieBannerEnabled = await isSettingEnabled(FeatureFlags.COOKIE_BANNER_ENABLED);

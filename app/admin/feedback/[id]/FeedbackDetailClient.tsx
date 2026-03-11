@@ -4,7 +4,7 @@ import { ArrowLeft, Bug, Lightbulb, MessageSquare, Send } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 
 interface FeedbackData {
   id: string;

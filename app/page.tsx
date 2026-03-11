@@ -1,24 +1,15 @@
-import { Metadata } from "next"
 import { auth } from "@clerk/nextjs/server"
 import { redirect } from "next/navigation"
-import { Button } from "components/Button/Button"
-import { Footer } from "components/Footer/Footer"
-import { Header } from "components/Header/Header"
+import { Button } from "@/components/Button/Button"
+import { Footer } from "@/components/Footer/Footer"
+import { Header } from "@/components/Header/Header"
+import { LP_GRID_ITEMS } from "@/lp-items"
 
-import { LP_GRID_ITEMS } from "lp-items"
-
-export const metadata: Metadata = {
-  title: "TeamFinder - Teams Need Players. Players Need Teams.",
-  description: "Connect bowlers with teams. Find teammates, recruit players, and join the bowling community.",
-  twitter: {
-    card: "summary_large_image",
-  },
-  openGraph: {
-    title: "TeamFinder - Teams Need Players. Players Need Teams.",
-    description: "The premier platform for bowling team matchmaking. Find your perfect team or recruit talented bowlers.",
-    url: "https://teamfinder.vercel.app/",
-  },
-}
+const HOW_IT_WORKS = [
+  { step: 1, title: "Create Your Profile", description: "Sign up and add your USBC ID, bowling stats, and availability. Tell teams what you\u2019re looking for." },
+  { step: 2, title: "Find Your Match", description: "Browse teams looking for players or discover bowlers seeking teams. Filter by skill level, location, and schedule." },
+  { step: 3, title: "Start Bowling", description: "Connect directly through our messaging system, join the team, and hit the lanes together." },
+]
 
 export default async function Web() {
   // Redirect authenticated users to dashboard
@@ -89,33 +80,15 @@ export default async function Web() {
             </p>
           </div>
           <div className="space-y-8 md:grid md:grid-cols-3 md:gap-12 md:space-y-0">
-            <div className="flex flex-col items-center text-center">
-              <div className="mb-4 flex size-16 items-center justify-center rounded-full bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300">
-                <span className="text-2xl font-bold">1</span>
+            {HOW_IT_WORKS.map(({ step, title, description }) => (
+              <div key={step} className="flex flex-col items-center text-center">
+                <div className="mb-4 flex size-16 items-center justify-center rounded-full bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300">
+                  <span className="text-2xl font-bold">{step}</span>
+                </div>
+                <h3 className="mb-2 text-xl font-bold dark:text-white">{title}</h3>
+                <p className="text-gray-500 dark:text-gray-400">{description}</p>
               </div>
-              <h3 className="mb-2 text-xl font-bold dark:text-white">Create Your Profile</h3>
-              <p className="text-gray-500 dark:text-gray-400">
-                Sign up and add your USBC ID, bowling stats, and availability. Tell teams what you&apos;re looking for.
-              </p>
-            </div>
-            <div className="flex flex-col items-center text-center">
-              <div className="mb-4 flex size-16 items-center justify-center rounded-full bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300">
-                <span className="text-2xl font-bold">2</span>
-              </div>
-              <h3 className="mb-2 text-xl font-bold dark:text-white">Find Your Match</h3>
-              <p className="text-gray-500 dark:text-gray-400">
-                Browse teams looking for players or discover bowlers seeking teams. Filter by skill level, location, and schedule.
-              </p>
-            </div>
-            <div className="flex flex-col items-center text-center">
-              <div className="mb-4 flex size-16 items-center justify-center rounded-full bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300">
-                <span className="text-2xl font-bold">3</span>
-              </div>
-              <h3 className="mb-2 text-xl font-bold dark:text-white">Start Bowling</h3>
-              <p className="text-gray-500 dark:text-gray-400">
-                Connect directly through our messaging system, join the team, and hit the lanes together.
-              </p>
-            </div>
+            ))}
           </div>
         </div>
       </section>

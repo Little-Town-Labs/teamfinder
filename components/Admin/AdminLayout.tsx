@@ -15,7 +15,6 @@ import {
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
-import { Toaster } from "react-hot-toast";
 
 import type { AdminRoleType } from "@/drizzle/schema/admin-roles";
 import { PERMISSIONS } from "@/drizzle/schema/permissions";
@@ -139,30 +138,6 @@ export function AdminLayout({ children, role, permissions }: AdminLayoutProps) {
 
   return (
     <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
-      <Toaster
-        position="top-right"
-        toastOptions={{
-          duration: 4000,
-          style: {
-            background: "#363636",
-            color: "#fff",
-          },
-          success: {
-            duration: 3000,
-            iconTheme: {
-              primary: "#10b981",
-              secondary: "#fff",
-            },
-          },
-          error: {
-            duration: 5000,
-            iconTheme: {
-              primary: "#ef4444",
-              secondary: "#fff",
-            },
-          },
-        }}
-      />
       {/* Sidebar */}
       <aside className="w-64 border-r border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
         <div className="flex h-full flex-col">

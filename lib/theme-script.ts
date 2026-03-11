@@ -10,6 +10,7 @@ export const themeScript = `
         if (stored === 'dark' || stored === 'light') {
           return stored;
         }
+        // 'system' or no value — use OS preference
       }
       return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
     }
@@ -28,7 +29,8 @@ export const themeScript = `
 
     // Listen for system preference changes
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-      if (!localStorage.getItem('theme')) {
+      var stored = localStorage.getItem('theme');
+      if (!stored || stored === 'system') {
         applyTheme(e.matches ? 'dark' : 'light');
       }
     });
