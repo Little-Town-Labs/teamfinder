@@ -39,3 +39,5 @@ storybook-static/
 
 /.npm-only-allow
 build-output.log
+
+.vercel

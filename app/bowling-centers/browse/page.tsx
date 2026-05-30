@@ -1,13 +1,15 @@
-import { ErrorBoundary } from "@/app/bowling-centers/ErrorBoundary";
-import { Header } from "@/components/Header/Header";
-import { bowlingCenters } from "@/drizzle/schema";
-import { db } from "@/lib/db";
+import { ErrorBoundary } from "@/app/bowling-centers/ErrorBoundary"
+import { Header } from "@/components/Header/Header"
+import { bowlingCenters } from "@/drizzle/schema"
+import { db } from "@/lib/db"
 
-import BrowseCentersClient from "./BrowseCentersClient";
+import BrowseCentersClient from "./BrowseCentersClient"
+
+export const dynamic = "force-dynamic"
 
 export default async function BrowseCentersPage() {
   // Fetch initial centers (first 20)
-  const initialCenters = await db.select().from(bowlingCenters).limit(20);
+  const initialCenters = await db.select().from(bowlingCenters).limit(20)
 
   return (
     <>
@@ -36,5 +38,5 @@ export default async function BrowseCentersPage() {
         </div>
       </section>
     </>
-  );
+  )
 }

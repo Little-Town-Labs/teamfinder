@@ -6,9 +6,23 @@ import { Header } from "@/components/Header/Header"
 import { LP_GRID_ITEMS } from "@/lp-items"
 
 const HOW_IT_WORKS = [
-  { step: 1, title: "Create Your Profile", description: "Sign up and add your USBC ID, bowling stats, and availability. Tell teams what you\u2019re looking for." },
-  { step: 2, title: "Find Your Match", description: "Browse teams looking for players or discover bowlers seeking teams. Filter by skill level, location, and schedule." },
-  { step: 3, title: "Start Bowling", description: "Connect directly through our messaging system, join the team, and hit the lanes together." },
+  {
+    step: 1,
+    title: "Create Your Profile",
+    description:
+      "Sign up and add your USBC ID, bowling stats, and availability. Tell teams what you\u2019re looking for.",
+  },
+  {
+    step: 2,
+    title: "Find Your Match",
+    description:
+      "Browse teams looking for players or discover bowlers seeking teams. Filter by skill level, location, and schedule.",
+  },
+  {
+    step: 3,
+    title: "Start Bowling",
+    description: "Connect directly through our messaging system, join the team, and hit the lanes together.",
+  },
 ]
 
 export default async function Web() {
@@ -72,12 +86,8 @@ export default async function Web() {
       <section className="bg-white dark:bg-gray-900">
         <div className="mx-auto max-w-(--breakpoint-xl) px-4 py-8 sm:py-16 lg:px-6">
           <div className="mb-8 text-center lg:mb-16">
-            <h2 className="mb-4 text-4xl font-extrabold tracking-tight text-gray-900 dark:text-white">
-              How It Works
-            </h2>
-            <p className="font-light text-gray-500 sm:text-xl dark:text-gray-400">
-              Get started in three simple steps
-            </p>
+            <h2 className="mb-4 text-4xl font-extrabold tracking-tight text-gray-900 dark:text-white">How It Works</h2>
+            <p className="font-light text-gray-500 sm:text-xl dark:text-gray-400">Get started in three simple steps</p>
           </div>
           <div className="space-y-8 md:grid md:grid-cols-3 md:gap-12 md:space-y-0">
             {HOW_IT_WORKS.map(({ step, title, description }) => (
@@ -96,14 +106,12 @@ export default async function Web() {
       {/* CTA Section */}
       <section className="bg-blue-700 dark:bg-blue-800">
         <div className="mx-auto max-w-(--breakpoint-xl) px-4 py-8 text-center sm:py-16 lg:px-6">
-          <h2 className="mb-4 text-4xl font-extrabold tracking-tight text-white">
-            Ready to Find Your Team?
-          </h2>
+          <h2 className="mb-4 text-4xl font-extrabold tracking-tight text-white">Ready to Find Your Team?</h2>
           <p className="mb-8 font-light text-blue-100 sm:text-xl">
             Join TeamFinder today and connect with the bowling community. It&apos;s free to get started.
           </p>
           <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <Button href="/sign-up" className="bg-white text-blue-700 border-white hover:enabled:bg-gray-100">
+            <Button href="/sign-up" className="border-white bg-white text-blue-700 hover:enabled:bg-gray-100">
               Create Your Profile
             </Button>
             <Button href="/teams" intent="secondary" className="border-white text-white hover:enabled:bg-blue-600">

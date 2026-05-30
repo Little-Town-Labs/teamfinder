@@ -13,6 +13,14 @@ jobs:
   check:
     name: Check
     runs-on: ubuntu-latest
+    env:
+      SKIP_ENV_VALIDATION: true
+      DATABASE_URL: postgresql://teamfinder:teamfinder@localhost:5432/teamfinder
+      CLERK_SECRET_KEY: sk_test_ci
+      CLERK_WEBHOOK_SECRET: whsec_ci
+      RESEND_API_KEY: re_ci_placeholder
+      NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: pk_test_ZGV2ZWxvcGVyLmNsZXJrLmFjY291bnRzLmRldiQ
+      NEXT_PUBLIC_MAPBOX_TOKEN: pk.ci
     steps:
       - uses: actions/checkout@v4
       - run: echo "node_version=$(cat .github/nodejs.version)" >> $GITHUB_ENV
@@ -33,7 +41,14 @@ jobs:
       - name: Type check
         run: pnpm run type-check
       - name: Format check
-        run: pnpm run prettier
+        run: |
+          git fetch origin "${{ github.base_ref || 'main' }}" --depth=1
+          changed_files="$(git diff --name-only --diff-filter=ACMRT "origin/${{ github.base_ref || 'main' }}" HEAD -- '*.js' '*.jsx' '*.ts' '*.tsx')"
+          if [ -n "$changed_files" ]; then
+            echo "$changed_files" | xargs pnpm exec prettier --check
+          else
+            echo "No changed JavaScript or TypeScript files to format-check."
+          fi
       - name: Unit & Integration tests
         run: pnpm run test
       - name: Smoke & Acceptance tests

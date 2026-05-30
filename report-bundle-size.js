@@ -1,5 +1,5 @@
 #!/usr/bin/env node
- 
+
 /**
  * Copyright (c) HashiCorp, Inc.
  * SPDX-License-Identifier: MPL-2.0
@@ -7,10 +7,11 @@
 
 // edited to work with the appdir by @raphaelbadia
 
-const gzSize = require("gzip-size")
-const mkdirp = require("mkdirp")
-const fs = require("fs")
-const path = require("path")
+import fs from "node:fs"
+import path from "node:path"
+
+import { sync as gzipSizeSync } from "gzip-size"
+import { mkdirpSync } from "mkdirp"
 
 // Pull options from `package.json`
 const options = getOptions()
@@ -28,8 +29,8 @@ try {
 }
 
 // if so, we can import the build manifest
-const buildMeta = require(path.join(nextMetaRoot, "build-manifest.json"))
-const appDirMeta = require(path.join(nextMetaRoot, "app-build-manifest.json"))
+const buildMeta = readJsonFile(path.join(nextMetaRoot, "build-manifest.json"))
+const appDirMeta = readJsonFile(path.join(nextMetaRoot, "app-build-manifest.json"))
 
 // this memory cache ensures we dont read any script file more than once
 // bundles are often shared between pages
@@ -71,7 +72,7 @@ const rawData = JSON.stringify({
 // log ouputs to the gh actions panel
 console.log(rawData)
 
-mkdirp.sync(path.join(nextMetaRoot, "analyze/"))
+mkdirpSync(path.join(nextMetaRoot, "analyze/"))
 fs.writeFileSync(path.join(nextMetaRoot, "analyze/__bundle_analysis.json"), rawData)
 
 // --------------
@@ -106,7 +107,7 @@ function getScriptSize(scriptPath) {
   } else {
     const textContent = fs.readFileSync(p, encoding)
     rawSize = Buffer.byteLength(textContent, encoding)
-    gzipSize = gzSize.sync(textContent)
+    gzipSize = gzipSizeSync(textContent)
     memoryCache[p] = [rawSize, gzipSize]
   }
 
@@ -117,9 +118,13 @@ function getScriptSize(scriptPath) {
  * Reads options from `package.json`
  */
 function getOptions(pathPrefix = process.cwd()) {
-  const pkg = require(path.join(pathPrefix, "package.json"))
+  const pkg = readJsonFile(path.join(pathPrefix, "package.json"))
 
   return { ...pkg.nextBundleAnalysis, name: pkg.name }
+}
+
+function readJsonFile(filePath) {
+  return JSON.parse(fs.readFileSync(filePath, "utf8"))
 }
 
 /**

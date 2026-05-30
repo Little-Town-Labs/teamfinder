@@ -20,6 +20,12 @@ jobs:
   analyze:
     env:
       SKIP_ENV_VALIDATION: true
+      DATABASE_URL: postgresql://teamfinder:teamfinder@localhost:5432/teamfinder
+      CLERK_SECRET_KEY: sk_test_ci
+      CLERK_WEBHOOK_SECRET: whsec_ci
+      RESEND_API_KEY: re_ci_placeholder
+      NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: pk_test_ZGV2ZWxvcGVyLmNsZXJrLmFjY291bnRzLmRldiQ
+      NEXT_PUBLIC_MAPBOX_TOKEN: pk.ci
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -73,6 +79,18 @@ jobs:
           workflow: nextjs_bundle_analysis.yml
           branch: ${{ github.event.pull_request.base.ref }}
           path: .next/analyze/base
+          if_no_artifact_found: ignore
+
+      - name: Check for base branch bundle
+        id: base-bundle
+        if: success() && github.event.number
+        run: |
+          if find .next/analyze/base -name '__bundle_analysis.json' -print -quit | grep -q .; then
+            echo "found=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "found=false" >> "$GITHUB_OUTPUT"
+            echo "No base bundle artifact found; skipping bundle comparison."
+          fi
 
       # And here's the second place - this runs after we have both the current and
       # base branch bundle stats, and will compare them to determine what changed.
@@ -88,12 +106,12 @@ jobs:
       # Either of these arguments can be changed or removed by editing the `nextBundleAnalysis`
       # entry in your package.json file.
       - name: Compare with base branch bundle
-        if: success() && github.event.number
+        if: success() && github.event.number && steps.base-bundle.outputs.found == 'true'
         run: ls -laR .next/analyze/base && npx -p nextjs-bundle-analysis compare
 
       - name: Get comment body
         id: get-comment-body
-        if: success() && github.event.number
+        if: success() && github.event.number && steps.base-bundle.outputs.found == 'true'
         uses: actions/github-script@v6
         with:
           result-encoding: string
@@ -104,7 +122,7 @@ jobs:
 
       - name: Find Comment
         uses: peter-evans/find-comment@v2
-        if: success() && github.event.number
+        if: success() && github.event.number && steps.base-bundle.outputs.found == 'true'
         id: fc
         with:
           issue-number: ${{ github.event.number }}
@@ -112,14 +130,14 @@ jobs:
 
       - name: Create Comment
         uses: peter-evans/create-or-update-comment@v3
-        if: success() && github.event.number && steps.fc.outputs.comment-id == 0
+        if: success() && github.event.number && steps.base-bundle.outputs.found == 'true' && steps.fc.outputs.comment-id == 0
         with:
           issue-number: ${{ github.event.number }}
           body: ${{ steps.get-comment-body.outputs.body }}
 
       - name: Update Comment
         uses: peter-evans/create-or-update-comment@v3
-        if: success() && github.event.number && steps.fc.outputs.comment-id != 0
+        if: success() && github.event.number && steps.base-bundle.outputs.found == 'true' && steps.fc.outputs.comment-id != 0
         with:
           issue-number: ${{ github.event.number }}
           body: ${{ steps.get-comment-body.outputs.body }}
