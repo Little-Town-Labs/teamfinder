@@ -1,26 +1,28 @@
-"use client";
+"use client"
 
-import "mapbox-gl/dist/mapbox-gl.css";
+import "mapbox-gl/dist/mapbox-gl.css"
 
-import { useEffect, useRef, useState } from "react";
-import { Map, Marker, NavigationControl } from "react-map-gl/mapbox";
-import type { MapRef } from "react-map-gl/mapbox";
+import { useEffect, useRef, useState } from "react"
+import { Map, Marker, NavigationControl } from "react-map-gl/mapbox"
+import type { MapRef } from "react-map-gl/mapbox"
+
+import { env } from "@/env.mjs"
 
 interface CenterDetailMapProps {
-  latitude: string;
-  longitude: string;
-  verified: boolean;
+  latitude: string
+  longitude: string
+  verified: boolean
 }
 
 export default function CenterDetailMap({ latitude, longitude, verified }: CenterDetailMapProps) {
-  const mapRef = useRef<MapRef>(null);
+  const mapRef = useRef<MapRef>(null)
   const [viewState, setViewState] = useState({
     longitude: parseFloat(longitude),
     latitude: parseFloat(latitude),
     zoom: 14,
-  });
+  })
 
-  const mapboxToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
+  const mapboxToken = env.NEXT_PUBLIC_MAPBOX_TOKEN
 
   useEffect(() => {
     if (mapRef.current) {
@@ -28,9 +30,9 @@ export default function CenterDetailMap({ latitude, longitude, verified }: Cente
         center: [parseFloat(longitude), parseFloat(latitude)],
         zoom: 14,
         duration: 1000,
-      });
+      })
     }
-  }, [latitude, longitude]);
+  }, [latitude, longitude])
 
   if (!mapboxToken) {
     return (
@@ -41,7 +43,7 @@ export default function CenterDetailMap({ latitude, longitude, verified }: Cente
           </p>
         </div>
       </div>
-    );
+    )
   }
 
   return (
@@ -77,5 +79,5 @@ export default function CenterDetailMap({ latitude, longitude, verified }: Cente
         </Marker>
       </Map>
     </div>
-  );
+  )
 }

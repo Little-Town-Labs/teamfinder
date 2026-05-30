@@ -162,6 +162,7 @@ pnpm dev              # Start development server
 pnpm build            # Build for production
 pnpm start            # Start production server
 pnpm lint             # Run ESLint
+pnpm type-check       # Run TypeScript checks
 pnpm test             # Run tests
 pnpm db:generate      # Generate Drizzle migrations
 pnpm db:push          # Push schema to database

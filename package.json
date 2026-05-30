@@ -1,5 +1,5 @@
 {
-  "name": "next-enterprise",
+  "name": "teamfinder",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -9,6 +9,7 @@
     "start": "next start",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
+    "type-check": "tsc --noEmit --pretty false",
     "prettier": "prettier --check \"**/*.{js,jsx,ts,tsx}\"",
     "prettier:fix": "prettier --write \"**/*.{js,jsx,ts,tsx}\"",
     "analyze": "cross-env ANALYZE=true pnpm run build",
@@ -139,7 +140,6 @@
     "semantic-release": "^22.0.12",
     "storybook": "^8.6.15",
     "tailwindcss": "^4.1.18",
-    "tsc": "^2.0.4",
     "typed-query-selector": "^2.12.0",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.50.0",

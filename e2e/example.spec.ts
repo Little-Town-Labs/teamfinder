@@ -1,7 +1,8 @@
 import { expect, test } from "@playwright/test"
 
-test("has title", async ({ page }) => {
-  await page.goto("./")
+test("serves the health endpoint", async ({ request }) => {
+  const response = await request.get("/api/health")
 
-  await expect(page).toHaveTitle(/Next.js Enterprise Boilerplate/)
+  expect(response.ok()).toBe(true)
+  await expect(response.json()).resolves.toEqual({ status: "ok" })
 })

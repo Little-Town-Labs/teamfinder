@@ -1,15 +1,9 @@
-import { auth } from "@clerk/nextjs/server";
-import { eq } from "drizzle-orm";
-import { NextResponse } from "next/server";
+import { auth } from "@clerk/nextjs/server"
+import { eq } from "drizzle-orm"
+import { NextResponse } from "next/server"
 
-import {
-  activityLogs,
-  messages,
-  playerProfiles,
-  teamMembers,
-  users,
-} from "@/drizzle/schema";
-import { db } from "@/lib/db";
+import { activityLogs, messages, playerProfiles, privacyConsents, teamMembers, users } from "@/drizzle/schema"
+import { db } from "@/lib/db"
 
 /**
  * GET /api/user/export-data
@@ -17,23 +11,23 @@ import { db } from "@/lib/db";
  */
 export async function GET() {
   try {
-    const { userId: clerkUserId } = await auth();
+    const { userId: clerkUserId } = await auth()
 
     if (!clerkUserId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
     // Get user from database
     const user = await db.query.users.findFirst({
       where: eq(users.clerkUserId, clerkUserId),
-    });
+    })
 
     if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      return NextResponse.json({ error: "User not found" }, { status: 404 })
     }
 
     // Gather all user data
-    const [profile, teams, userMessages, activities, consents] = await Promise.all([
+    const [profile, teams, sentMessages, receivedMessages, activities, consents] = await Promise.all([
       db.query.playerProfiles.findFirst({
         where: eq(playerProfiles.userId, user.id),
       }),
@@ -46,13 +40,16 @@ export async function GET() {
       db.query.messages.findMany({
         where: eq(messages.senderId, user.id),
       }),
+      db.query.messages.findMany({
+        where: eq(messages.recipientId, user.id),
+      }),
       db.query.activityLogs.findMany({
         where: eq(activityLogs.userId, user.id),
       }),
       db.query.privacyConsents.findMany({
-        where: eq(users.id, user.id),
+        where: eq(privacyConsents.userId, user.id),
       }),
-    ]);
+    ])
 
     // Compile export package
     const exportData = {
@@ -78,10 +75,14 @@ export async function GET() {
       },
       bowlingProfile: profile || null,
       teams: teams || [],
-      messages: userMessages || [],
+      messages: {
+        sent: sentMessages || [],
+        received: receivedMessages || [],
+        all: [...(sentMessages || []), ...(receivedMessages || [])],
+      },
       activityHistory: activities || [],
       privacyConsents: consents || [],
-    };
+    }
 
     // Return as downloadable JSON
     return new NextResponse(JSON.stringify(exportData, null, 2), {
@@ -89,12 +90,9 @@ export async function GET() {
         "Content-Type": "application/json",
         "Content-Disposition": `attachment; filename="teamfinder-data-export-${user.id}.json"`,
       },
-    });
+    })
   } catch (error) {
-    console.error("Error exporting user data:", error);
-    return NextResponse.json(
-      { error: "Failed to export data" },
-      { status: 500 }
-    );
+    console.error("Error exporting user data:", error)
+    return NextResponse.json({ error: "Failed to export data" }, { status: 500 })
   }
 }
