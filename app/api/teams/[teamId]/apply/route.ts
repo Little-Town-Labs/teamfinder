@@ -3,12 +3,12 @@ import { and, eq } from "drizzle-orm"
 import { NextRequest, NextResponse } from "next/server"
 import { z } from "zod"
 
-import { playerApplications, teams, users } from "@/drizzle/schema"
+import { playerApplications, teamMembers, teams, users } from "@/drizzle/schema"
 import { db } from "@/lib/db"
 import { emailTemplates, resend } from "@/lib/email"
 
 const applicationSchema = z.object({
-  coverLetter: z.string().optional(),
+  coverLetter: z.string().trim().max(2000).optional(),
 })
 
 export async function POST(request: NextRequest, { params }: { params: Promise<{ teamId: string }> }) {
@@ -51,6 +51,18 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     // Check if user is already on the team
     if (team.captainId === applicant.id) {
       return NextResponse.json({ error: "You are the captain of this team" }, { status: 400 })
+    }
+
+    if (!team.lookingForPlayers || team.openPositions <= 0 || team.currentRosterSize >= team.maxRosterSize) {
+      return NextResponse.json({ error: "This team is not accepting applications" }, { status: 400 })
+    }
+
+    const existingMember = await db.query.teamMembers.findFirst({
+      where: and(eq(teamMembers.teamId, teamId), eq(teamMembers.userId, applicant.id)),
+    })
+
+    if (existingMember) {
+      return NextResponse.json({ error: "You are already a member of this team" }, { status: 400 })
     }
 
     // Check if application already exists

@@ -1,21 +1,31 @@
-import { auth } from "@clerk/nextjs/server";
-import { eq } from "drizzle-orm";
-import Image from "next/image";
-import { notFound, redirect } from "next/navigation";
+import { auth } from "@clerk/nextjs/server"
+import { and, eq } from "drizzle-orm"
+import Image from "next/image"
+import { notFound, redirect } from "next/navigation"
 
-import { Button } from "@/components/Button/Button";
-import { Header } from "@/components/Header/Header";
-import { teamMembers, teams, users } from "@/drizzle/schema";
-import type { TeamMember, User } from "@/drizzle/schema";
+import { Button } from "@/components/Button/Button"
+import { Header } from "@/components/Header/Header"
+import { playerApplications, teamMembers, teams, users } from "@/drizzle/schema"
+import type { PlayerApplication, TeamMember, User } from "@/drizzle/schema"
 
-import { db } from "@/lib/db";
+import { db } from "@/lib/db"
+import { CaptainApplicationsPanel } from "./CaptainApplicationsPanel"
+import { TeamApplicationPanel } from "./TeamApplicationPanel"
+import type { PendingApplication, ViewerApplicationState } from "./types"
 
-export default async function TeamDetailsPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
-  const { userId } = await auth();
+export default async function TeamDetailsPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ id: string }>
+  searchParams?: Promise<{ created?: string }>
+}) {
+  const { id } = await params
+  const resolvedSearchParams = await searchParams
+  const { userId } = await auth()
 
   if (!userId) {
-    redirect("/sign-in");
+    redirect("/sign-in")
   }
 
   // Get team with captain info
@@ -24,10 +34,10 @@ export default async function TeamDetailsPage({ params }: { params: Promise<{ id
     with: {
       captain: true,
     },
-  });
+  })
 
   if (!team) {
-    notFound();
+    notFound()
   }
 
   // Get team members
@@ -36,14 +46,64 @@ export default async function TeamDetailsPage({ params }: { params: Promise<{ id
     with: {
       user: true,
     },
-  })) as Array<TeamMember & { user: User }>;
+  })) as Array<TeamMember & { user: User }>
 
   // Check if current user is team captain
   const currentUser = await db.query.users.findFirst({
     where: eq(users.clerkUserId, userId),
-  });
+  })
 
-  const isCaptain = currentUser?.id === team.captainId;
+  const isCaptain = currentUser?.id === team.captainId
+  const isCurrentMember = Boolean(currentUser && members.some((member) => member.userId === currentUser.id))
+
+  const viewerApplication = currentUser
+    ? await db.query.playerApplications.findFirst({
+        where: and(eq(playerApplications.teamId, id), eq(playerApplications.applicantUserId, currentUser.id)),
+        orderBy: (applications, { desc }) => [desc(applications.createdAt)],
+      })
+    : null
+
+  const applicationState: ViewerApplicationState = (() => {
+    if (isCaptain) {
+      return { status: "captain" }
+    }
+    if (isCurrentMember) {
+      return { status: "member" }
+    }
+    if (viewerApplication?.status === "pending") {
+      return { status: "pending", applicationId: viewerApplication.id }
+    }
+    if (viewerApplication?.status === "accepted") {
+      return { status: "accepted", applicationId: viewerApplication.id }
+    }
+    if (viewerApplication?.status === "declined") {
+      return { status: "declined", applicationId: viewerApplication.id }
+    }
+    if (!team.lookingForPlayers || team.openPositions <= 0 || team.currentRosterSize >= team.maxRosterSize) {
+      return { status: "not_recruiting" }
+    }
+    return { status: "eligible" }
+  })()
+
+  const pendingApplications = isCaptain
+    ? (
+        (await db.query.playerApplications.findMany({
+          where: and(eq(playerApplications.teamId, id), eq(playerApplications.status, "pending")),
+          with: {
+            applicant: true,
+          },
+          orderBy: (applications, { desc }) => [desc(applications.createdAt)],
+        })) as Array<PlayerApplication & { applicant: User }>
+      ).map((application) => ({
+        ...application,
+        applicant: {
+          id: application.applicant.id,
+          firstName: application.applicant.firstName,
+          lastName: application.applicant.lastName,
+          imageUrl: application.applicant.imageUrl,
+        },
+      }))
+    : []
 
   return (
     <>
@@ -63,22 +123,21 @@ export default async function TeamDetailsPage({ params }: { params: Promise<{ id
         </div>
       </section>
 
-      {/* Success Message */}
-      <section className="bg-green-50 dark:bg-green-900">
-        <div className="mx-auto max-w-(--breakpoint-xl) px-4 py-4 lg:px-6">
-          <p className="text-center font-medium text-green-800 dark:text-green-200">
-            Team created successfully! You are now the team captain.
-          </p>
-        </div>
-      </section>
+      {resolvedSearchParams?.created === "true" && (
+        <section className="bg-green-50 dark:bg-green-900">
+          <div className="mx-auto max-w-(--breakpoint-xl) px-4 py-4 lg:px-6">
+            <p className="text-center font-medium text-green-800 dark:text-green-200">
+              Team created successfully. You are now the team captain.
+            </p>
+          </div>
+        </section>
+      )}
 
       {/* Team Info Section */}
       <section className="bg-gray-50 dark:bg-gray-800">
         <div className="mx-auto max-w-(--breakpoint-xl) px-4 py-8 sm:py-16 lg:px-6">
           <div className="mb-8 text-center lg:mb-16">
-            <h2 className="mb-4 text-4xl font-extrabold tracking-tight text-gray-900 dark:text-white">
-              Team Details
-            </h2>
+            <h2 className="mb-4 text-4xl font-extrabold tracking-tight text-gray-900 dark:text-white">Team Details</h2>
           </div>
 
           <div className="mx-auto max-w-5xl rounded-lg bg-white p-8 shadow-md dark:bg-gray-900">
@@ -88,21 +147,21 @@ export default async function TeamDetailsPage({ params }: { params: Promise<{ id
                 <dl className="space-y-2">
                   <div>
                     <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">Team Type</dt>
-                    <dd className="text-sm capitalize text-gray-900 dark:text-white">{team.teamType}</dd>
+                    <dd className="text-sm text-gray-900 capitalize dark:text-white">{team.teamType}</dd>
                   </div>
                   <div>
                     <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">Gender Type</dt>
-                    <dd className="text-sm capitalize text-gray-900 dark:text-white">
+                    <dd className="text-sm text-gray-900 capitalize dark:text-white">
                       {team.genderType === "male"
                         ? "Men's Team"
                         : team.genderType === "female"
-                          ? "Women's Team"
-                          : "Mixed Team"}
+                        ? "Women's Team"
+                        : "Mixed Team"}
                     </dd>
                   </div>
                   <div>
                     <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">Competition Level</dt>
-                    <dd className="text-sm capitalize text-gray-900 dark:text-white">{team.competitionLevel}</dd>
+                    <dd className="text-sm text-gray-900 capitalize dark:text-white">{team.competitionLevel}</dd>
                   </div>
                   <div>
                     <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">Roster Size</dt>
@@ -146,13 +205,15 @@ export default async function TeamDetailsPage({ params }: { params: Promise<{ id
         </div>
       </section>
 
+      {!isCaptain && <TeamApplicationPanel teamId={team.id} teamName={team.name} state={applicationState} />}
+
+      {isCaptain && <CaptainApplicationsPanel applications={pendingApplications as PendingApplication[]} />}
+
       {/* Team Members Section */}
       <section className="bg-white dark:bg-gray-900">
         <div className="mx-auto max-w-(--breakpoint-xl) px-4 py-8 sm:py-16 lg:px-6">
           <div className="mb-8 text-center lg:mb-16">
-            <h2 className="mb-4 text-4xl font-extrabold tracking-tight text-gray-900 dark:text-white">
-              Team Members
-            </h2>
+            <h2 className="mb-4 text-4xl font-extrabold tracking-tight text-gray-900 dark:text-white">Team Members</h2>
           </div>
 
           <div className="mx-auto max-w-3xl space-y-3">
@@ -175,7 +236,7 @@ export default async function TeamDetailsPage({ params }: { params: Promise<{ id
                     <p className="font-medium text-gray-900 dark:text-white">
                       {member.user.firstName} {member.user.lastName}
                     </p>
-                    <p className="text-xs capitalize text-gray-500 dark:text-gray-400">{member.role}</p>
+                    <p className="text-xs text-gray-500 capitalize dark:text-gray-400">{member.role}</p>
                   </div>
                 </div>
               </div>
@@ -188,17 +249,19 @@ export default async function TeamDetailsPage({ params }: { params: Promise<{ id
       {isCaptain && (
         <section className="bg-blue-700 dark:bg-blue-800">
           <div className="mx-auto max-w-(--breakpoint-xl) px-4 py-8 text-center sm:py-16 lg:px-6">
-            <h2 className="mb-4 text-4xl font-extrabold tracking-tight text-white">
-              Next Steps
-            </h2>
+            <h2 className="mb-4 text-4xl font-extrabold tracking-tight text-white">Next Steps</h2>
             <p className="mb-8 font-light text-blue-100 sm:text-xl">
               As the team captain, you can manage your team, invite players, and update team information.
             </p>
             <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-              <Button href="/dashboard" className="bg-white text-blue-700 border-white hover:enabled:bg-gray-100">
-                Invite Players
+              <Button href="/dashboard" className="border-white bg-white text-blue-700 hover:enabled:bg-gray-100">
+                View Applications
               </Button>
-              <Button href="/dashboard" intent="secondary" className="border-white text-white hover:enabled:bg-blue-600">
+              <Button
+                href="/dashboard"
+                intent="secondary"
+                className="border-white text-white hover:enabled:bg-blue-600"
+              >
                 Edit Team
               </Button>
             </div>
@@ -206,5 +269,5 @@ export default async function TeamDetailsPage({ params }: { params: Promise<{ id
         </section>
       )}
     </>
-  );
+  )
 }

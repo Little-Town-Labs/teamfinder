@@ -1,16 +1,16 @@
-"use client";
+"use client"
 
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRouter } from "next/navigation"
+import { useState } from "react"
 
 interface CreateTeamFormProps {
-  userId: string;
+  userId: string
 }
 
 export default function CreateTeamForm({ userId }: CreateTeamFormProps) {
-  const router = useRouter();
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const router = useRouter()
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const [formData, setFormData] = useState({
     name: "",
@@ -23,25 +23,23 @@ export default function CreateTeamForm({ userId }: CreateTeamFormProps) {
     minAverage: "",
     maxAverage: "",
     additionalNotes: "",
-  });
+  })
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
-  ) => {
-    const { name, value, type } = e.target;
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    const { name, value, type } = e.target
 
     if (type === "checkbox") {
-      const checked = (e.target as HTMLInputElement).checked;
-      setFormData((prev) => ({ ...prev, [name]: checked }));
+      const checked = (e.target as HTMLInputElement).checked
+      setFormData((prev) => ({ ...prev, [name]: checked }))
     } else {
-      setFormData((prev) => ({ ...prev, [name]: value }));
+      setFormData((prev) => ({ ...prev, [name]: value }))
     }
-  };
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setError(null);
+    e.preventDefault()
+    setIsSubmitting(true)
+    setError(null)
 
     try {
       const response = await fetch("/api/teams/create", {
@@ -51,31 +49,27 @@ export default function CreateTeamForm({ userId }: CreateTeamFormProps) {
           ...formData,
           userId,
         }),
-      });
+      })
 
       if (!response.ok) {
-        const data = (await response.json()) as { error: string };
-        throw new Error(data.error || "Failed to create team");
+        const data = (await response.json()) as { error: string }
+        throw new Error(data.error || "Failed to create team")
       }
 
-      const data = (await response.json()) as { teamId: string };
-      router.push(`/teams/${data.teamId}`);
-      router.refresh();
+      const data = (await response.json()) as { teamId: string }
+      router.push(`/teams/${data.teamId}?created=true`)
+      router.refresh()
     } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred");
-      setIsSubmitting(false);
+      setError(err instanceof Error ? err.message : "An error occurred")
+      setIsSubmitting(false)
     }
-  };
+  }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <h2 className="text-xl font-semibold text-gray-900">Team Information</h2>
 
-      {error && (
-        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
-          {error}
-        </div>
-      )}
+      {error && <div className="rounded border border-red-200 bg-red-50 px-4 py-3 text-red-700">{error}</div>}
 
       {/* Team Name */}
       <div>
@@ -187,7 +181,7 @@ export default function CreateTeamForm({ userId }: CreateTeamFormProps) {
 
       {/* Recruitment Requirements (only show if looking for players) */}
       {formData.lookingForPlayers && (
-        <div className="bg-gray-50 p-4 rounded-lg space-y-4">
+        <div className="space-y-4 rounded-lg bg-gray-50 p-4">
           <h3 className="text-lg font-medium text-gray-900">Recruitment Requirements</h3>
 
           <div>
@@ -207,7 +201,7 @@ export default function CreateTeamForm({ userId }: CreateTeamFormProps) {
             />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <div>
               <label htmlFor="minAverage" className="block text-sm font-medium text-gray-700">
                 Minimum Average (optional)
@@ -261,11 +255,11 @@ export default function CreateTeamForm({ userId }: CreateTeamFormProps) {
       )}
 
       {/* Submit Button */}
-      <div className="flex justify-between pt-6 border-t">
+      <div className="flex justify-between border-t pt-6">
         <button
           type="button"
           onClick={() => router.back()}
-          className="px-6 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+          className="rounded-md border border-gray-300 px-6 py-2 text-gray-700 hover:bg-gray-50"
         >
           Cancel
         </button>
@@ -273,11 +267,11 @@ export default function CreateTeamForm({ userId }: CreateTeamFormProps) {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
+          className="rounded-md bg-blue-600 px-6 py-2 text-white hover:bg-blue-700 disabled:opacity-50"
         >
           {isSubmitting ? "Creating Team..." : "Create Team"}
         </button>
       </div>
     </form>
-  );
+  )
 }
