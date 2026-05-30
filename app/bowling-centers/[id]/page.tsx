@@ -1,78 +1,80 @@
-import Link from "next/link";
-import { notFound } from "next/navigation";
+import Link from "next/link"
+import { notFound } from "next/navigation"
 
-import { ErrorBoundary } from "@/app/bowling-centers/ErrorBoundary";
-import { Header } from "@/components/Header/Header";
+import { ErrorBoundary } from "@/app/bowling-centers/ErrorBoundary"
+import { Header } from "@/components/Header/Header"
+import { env } from "@/env.mjs"
 
-import CenterDetailClient from "./CenterDetailClient";
-import CenterDetailMapWrapper from "./CenterDetailMapWrapper";
+import CenterDetailClient from "./CenterDetailClient"
+import CenterDetailMapWrapper from "./CenterDetailMapWrapper"
 
-export const dynamic = "force-dynamic";
+export const dynamic = "force-dynamic"
 
 interface CenterDetailPageProps {
-  params: Promise<{ id: string }>;
+  params: Promise<{ id: string }>
 }
 
 export default async function CenterDetailPage({ params }: CenterDetailPageProps) {
-  const { id } = await params;
+  const { id } = await params
 
   // Fetch center details from API
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
   const response = await fetch(`${baseUrl}/api/bowling-centers/${id}`, {
     cache: "no-store",
-  });
+  })
 
   if (!response.ok) {
-    notFound();
+    notFound()
   }
 
   const data = (await response.json()) as {
     center: {
-      id: string;
-      name: string;
-      address: string;
-      city: string;
-      state: string;
-      zipCode: string;
-      country: string;
-      phone: string | null;
-      email: string | null;
-      website: string | null;
-      numberOfLanes: string | null;
-      amenities: string[] | null;
-      verified: boolean;
-      latitude: string | null;
-      longitude: string | null;
-    };
+      id: string
+      name: string
+      address: string
+      city: string
+      state: string
+      zipCode: string
+      country: string
+      phone: string | null
+      email: string | null
+      website: string | null
+      numberOfLanes: string | null
+      amenities: string[] | null
+      verified: boolean
+      latitude: string | null
+      longitude: string | null
+    }
     teams: {
       items: Array<{
-        id: string;
-        name: string;
-        teamType: string;
-        captain: { id: string; firstName: string | null; lastName: string | null };
-      }>;
-      total: number;
-    };
+        id: string
+        name: string
+        teamType: string
+        captain: { id: string; firstName: string | null; lastName: string | null }
+      }>
+      total: number
+    }
     leagues: {
       items: Array<{
-        id: string;
-        name: string;
-        dayOfWeek: string;
-        startTime: string;
-      }>;
-      total: number;
-    };
+        id: string
+        name: string
+        dayOfWeek: string
+        startTime: string
+      }>
+      total: number
+    }
     players: {
       items: Array<{
-        id: string;
-        user: { id: string; firstName: string | null; lastName: string | null };
-        currentAverage: number | null;
-      }>;
-      total: number;
-    };
-  };
+        id: string
+        user: { id: string; firstName: string | null; lastName: string | null }
+        currentAverage: number | null
+      }>
+      total: number
+    }
+  }
 
-  const { center, teams, leagues, players } = data;
+  const { center, teams, leagues, players } = data
+  const mapsEnabled = env.NEXT_PUBLIC_MAPS_ENABLED && !!env.NEXT_PUBLIC_MAPBOX_TOKEN
 
   return (
     <>
@@ -89,7 +91,7 @@ export default async function CenterDetailPage({ params }: CenterDetailPageProps
                 </h1>
                 {center.verified && (
                   <span className="inline-flex items-center rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-800 dark:bg-blue-900 dark:text-blue-200">
-                    <svg className="-ml-0.5 mr-1.5 h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+                    <svg className="mr-1.5 -ml-0.5 h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
                       <path
                         fillRule="evenodd"
                         d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
@@ -118,18 +120,11 @@ export default async function CenterDetailPage({ params }: CenterDetailPageProps
           <div className="mx-auto max-w-4xl space-y-8">
             {/* Contact Information */}
             <div className="rounded-lg bg-white p-6 shadow-md dark:bg-gray-900">
-              <h2 className="mb-4 text-2xl font-semibold text-gray-900 dark:text-white">
-                Contact Information
-              </h2>
+              <h2 className="mb-4 text-2xl font-semibold text-gray-900 dark:text-white">Contact Information</h2>
               <div className="space-y-3">
                 {center.phone && (
                   <p className="flex items-center text-gray-700 dark:text-gray-300">
-                    <svg
-                      className="mr-3 h-5 w-5 text-gray-500"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
+                    <svg className="mr-3 h-5 w-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -144,12 +139,7 @@ export default async function CenterDetailPage({ params }: CenterDetailPageProps
                 )}
                 {center.email && (
                   <p className="flex items-center text-gray-700 dark:text-gray-300">
-                    <svg
-                      className="mr-3 h-5 w-5 text-gray-500"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
+                    <svg className="mr-3 h-5 w-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -157,22 +147,14 @@ export default async function CenterDetailPage({ params }: CenterDetailPageProps
                         d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
                       />
                     </svg>
-                    <a
-                      href={`mailto:${center.email}`}
-                      className="hover:text-blue-600 dark:hover:text-blue-400"
-                    >
+                    <a href={`mailto:${center.email}`} className="hover:text-blue-600 dark:hover:text-blue-400">
                       {center.email}
                     </a>
                   </p>
                 )}
                 {center.website && (
                   <p className="flex items-center text-gray-700 dark:text-gray-300">
-                    <svg
-                      className="mr-3 h-5 w-5 text-gray-500"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
+                    <svg className="mr-3 h-5 w-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -221,13 +203,15 @@ export default async function CenterDetailPage({ params }: CenterDetailPageProps
                     Get Directions
                   </a>
                 </div>
-                <ErrorBoundary>
-                  <CenterDetailMapWrapper
-                    latitude={center.latitude}
-                    longitude={center.longitude}
-                    verified={center.verified}
-                  />
-                </ErrorBoundary>
+                {mapsEnabled && (
+                  <ErrorBoundary>
+                    <CenterDetailMapWrapper
+                      latitude={center.latitude}
+                      longitude={center.longitude}
+                      verified={center.verified}
+                    />
+                  </ErrorBoundary>
+                )}
               </div>
             )}
 
@@ -277,9 +261,7 @@ export default async function CenterDetailPage({ params }: CenterDetailPageProps
             {/* Teams */}
             {teams.items.length > 0 && (
               <div className="rounded-lg bg-white p-6 shadow-md dark:bg-gray-900">
-                <h2 className="mb-4 text-2xl font-semibold text-gray-900 dark:text-white">
-                  Teams ({teams.total})
-                </h2>
+                <h2 className="mb-4 text-2xl font-semibold text-gray-900 dark:text-white">Teams ({teams.total})</h2>
                 <div className="space-y-3">
                   {teams.items.map((team) => (
                     <Link
@@ -290,21 +272,12 @@ export default async function CenterDetailPage({ params }: CenterDetailPageProps
                       <div>
                         <h3 className="font-medium text-gray-900 dark:text-white">{team.name}</h3>
                         <p className="text-sm text-gray-600 dark:text-gray-400">
-                          Captain: {`${team.captain.firstName || ""} ${team.captain.lastName || ""}`.trim() || "Unknown"}
+                          Captain:{" "}
+                          {`${team.captain.firstName || ""} ${team.captain.lastName || ""}`.trim() || "Unknown"}
                         </p>
                       </div>
-                      <svg
-                        className="h-5 w-5 text-gray-400"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M9 5l7 7-7 7"
-                        />
+                      <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                       </svg>
                     </Link>
                   ))}
@@ -315,15 +288,10 @@ export default async function CenterDetailPage({ params }: CenterDetailPageProps
             {/* Leagues */}
             {leagues.items.length > 0 && (
               <div className="rounded-lg bg-white p-6 shadow-md dark:bg-gray-900">
-                <h2 className="mb-4 text-2xl font-semibold text-gray-900 dark:text-white">
-                  Leagues ({leagues.total})
-                </h2>
+                <h2 className="mb-4 text-2xl font-semibold text-gray-900 dark:text-white">Leagues ({leagues.total})</h2>
                 <div className="space-y-3">
                   {leagues.items.map((league) => (
-                    <div
-                      key={league.id}
-                      className="rounded-lg border border-gray-200 p-4 dark:border-gray-700"
-                    >
+                    <div key={league.id} className="rounded-lg border border-gray-200 p-4 dark:border-gray-700">
                       <h3 className="font-medium text-gray-900 dark:text-white">{league.name}</h3>
                       <p className="text-sm text-gray-600 dark:text-gray-400">
                         {league.dayOfWeek}s at {league.startTime}
@@ -337,9 +305,7 @@ export default async function CenterDetailPage({ params }: CenterDetailPageProps
             {/* Players */}
             {players.items.length > 0 && (
               <div className="rounded-lg bg-white p-6 shadow-md dark:bg-gray-900">
-                <h2 className="mb-4 text-2xl font-semibold text-gray-900 dark:text-white">
-                  Players ({players.total})
-                </h2>
+                <h2 className="mb-4 text-2xl font-semibold text-gray-900 dark:text-white">Players ({players.total})</h2>
                 <div className="space-y-3">
                   {players.items.map((player) => (
                     <div
@@ -351,9 +317,7 @@ export default async function CenterDetailPage({ params }: CenterDetailPageProps
                           {`${player.user.firstName || ""} ${player.user.lastName || ""}`.trim() || "Unknown"}
                         </h3>
                         {player.currentAverage && (
-                          <p className="text-sm text-gray-600 dark:text-gray-400">
-                            Average: {player.currentAverage}
-                          </p>
+                          <p className="text-sm text-gray-600 dark:text-gray-400">Average: {player.currentAverage}</p>
                         )}
                       </div>
                     </div>
@@ -365,5 +329,5 @@ export default async function CenterDetailPage({ params }: CenterDetailPageProps
         </div>
       </section>
     </>
-  );
+  )
 }

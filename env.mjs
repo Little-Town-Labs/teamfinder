@@ -23,7 +23,11 @@ export const env = createEnv({
     NEXT_PUBLIC_CLERK_SIGN_UP_URL: z.string().default("/sign-up"),
     NEXT_PUBLIC_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL: z.string().default("/dashboard"),
     NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL: z.string().default("/onboarding"),
-    NEXT_PUBLIC_MAPBOX_TOKEN: z.string().min(1),
+    NEXT_PUBLIC_MAPS_ENABLED: z
+      .enum(["true", "false"])
+      .default("false")
+      .transform((value) => value === "true"),
+    NEXT_PUBLIC_MAPBOX_TOKEN: z.string().optional(),
   },
   runtimeEnv: {
     ANALYZE: process.env.ANALYZE,
@@ -37,8 +41,14 @@ export const env = createEnv({
     NEXT_PUBLIC_CLERK_SIGN_UP_URL: process.env.NEXT_PUBLIC_CLERK_SIGN_UP_URL,
     NEXT_PUBLIC_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL: process.env.NEXT_PUBLIC_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL,
     NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL: process.env.NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL,
+    NEXT_PUBLIC_MAPS_ENABLED: process.env.NEXT_PUBLIC_MAPS_ENABLED,
     NEXT_PUBLIC_MAPBOX_TOKEN: process.env.NEXT_PUBLIC_MAPBOX_TOKEN,
     // Resend
     RESEND_API_KEY: process.env.RESEND_API_KEY,
   },
 })
+
+if (!process.env.SKIP_ENV_VALIDATION && env.NEXT_PUBLIC_MAPS_ENABLED && !env.NEXT_PUBLIC_MAPBOX_TOKEN) {
+  console.error("❌ Invalid environment variables: NEXT_PUBLIC_MAPBOX_TOKEN is required when maps are enabled")
+  throw new Error("Invalid environment variables")
+}

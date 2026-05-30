@@ -46,15 +46,14 @@ export function formatDistance(distance: number): string {
 /**
  * Geocode an address using Mapbox Geocoding API
  * Converts an address string to lat/lng coordinates
- * Requires NEXT_PUBLIC_MAPBOX_TOKEN environment variable
+ * Requires maps to be enabled and NEXT_PUBLIC_MAPBOX_TOKEN to be configured.
  */
 export async function geocodeAddress(address: string): Promise<{
   latitude: number
   longitude: number
 } | null> {
-  const token = env.NEXT_PUBLIC_MAPBOX_TOKEN
+  const token = env.NEXT_PUBLIC_MAPS_ENABLED ? env.NEXT_PUBLIC_MAPBOX_TOKEN : undefined
   if (!token) {
-    console.error("NEXT_PUBLIC_MAPBOX_TOKEN is not set")
     return null
   }
 

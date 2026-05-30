@@ -11,6 +11,12 @@ on:
       - develop
   workflow_dispatch:
 
+permissions:
+  actions: read
+  contents: read
+  issues: write
+  pull-requests: write
+
 defaults:
   run:
     # change this if your nextjs app does not live at the root of the repo
@@ -25,7 +31,7 @@ jobs:
       CLERK_WEBHOOK_SECRET: whsec_ci
       RESEND_API_KEY: re_ci_placeholder
       NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: pk_test_ZGV2ZWxvcGVyLmNsZXJrLmFjY291bnRzLmRldiQ
-      NEXT_PUBLIC_MAPBOX_TOKEN: pk.ci
+      NEXT_PUBLIC_MAPS_ENABLED: "false"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

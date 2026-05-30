@@ -1,12 +1,13 @@
-"use client";
+"use client"
 
-import dynamic from "next/dynamic";
-import { useEffect, useState } from "react";
+import dynamic from "next/dynamic"
+import { useEffect, useState } from "react"
 
-import type { BowlingCenter } from "@/drizzle/schema";
+import type { BowlingCenter } from "@/drizzle/schema"
+import { env } from "@/env.mjs"
 
-import CenterFilters from "./CenterFilters";
-import CenterList from "./CenterList";
+import CenterFilters from "./CenterFilters"
+import CenterList from "./CenterList"
 
 // Dynamically import CenterMap to avoid SSR issues with Mapbox
 const CenterMap = dynamic(() => import("./CenterMap"), {
@@ -16,31 +17,32 @@ const CenterMap = dynamic(() => import("./CenterMap"), {
       <div className="text-gray-600 dark:text-gray-400">Loading map...</div>
     </div>
   ),
-});
+})
 
 interface BrowseCentersClientProps {
-  initialCenters: BowlingCenter[];
+  initialCenters: BowlingCenter[]
 }
 
 export interface CenterFilters {
-  search: string;
-  state: string;
-  city: string;
-  verified: boolean | null;
-  useLocation: boolean;
-  radius: number | null;
-  userLat: number | null;
-  userLng: number | null;
+  search: string
+  state: string
+  city: string
+  verified: boolean | null
+  useLocation: boolean
+  radius: number | null
+  userLat: number | null
+  userLng: number | null
 }
 
 export default function BrowseCentersClient({ initialCenters }: BrowseCentersClientProps) {
-  const [centers, setCenters] = useState<BowlingCenter[]>(initialCenters);
-  const [loading, setLoading] = useState(false);
-  const [loadingMore, setLoadingMore] = useState(false);
-  const [totalResults, setTotalResults] = useState(initialCenters.length);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [hasMore, setHasMore] = useState(false);
-  const [viewMode, setViewMode] = useState<"list" | "map">("list");
+  const mapsEnabled = env.NEXT_PUBLIC_MAPS_ENABLED && !!env.NEXT_PUBLIC_MAPBOX_TOKEN
+  const [centers, setCenters] = useState<BowlingCenter[]>(initialCenters)
+  const [loading, setLoading] = useState(false)
+  const [loadingMore, setLoadingMore] = useState(false)
+  const [totalResults, setTotalResults] = useState(initialCenters.length)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [hasMore, setHasMore] = useState(false)
+  const [viewMode, setViewMode] = useState<"list" | "map">("list")
 
   const [filters, setFilters] = useState<CenterFilters>({
     search: "",
@@ -51,92 +53,92 @@ export default function BrowseCentersClient({ initialCenters }: BrowseCentersCli
     radius: null,
     userLat: null,
     userLng: null,
-  });
+  })
 
   // Fetch centers whenever filters change
   useEffect(() => {
     const fetchCenters = async () => {
-      setLoading(true);
-      setCurrentPage(1);
+      setLoading(true)
+      setCurrentPage(1)
 
       try {
         // Build query params
-        const params = new URLSearchParams();
-        params.append("page", "1");
-        params.append("limit", "20");
+        const params = new URLSearchParams()
+        params.append("page", "1")
+        params.append("limit", "20")
 
-        if (filters.search) params.append("search", filters.search);
-        if (filters.state) params.append("state", filters.state);
-        if (filters.city) params.append("city", filters.city);
-        if (filters.verified !== null) params.append("verified", filters.verified.toString());
+        if (filters.search) params.append("search", filters.search)
+        if (filters.state) params.append("state", filters.state)
+        if (filters.city) params.append("city", filters.city)
+        if (filters.verified !== null) params.append("verified", filters.verified.toString())
         if (filters.useLocation && filters.userLat && filters.userLng) {
-          params.append("lat", filters.userLat.toString());
-          params.append("lng", filters.userLng.toString());
-          if (filters.radius) params.append("radius", filters.radius.toString());
+          params.append("lat", filters.userLat.toString())
+          params.append("lng", filters.userLng.toString())
+          if (filters.radius) params.append("radius", filters.radius.toString())
         }
 
-        const response = await fetch(`/api/bowling-centers?${params.toString()}`);
+        const response = await fetch(`/api/bowling-centers?${params.toString()}`)
         if (!response.ok) {
-          throw new Error("Failed to fetch centers");
+          throw new Error("Failed to fetch centers")
         }
 
         const data = (await response.json()) as {
-          centers: BowlingCenter[];
-          pagination: { total: number; page: number; totalPages: number };
-        };
+          centers: BowlingCenter[]
+          pagination: { total: number; page: number; totalPages: number }
+        }
 
-        setCenters(data.centers);
-        setTotalResults(data.pagination.total);
-        setHasMore(data.pagination.page < data.pagination.totalPages);
+        setCenters(data.centers)
+        setTotalResults(data.pagination.total)
+        setHasMore(data.pagination.page < data.pagination.totalPages)
       } catch (error) {
-        console.error("Error fetching centers:", error);
+        console.error("Error fetching centers:", error)
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
-    };
+    }
 
-    fetchCenters();
-  }, [filters]);
+    fetchCenters()
+  }, [filters])
 
   // Load more centers
   const loadMore = async () => {
-    setLoadingMore(true);
-    const nextPage = currentPage + 1;
+    setLoadingMore(true)
+    const nextPage = currentPage + 1
 
     try {
-      const params = new URLSearchParams();
-      params.append("page", nextPage.toString());
-      params.append("limit", "20");
+      const params = new URLSearchParams()
+      params.append("page", nextPage.toString())
+      params.append("limit", "20")
 
-      if (filters.search) params.append("search", filters.search);
-      if (filters.state) params.append("state", filters.state);
-      if (filters.city) params.append("city", filters.city);
-      if (filters.verified !== null) params.append("verified", filters.verified.toString());
+      if (filters.search) params.append("search", filters.search)
+      if (filters.state) params.append("state", filters.state)
+      if (filters.city) params.append("city", filters.city)
+      if (filters.verified !== null) params.append("verified", filters.verified.toString())
       if (filters.useLocation && filters.userLat && filters.userLng) {
-        params.append("lat", filters.userLat.toString());
-        params.append("lng", filters.userLng.toString());
-        if (filters.radius) params.append("radius", filters.radius.toString());
+        params.append("lat", filters.userLat.toString())
+        params.append("lng", filters.userLng.toString())
+        if (filters.radius) params.append("radius", filters.radius.toString())
       }
 
-      const response = await fetch(`/api/bowling-centers?${params.toString()}`);
+      const response = await fetch(`/api/bowling-centers?${params.toString()}`)
       if (!response.ok) {
-        throw new Error("Failed to fetch centers");
+        throw new Error("Failed to fetch centers")
       }
 
       const data = (await response.json()) as {
-        centers: BowlingCenter[];
-        pagination: { total: number; page: number; totalPages: number };
-      };
+        centers: BowlingCenter[]
+        pagination: { total: number; page: number; totalPages: number }
+      }
 
-      setCenters((prev) => [...prev, ...data.centers]);
-      setCurrentPage(nextPage);
-      setHasMore(data.pagination.page < data.pagination.totalPages);
+      setCenters((prev) => [...prev, ...data.centers])
+      setCurrentPage(nextPage)
+      setHasMore(data.pagination.page < data.pagination.totalPages)
     } catch (error) {
-      console.error("Error loading more centers:", error);
+      console.error("Error loading more centers:", error)
     } finally {
-      setLoadingMore(false);
+      setLoadingMore(false)
     }
-  };
+  }
 
   return (
     <div className="space-y-6">
@@ -181,38 +183,35 @@ export default function BrowseCentersClient({ initialCenters }: BrowseCentersCli
             }`}
           >
             <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 6h16M4 10h16M4 14h16M4 18h16"
-              />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" />
             </svg>
             List View
           </button>
-          <button
-            onClick={() => setViewMode("map")}
-            className={`flex items-center gap-2 px-4 py-2.5 text-sm font-semibold transition-all ${
-              viewMode === "map"
-                ? "bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg shadow-blue-500/30"
-                : "text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-800"
-            }`}
-          >
-            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"
-              />
-            </svg>
-            Map View
-          </button>
+          {mapsEnabled && (
+            <button
+              onClick={() => setViewMode("map")}
+              className={`flex items-center gap-2 px-4 py-2.5 text-sm font-semibold transition-all ${
+                viewMode === "map"
+                  ? "bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg shadow-blue-500/30"
+                  : "text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-800"
+              }`}
+            >
+              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"
+                />
+              </svg>
+              Map View
+            </button>
+          )}
         </div>
       </div>
 
       {/* Centers List or Map */}
-      {viewMode === "list" ? (
+      {viewMode === "list" || !mapsEnabled ? (
         <>
           <CenterList centers={centers} loading={loading} />
           {!loading && hasMore && (
@@ -231,5 +230,5 @@ export default function BrowseCentersClient({ initialCenters }: BrowseCentersCli
         <CenterMap centers={centers} userLat={filters.userLat} userLng={filters.userLng} />
       )}
     </div>
-  );
+  )
 }

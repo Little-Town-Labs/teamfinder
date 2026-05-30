@@ -22,7 +22,7 @@ export default function CenterDetailMap({ latitude, longitude, verified }: Cente
     zoom: 14,
   })
 
-  const mapboxToken = env.NEXT_PUBLIC_MAPBOX_TOKEN
+  const mapboxToken = env.NEXT_PUBLIC_MAPS_ENABLED ? env.NEXT_PUBLIC_MAPBOX_TOKEN : undefined
 
   useEffect(() => {
     if (mapRef.current) {
@@ -38,9 +38,7 @@ export default function CenterDetailMap({ latitude, longitude, verified }: Cente
     return (
       <div className="flex h-[300px] items-center justify-center rounded-lg bg-gray-100 dark:bg-gray-800">
         <div className="text-center">
-          <p className="text-sm text-gray-700 dark:text-gray-300">
-            Mapbox token not configured. Please add NEXT_PUBLIC_MAPBOX_TOKEN to your .env.local file.
-          </p>
+          <p className="text-sm text-gray-700 dark:text-gray-300">Maps are currently unavailable.</p>
         </div>
       </div>
     )
