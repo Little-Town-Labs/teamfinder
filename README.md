@@ -192,6 +192,7 @@ pnpm build            # Build for production
 pnpm start            # Start production server
 pnpm lint             # Run ESLint
 pnpm lint:fix         # Fix ESLint errors
+pnpm type-check       # Run TypeScript checks
 pnpm prettier         # Check code formatting
 pnpm prettier:fix     # Fix code formatting
 
