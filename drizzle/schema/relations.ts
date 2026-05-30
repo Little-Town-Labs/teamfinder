@@ -1,15 +1,16 @@
-import { relations } from "drizzle-orm";
-import { activityLogs } from "./activity-logs";
-import { affiliations } from "./affiliations";
-import { bowlingCenters } from "./bowling-centers";
-import { centerEditSuggestions } from "./center-edit-suggestions";
-import { feedback } from "./feedback";
-import { leagues } from "./leagues";
-import { playerProfiles } from "./player-profiles";
-import { privacyConsents } from "./privacy-consents";
-import { teamMembers } from "./team-members";
-import { teams } from "./teams";
-import { users } from "./users";
+import { relations } from "drizzle-orm"
+import { activityLogs } from "./activity-logs"
+import { affiliations } from "./affiliations"
+import { bowlingCenters } from "./bowling-centers"
+import { centerEditSuggestions } from "./center-edit-suggestions"
+import { feedback } from "./feedback"
+import { leagues } from "./leagues"
+import { playerProfiles } from "./player-profiles"
+import { playerApplications } from "./player-applications"
+import { privacyConsents } from "./privacy-consents"
+import { teamMembers } from "./team-members"
+import { teams } from "./teams"
+import { users } from "./users"
 
 export const usersRelations = relations(users, ({ one, many }) => ({
   playerProfile: one(playerProfiles, {
@@ -23,7 +24,13 @@ export const usersRelations = relations(users, ({ one, many }) => ({
   centerEditSuggestions: many(centerEditSuggestions),
   privacyConsents: many(privacyConsents),
   feedbackSubmissions: many(feedback),
-}));
+  playerApplications: many(playerApplications, {
+    relationName: "applicantApplications",
+  }),
+  reviewedApplications: many(playerApplications, {
+    relationName: "reviewedApplications",
+  }),
+}))
 
 export const playerProfilesRelations = relations(playerProfiles, ({ one }) => ({
   user: one(users, {
@@ -34,7 +41,7 @@ export const playerProfilesRelations = relations(playerProfiles, ({ one }) => ({
     fields: [playerProfiles.homeBowlingCenterId],
     references: [bowlingCenters.id],
   }),
-}));
+}))
 
 export const teamMembersRelations = relations(teamMembers, ({ one }) => ({
   user: one(users, {
@@ -45,7 +52,7 @@ export const teamMembersRelations = relations(teamMembers, ({ one }) => ({
     fields: [teamMembers.teamId],
     references: [teams.id],
   }),
-}));
+}))
 
 export const teamsRelations = relations(teams, ({ one, many }) => ({
   captain: one(users, {
@@ -53,18 +60,36 @@ export const teamsRelations = relations(teams, ({ one, many }) => ({
     references: [users.id],
   }),
   members: many(teamMembers),
+  applications: many(playerApplications),
   homeBowlingCenter: one(bowlingCenters, {
     fields: [teams.homeBowlingCenterId],
     references: [bowlingCenters.id],
   }),
-}));
+}))
+
+export const playerApplicationsRelations = relations(playerApplications, ({ one }) => ({
+  team: one(teams, {
+    fields: [playerApplications.teamId],
+    references: [teams.id],
+  }),
+  applicant: one(users, {
+    fields: [playerApplications.applicantUserId],
+    references: [users.id],
+    relationName: "applicantApplications",
+  }),
+  reviewer: one(users, {
+    fields: [playerApplications.reviewedByUserId],
+    references: [users.id],
+    relationName: "reviewedApplications",
+  }),
+}))
 
 export const affiliationsRelations = relations(affiliations, ({ one }) => ({
   user: one(users, {
     fields: [affiliations.userId],
     references: [users.id],
   }),
-}));
+}))
 
 export const activityLogsRelations = relations(activityLogs, ({ one }) => ({
   user: one(users, {
@@ -79,21 +104,21 @@ export const activityLogsRelations = relations(activityLogs, ({ one }) => ({
     fields: [activityLogs.teamId],
     references: [teams.id],
   }),
-}));
+}))
 
 export const bowlingCentersRelations = relations(bowlingCenters, ({ many }) => ({
   teams: many(teams),
   leagues: many(leagues),
   playerProfiles: many(playerProfiles),
   editSuggestions: many(centerEditSuggestions),
-}));
+}))
 
 export const leaguesRelations = relations(leagues, ({ one }) => ({
   bowlingCenter: one(bowlingCenters, {
     fields: [leagues.bowlingCenterId],
     references: [bowlingCenters.id],
   }),
-}));
+}))
 
 export const centerEditSuggestionsRelations = relations(centerEditSuggestions, ({ one }) => ({
   bowlingCenter: one(bowlingCenters, {
@@ -108,14 +133,14 @@ export const centerEditSuggestionsRelations = relations(centerEditSuggestions, (
     fields: [centerEditSuggestions.reviewedBy],
     references: [users.id],
   }),
-}));
+}))
 
 export const privacyConsentsRelations = relations(privacyConsents, ({ one }) => ({
   user: one(users, {
     fields: [privacyConsents.userId],
     references: [users.id],
   }),
-}));
+}))
 
 export const feedbackRelations = relations(feedback, ({ one }) => ({
   submitter: one(users, {
@@ -126,4 +151,4 @@ export const feedbackRelations = relations(feedback, ({ one }) => ({
     fields: [feedback.respondedBy],
     references: [users.id],
   }),
-}));
+}))

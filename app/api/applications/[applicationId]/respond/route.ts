@@ -1,5 +1,5 @@
 import { auth } from "@clerk/nextjs/server"
-import { eq } from "drizzle-orm"
+import { and, eq, sql } from "drizzle-orm"
 import { NextRequest, NextResponse } from "next/server"
 import { z } from "zod"
 
@@ -59,6 +59,10 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       return NextResponse.json({ error: "Application already processed" }, { status: 400 })
     }
 
+    if (body.status === "accepted" && (team.openPositions <= 0 || team.currentRosterSize >= team.maxRosterSize)) {
+      return NextResponse.json({ error: "Team roster is full" }, { status: 400 })
+    }
+
     // Get applicant
     const applicant = await db.query.users.findFirst({
       where: eq(users.id, application.applicantUserId),
@@ -66,6 +70,14 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
 
     if (!applicant) {
       return NextResponse.json({ error: "Applicant not found" }, { status: 404 })
+    }
+
+    const existingMember = await db.query.teamMembers.findFirst({
+      where: and(eq(teamMembers.teamId, application.teamId), eq(teamMembers.userId, application.applicantUserId)),
+    })
+
+    if (existingMember) {
+      return NextResponse.json({ error: "Applicant is already on the team" }, { status: 400 })
     }
 
     const updatedApplication = await db.transaction(async (tx) => {
@@ -87,6 +99,15 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
           role: "member",
           joinedAt: new Date(),
         })
+
+        await tx
+          .update(teams)
+          .set({
+            currentRosterSize: sql`${teams.currentRosterSize} + 1`,
+            openPositions: sql`greatest(${teams.openPositions} - 1, 0)`,
+            updatedAt: new Date(),
+          })
+          .where(eq(teams.id, application.teamId))
       }
 
       return updated
