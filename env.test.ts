@@ -23,13 +23,35 @@ describe("env", () => {
     expect(result.status).toBe(0)
   })
 
-  it("requires NEXT_PUBLIC_MAPBOX_TOKEN", () => {
+  it("allows maps to be disabled without NEXT_PUBLIC_MAPBOX_TOKEN", () => {
     const env: NodeJS.ProcessEnv = {
       ...process.env,
       DATABASE_URL: "postgresql://user:password@localhost:5432/teamfinder",
       CLERK_SECRET_KEY: "sk_test_mock",
       CLERK_WEBHOOK_SECRET: "whsec_mock",
       NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: "pk_test_mock",
+      RESEND_API_KEY: "re_mock",
+    }
+    delete env.SKIP_ENV_VALIDATION
+    delete env.NEXT_PUBLIC_MAPBOX_TOKEN
+
+    const result = spawnSync(process.execPath, ["--input-type=module", "-e", "import('./env.mjs')"], {
+      cwd: process.cwd(),
+      env,
+      encoding: "utf8",
+    })
+
+    expect(result.status).toBe(0)
+  })
+
+  it("requires NEXT_PUBLIC_MAPBOX_TOKEN when maps are enabled", () => {
+    const env: NodeJS.ProcessEnv = {
+      ...process.env,
+      DATABASE_URL: "postgresql://user:password@localhost:5432/teamfinder",
+      CLERK_SECRET_KEY: "sk_test_mock",
+      CLERK_WEBHOOK_SECRET: "whsec_mock",
+      NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: "pk_test_mock",
+      NEXT_PUBLIC_MAPS_ENABLED: "true",
       RESEND_API_KEY: "re_mock",
     }
     delete env.SKIP_ENV_VALIDATION
